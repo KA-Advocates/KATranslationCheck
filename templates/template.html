@@ -9,13 +9,15 @@
         padding-top: 100px;
       }
       .tcomment {margin-left: 25px; color: #444;}
+      /*.hit {text-decoration: none; font-weight: normal;   font-family: Monospace;} */
+      .hitno {font-weight: bold;}
     </style>
   </head>
   <body>
     <div class="container">
         {% for entry, hit, filename in hits %}
           <div class="row">
-            <h3>Hit #{{loop.index}}</h3>
+            <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hit">{{hit}}</code> in {{filename}}</h3>
             <div class="tcomment">{{entry.tcomment.replace("\n","<br/>")}}</div>
             <pre>{{entry.msgstr}}</pre>
           </div>
