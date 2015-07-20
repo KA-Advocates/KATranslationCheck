@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>KATranslationCheck output</title>
@@ -6,7 +6,6 @@
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <style type="text/css">
       .container {
-        max-width: 500px;
         padding-top: 100px;
       }
       .tcomment {margin-left: 25px; color: #444;}
@@ -16,8 +15,9 @@
     <div class="container">
         {% for entry, hit, filename in hits %}
           <div class="row">
+            <h3>Hit #{{loop.index}}</h3>
+            <div class="tcomment">{{entry.tcomment.replace("\n","<br/>")}}</div>
             <pre>{{entry.msgstr}}</pre>
-            <div class="tcomment">{{entry.tcomment}}</div>
           </div>
         {% endfor %}
       </ul>
