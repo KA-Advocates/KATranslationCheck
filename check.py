@@ -61,6 +61,12 @@ def findByRule(poFiles, msgstrRegexStr):
             if searchResult:
                 yield (entry, searchResult.group(0), filename)
 
+def download():
+    import subprocess
+    url = "https://crowdin.com/download/project/khanacademy.zip"
+    subprocess.check_output(["wget", url])
+    subprocess.check_output(["unzip", "khanacademy.zip", "de"])
+
 #Coordinate separated by comma instead of |
 commaSeparatedCoordinate = r"\$\(\d+\s*\,\s*\d+\)\$"
 assert(re.match(commaSeparatedCoordinate, "$(12,3)$"))
@@ -80,6 +86,7 @@ def hitsToHTML(poFiles, outfile, rule):
     return len(hits)
 
 if __name__ == "__main__":
+    download()
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('directory', help='The directory to look for translation files')
