@@ -83,11 +83,12 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('directory', help='The directory to look for translation files')
+    parser.add_argument('outfile', help='The HTML output file')
     args = parser.parse_args()
 
     poFiles = readPOFiles(args.directory)
     print(black("Read %d files" % len(poFiles), bold=True))
 
-    ctr = hitsToHTML(poFiles, "/ram/out.html", commaSeparatedCoordinate)
+    ctr = hitsToHTML(poFiles, args.outfile, commaSeparatedCoordinate)
 
     print ("Found %d rule violations" % ctr)
