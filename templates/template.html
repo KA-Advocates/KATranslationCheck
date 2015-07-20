@@ -1,0 +1,28 @@
+!DOCTYPE html>
+<html>
+  <head>
+    <title>KATranslationCheck output</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+      .container {
+        max-width: 500px;
+        padding-top: 100px;
+      }
+      .tcomment {margin-left: 25px; color: #444;}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        {% for entry, hit, filename in hits %}
+          <div class="row">
+            <pre>{{entry.msgstr}}</pre>
+            <div class="tcomment">{{entry.tcomment}}</div>
+          </div>
+        {% endfor %}
+      </ul>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

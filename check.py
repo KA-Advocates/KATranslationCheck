@@ -13,22 +13,40 @@ Instructions:
 import polib
 import re
 import os
+import os.path
+from multiprocessing import Pool
+from ansicolor import red, black
+from jinja2 import Environment, FileSystemLoader
 
-def readPOFiles(startdir="de/2_high_priority_content/"):
+def readPOFiles(directory):
     """
     Read all PO files from a given directory and return
-    a dictionary path -> PO object
-    """
-    poFiles = {}
-    for (curdir, _, files) in os.walk(startdir):
-        for f in files:
-            path = os.path.join(curdir, f)
-            #Ignore non-PO files
-            if not path.endswith(".po"): continue
-            poFiles[path] = polib.pofile(path)
-    return poFiles
+    a dictionary path -> PO object.
 
-poFiles = readPOFiles()
+    Also supports using a single file as argument.
+    """
+    if os.path.isfile(directory): #Single file
+        poFilenames = [directory]
+    else:
+        poFilenames = []
+        #Recursively iterate directory, ignore everythin except *.po
+        for (curdir, _, files) in os.walk(directory):
+            for f in files:
+                #Ignore non-PO files
+                if not f.endswith(".po"): continue
+                #Add to list of files to process
+                poFilenames.append(os.path.join(curdir, f))
+    # Parsing is computationally expensive.
+    # Distribute processing amongst distinct processing
+    #  if there is a significant number of files
+    if len(poFilenames) > 3:
+        pool = Pool(None) #As many as CPUs
+        parsedFiles = pool.map(polib.pofile, poFilenames)
+        return {path: parsedFile
+                   for path, parsedFile
+                   in zip(poFilenames, parsedFiles)}
+    else: #Only a small number of files, process directly
+        return {path: polib.pofile(path) for path in poFilenames}
 
 def findByRule(poFiles, msgstrRegexStr):
     """
@@ -38,14 +56,38 @@ def findByRule(poFiles, msgstrRegexStr):
     msgstrRegex = re.compile(msgstrRegexStr, re.UNICODE)
     #Iterate over files
     for filename, po in poFiles.items():
-        print(filename)
         for entry in po:
-            if msgstrRegex.search(entry.msgstr):
-                yield entry
+            searchResult = msgstrRegex.search(entry.msgstr)
+            if searchResult:
+                yield (entry, searchResult.group(0), filename)
+
+#Coordinate separated by comma instead of |
+commaSeparatedCoordinate = r"\$\(\d+\s*\,\s*\d+\)\$"
+assert(re.match(commaSeparatedCoordinate, "$(12,3)$"))
+#Simple currency value in dollar (matches both comma sep)
+simpleDollarCurrency = r"\$\s*\\\\\$\s*\d+([.,]\d+)?\s*\$"
+assert(re.match(simpleDollarCurrency, "$\\\\$12$"))
+assert(re.match(simpleDollarCurrency, "$\\\\$12.5$"))
+assert(re.match(simpleDollarCurrency, "$\\\\$12,5$"))
+
+def hitsToHTML(poFiles, outfile, rule):
+    hits = list(findByRule(poFiles, rule))
+    #Initialize template engine
+    env = Environment(loader=FileSystemLoader('templates'))
+    template = env.get_template("template.html")
+    with open(outfile, "w") as outfile:
+        outfile.write(template.render(hits=hits))
+    return len(hits)
+
 if __name__ == "__main__":
-    ctr = 0
-    for s in findByRule(poFiles, r"\$\(\d+\s*\,\s*\d+\)\$"):
-        ctr += 1
-        # s.tcomment contains the URL
-        print (s.msgstr)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('directory', help='The directory to look for translation files')
+    args = parser.parse_args()
+
+    poFiles = readPOFiles(args.directory)
+    print(black("Read %d files" % len(poFiles), bold=True))
+
+    ctr = hitsToHTML(poFiles, "/ram/out.html", commaSeparatedCoordinate)
+
     print ("Found %d rule violations" % ctr)
