@@ -28,7 +28,7 @@
                       <a class="page-scroll" href="#page-top"></a>
                   </li>
                   <li class="active">
-                      <a href="index.html">Home</a>
+                      <a href="/">Home</a>
                   </li>                    
               </ul>
           </div>
@@ -49,17 +49,20 @@
             <a href="{{rule.get_machine_name()}}.html">{{rule.name}}</a> ({{rule.custom_info["numhits"]}} hits)
           </div>
           {% endif %}
+        {% endfor %}
         {% if files %}
           <div class="row">
             <h3>Files</h3>
           </div>
           {% for filename, filelink in files.items() %}
-            <div class="row">
-              <a href="{{filelink}}">{{filename}}</a>
-              {% if filename in statsByFile %}
-                <span>({{statsByFile[filename]}} hits)</span>
-              {% endif %}
-            </div>
+            {% if statsByFile[filename] %}
+                <div class="row">
+                  <a href="{{filelink}}">{{filename}}</a>
+                  {% if filename in statsByFile %}
+                    <span>({{statsByFile[filename]}} hits)</span>
+                  {% endif %}
+                </div>
+            {% endif %}
           {% endfor %}
         {% endif %}
       </ul>

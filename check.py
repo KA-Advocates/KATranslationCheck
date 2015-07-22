@@ -107,7 +107,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-d','--download', action='store_true', help='Download or update the directory')
     parser.add_argument('-l','--language', default="de", help='The language directory to use/extract')
-    parser.add_argument('-i','--individual-reports',  action='store_true', help='Also create outputs for all individual files')
+    parser.add_argument('--no-individual-reports',  action='store_true', help='Only create overview')
     parser.add_argument('outdir', nargs='?', default="output", help='The HTML output file')
     args = parser.parse_args()
 
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     print(black("Read %d files" % len(poFiles), bold=True))
 
     statsByFile = {}
-    if args.individual_reports:
+    if not args.no_individual_reports:
         print (black("Generating individual reports...", bold=True))
         for poFilename, poFile in poFiles.items():
             filename = filepath_to_filename(poFilename)
