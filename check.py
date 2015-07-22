@@ -14,6 +14,7 @@ import polib
 import re
 import os
 import os.path
+import shutil
 from multiprocessing import Pool
 from ansicolor import red, black
 from jinja2 import Environment, FileSystemLoader
@@ -64,9 +65,15 @@ def findByRule(poFiles, msgstrRegexStr):
 def download(lang="de"):
     import subprocess
     url = "https://crowdin.com/download/project/khanacademy.zip"
+    #Remove file it it exists
     if os.path.isfile("khanacademy.zip"):
         os.remove("khanacademy.zip")
+    #Remove language directory
+    if os.path.exists(lang):
+        shutil.rmtree(lang)
+    #Download
     subprocess.check_output(["wget", url])
+    #Extract
     subprocess.check_output(["unzip", "khanacademy.zip", "%s/*" % lang], shell=False)
     #Now that we have the de folder we don't need the zip any more
     if os.path.isfile("khanacademy.zip"):
