@@ -47,6 +47,7 @@
           Page generated at {{timestamp}}
         </div>
         <div class="hitlist">
+        %
         {% for entry, hit, filename in hits %}
           <div class="row hit" data-hitfile="{{filename}}">
             <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hit">{{hit}}</code> in {{filename}}</h3>
@@ -57,6 +58,8 @@
             <pre>{{entry.msgid}}</pre>
             <hr/>
           </div>
+        {% else %}
+         <h2>No hits found</h2>
         {% endfor %}
         </div>
       </ul>
