@@ -110,7 +110,7 @@ rules = [
     #Did not translate "years"
     SimpleRegexRule("Occurrence of untranslated 'year'", r"(?<!%\()[Yy]ear(?!\)s)"), # These are lookbehind/lookhead assertions ;-)
     #Did not translate "time"
-    SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?[^A-Za-z]"),
+    SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?(?![A-Za-z])"),
     #Did not translate "time"
     SimpleSubstringRule("Occurrence of untranslated 'is'", " is "),
     #word problems no
