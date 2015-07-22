@@ -21,7 +21,7 @@ class Rule(object):
         self.custom_info = {}
     def get_machine_name(self):
         """Get a machine-readable name from a rule name"""
-        return self.name.lower().replace(" ", "-").replace("'", "").replace("\"", "")
+        return self.name.lower().replace(" ", "-").replace("'", "").replace("\"", "").replace("(","").replace(")","")
     def apply_to_po_set(self, poset, ignore_untranslated=True):
         """
         Apply to a dictionary of parsed PO files.

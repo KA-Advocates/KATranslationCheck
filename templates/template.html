@@ -11,6 +11,7 @@
       .tcomment {margin-left: 25px; color: #444;}
       /*.hit {text-decoration: none; font-weight: normal;   font-family: Monospace;} */
       .hitno {font-weight: bold;}
+      .highlight { background-color: yellow }
     </style>
     <script>
 
@@ -47,15 +48,14 @@
           Page generated at {{timestamp}}
         </div>
         <div class="hitlist">
-        %
         {% for entry, hit, filename in hits %}
           <div class="row hit" data-hitfile="{{filename}}">
-            <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hit">{{hit}}</code> in {{filename}}</h3>
+            <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hittext">{{hit}}</code> in {{filename}}</h3>
             <div class="tcomment">{{entry.tcomment.replace("\n","<br/>")}}</div>
             <h4>Translated text:</h4>
-            <pre>{{entry.msgstr}}</pre>
+            <pre class="translated">{{entry.msgstr}}</pre>
             <h4>Original text:</h4>
-            <pre>{{entry.msgid}}</pre>
+            <pre class="original">{{entry.msgid}}</pre>
             <hr/>
           </div>
         {% else %}
@@ -67,5 +67,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="http://localgrid.de/jquery.highlight-5.closure.js"></script>
+    <script>
+    $(document).ready(function() {
+      $( ".hit" ).each(function(index) {
+        hittext = $(this).find(".hittext")
+        $(this).find(".translated").highlight(hittext.text())
+      });
+    })
+    </script>
   </body>
 </html>
