@@ -12,6 +12,7 @@ Instructions:
 """
 import polib
 import re
+import json
 import os
 import os.path
 import shutil
@@ -145,4 +146,10 @@ if __name__ == "__main__":
             ctr = hitsToHTML({poFilename: poFile}, curOutdir, write_files=False)
             statsByFile[poFilename] = ctr
     ctr = hitsToHTML(poFiles, args.outdir, statsByFile=statsByFile)
-    print ("Found %d rule violations" % ctr)
+
+    print ("Found overall %d rule violations" % ctr)
+    #Write stats by file
+    with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
+        json.dump(statsByFile, outfile)
+    print (black("Generated JSON API files" % ctr, bold=True))
+
