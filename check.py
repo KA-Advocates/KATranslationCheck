@@ -154,6 +154,6 @@ if __name__ == "__main__":
         for filename, numHits in statsByFile.items()
     }
     with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
-        json.dump(statsByFile, outfile)
+        json.dump(filestats, outfile)
     print (black("Generated JSON API files", bold=True))
 
