@@ -61,13 +61,16 @@ def findByRule(poFiles, msgstrRegexStr):
             if searchResult:
                 yield (entry, searchResult.group(0), filename)
 
-def download():
+def download(lang="de"):
     import subprocess
     url = "https://crowdin.com/download/project/khanacademy.zip"
     if os.path.isfile("khanacademy.zip"):
         os.remove("khanacademy.zip")
     subprocess.check_output(["wget", url])
-    subprocess.check_output(["unzip", "khanacademy.zip", "de/*"], shell=False)
+    subprocess.check_output(["unzip", "khanacademy.zip", "%s/*" % lang], shell=False)
+    #Now that we have the de folder we don't need the zip any more
+    if os.path.isfile("khanacademy.zip"):
+        os.remove("khanacademy.zip")
 
 #Coordinate separated by comma instead of |
 commaSeparatedCoordinate = r"\$\(\d+\s*\,\s*\d+\)\$"
