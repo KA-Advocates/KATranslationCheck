@@ -151,5 +151,5 @@ if __name__ == "__main__":
     #Write stats by file
     with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
         json.dump(statsByFile, outfile)
-    print (black("Generated JSON API files" % ctr, bold=True))
+    print (black("Generated JSON API files", bold=True))
 
