@@ -16,8 +16,9 @@ import os
 import os.path
 import shutil
 from multiprocessing import Pool
-from ansicolor import red, black
+from ansicolor import red, black, blue
 from jinja2 import Environment, FileSystemLoader
+from Rules import rules
 
 def readPOFiles(directory):
     """
@@ -49,19 +50,6 @@ def readPOFiles(directory):
     else: #Only a small number of files, process directly
         return {path: polib.pofile(path) for path in poFilenames}
 
-def findByRule(poFiles, msgstrRegexStr):
-    """
-    In a dictionary of PO objects, find msgstrs that satisfy a given regex.
-    """
-    #Precompile expressions
-    msgstrRegex = re.compile(msgstrRegexStr, re.UNICODE)
-    #Iterate over files
-    for filename, po in poFiles.items():
-        for entry in po:
-            searchResult = msgstrRegex.search(entry.msgstr)
-            if searchResult:
-                yield (entry, searchResult.group(0), filename)
-
 def download(lang="de"):
     import subprocess
     url = "https://crowdin.com/download/project/khanacademy.zip"
@@ -71,7 +59,7 @@ def download(lang="de"):
     #Remove language directory
     if os.path.exists(lang):
         shutil.rmtree(lang)
-    #Download
+    #Download using wget. More robust than python solutions.
     subprocess.check_output(["wget", url])
     #Extract
     subprocess.check_output(["unzip", "khanacademy.zip", "%s/*" % lang], shell=False)
@@ -79,35 +67,45 @@ def download(lang="de"):
     if os.path.isfile("khanacademy.zip"):
         os.remove("khanacademy.zip")
 
-#Coordinate separated by comma instead of |
-commaSeparatedCoordinate = r"\$\(\d+\s*\,\s*\d+\)\$"
-assert(re.match(commaSeparatedCoordinate, "$(12,3)$"))
-#Simple currency value in dollar (matches both comma sep)
-simpleDollarCurrency = r"\$\s*\\\\\$\s*\d+([.,]\d+)?\s*\$"
-assert(re.match(simpleDollarCurrency, "$\\\\$12$"))
-assert(re.match(simpleDollarCurrency, "$\\\\$12.5$"))
-assert(re.match(simpleDollarCurrency, "$\\\\$12,5$"))
-
-def hitsToHTML(poFiles, outfile, rule):
-    hits = list(findByRule(poFiles, rule))
+def hitsToHTML(poFiles, outdir):
     #Initialize template engine
     env = Environment(loader=FileSystemLoader('templates'))
     template = env.get_template("template.html")
-    with open(outfile, "w") as outfile:
-        outfile.write(template.render(hits=hits))
-    return len(hits)
+    # Stats
+    violation_ctr = 0
+    # Generate out
+    for rule in rules:
+        print(blue("Processing rule %s" % rule.name))
+        #Run rule
+        hits = list(rule.apply_to_po_set(poFiles))
+        # Run outfile path
+        outfilePath = os.path.join(outdir, "%s.html" % rule.get_machine_name())
+        with open(outfilePath, "w") as outfile:
+            outfile.write(template.render(hits=hits))
+        # Stats
+        violation_ctr += len(hits)
+    return violation_ctr
 
 if __name__ == "__main__":
-    download()
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('directory', help='The directory to look for translation files')
-    parser.add_argument('outfile', help='The HTML output file')
+    parser.add_argument('-d','--download', action='store_true', help='Download or update the directory')
+    parser.add_argument('-l','--language', default="de", help='The language directory to use/extract')
+    parser.add_argument('outdir', nargs='?', default="output", help='The HTML output file')
     args = parser.parse_args()
 
-    poFiles = readPOFiles(args.directory)
+    # Download / update if requested
+    if args.download:
+        download()
+
+    # Create directory
+    if not os.path.isdir(args.outdir):
+        os.mkdir(args.outdir)
+
+    # Import
+    print(black("Reading files from %s folder..." % args.language, bold=True))
+    poFiles = readPOFiles(args.language)
     print(black("Read %d files" % len(poFiles), bold=True))
 
-    ctr = hitsToHTML(poFiles, args.outfile, commaSeparatedCoordinate)
-
+    ctr = hitsToHTML(poFiles, args.outdir)
     print ("Found %d rule violations" % ctr)
