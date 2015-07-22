@@ -68,7 +68,10 @@ def download(lang="de"):
     if os.path.isfile("khanacademy.zip"):
         os.remove("khanacademy.zip")
 
-def hitsToHTML(poFiles, outdir):
+def hitsToHTML(poFiles, outdir, write_files=True):
+    """
+    Apply a rule and write a directory of output HTML files
+    """
     #Initialize template engine
     env = Environment(loader=FileSystemLoader('templates'))
     ruleTemplate = env.get_template("template.html")
@@ -78,7 +81,7 @@ def hitsToHTML(poFiles, outdir):
     # Stats
     violation_ctr = 0
     # Generate output HTML for each rule
-    files = {filename: filepath_to_filename(filename) for filename in poFiles.keys()}
+    files = {filename: filepath_to_filename(filename) for filename in poFiles.keys()} if write_files else None
     for rule in rules:
         #Run rule
         hits = list(rule.apply_to_po_set(poFiles))
@@ -129,4 +132,4 @@ if __name__ == "__main__":
             curOutdir = os.path.join(args.outdir, filename)
             if not os.path.isdir(curOutdir):
                 os.mkdir(curOutdir)
-            hitsToHTML({poFilename: poFile}, curOutdir)
+            hitsToHTML({poFilename: poFile}, curOutdir, write_files=False)

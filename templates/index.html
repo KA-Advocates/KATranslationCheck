@@ -48,14 +48,16 @@
             <a href="{{rule.get_machine_name()}}.html">{{rule.name}}</a> ({{rule.custom_info["numhits"]}} hits)
           </div>
         {% endfor %}
-        <div class="row">
-          <h3>Files</h3>
-        </div>
-        {% for filename, filelink in files.items() %}
+        {% if files %}
           <div class="row">
-            <a href="{{filelink}}">{{filename}}</a>
+            <h3>Files</h3>
           </div>
-        {% endfor %}
+          {% for filename, filelink in files.items() %}
+            <div class="row">
+              <a href="{{filelink}}">{{filename}}</a>
+            </div>
+          {% endfor %}
+        {% endif %}
       </ul>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

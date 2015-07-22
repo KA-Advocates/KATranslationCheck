@@ -117,7 +117,7 @@ rules = [
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben", r"word\s+problem", "Textaufgabe"),
     #Bing issues
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
-    SimpleRegexRule("Bing (1)", r"!\s+\[\]\("),
+    SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),
     SimpleRegexRule("False Bing translation of interactive-graphic", r"[Ii]nteraktive\s+Grafik"),
     SimpleRegexRule("False Bing translation of Radio", r"Radio"),
     SimpleRegexRule("False Bing translation of input-number", r"[Ee]ingabe-Zahl"),
