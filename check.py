@@ -70,9 +70,8 @@ def download(lang="de"):
         os.remove("khanacademy.zip")
     #Set download timestamp
     timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
-    if os.path.isfile("lastdownload.txt"):
-        with open("lastdownload.txt", "w") as outfile:
-            outfile.write(timestamp)
+    with open("lastdownload.txt", "w") as outfile:
+        outfile.write(timestamp)
 
 def hitsToHTML(poFiles, outdir, write_files=True, statsByFile={}):
     """
