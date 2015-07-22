@@ -41,11 +41,19 @@
           Page generated at {{timestamp}}
         </div>
         <div class="row">
-          <h3>Rules</h3>
+          <h3>Overall statistics</h3>
         </div>
         {% for rule in rules %}
           <div class="row">
             <a href="{{rule.get_machine_name()}}.html">{{rule.name}}</a> ({{rule.custom_info["numhits"]}} hits)
+          </div>
+        {% endfor %}
+        <div class="row">
+          <h3>Files</h3>
+        </div>
+        {% for filename, filelink in files.items() %}
+          <div class="row">
+            <a href="{{filelink}}">{{filename}}</a>
           </div>
         {% endfor %}
       </ul>

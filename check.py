@@ -77,9 +77,9 @@ def hitsToHTML(poFiles, outdir):
     timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
     # Stats
     violation_ctr = 0
-    # Generate out
+    # Generate output HTML for each rule
+    files = {filename: filepath_to_filename(filename) for filename in poFiles.keys()}
     for rule in rules:
-        print(blue("Processing rule %s" % rule.name))
         #Run rule
         hits = list(rule.apply_to_po_set(poFiles))
         # Run outfile path
@@ -91,14 +91,18 @@ def hitsToHTML(poFiles, outdir):
         rule.custom_info["numhits"] = len(hits)
     # Render index page
     with open(os.path.join(outdir, "index.html"), "w") as outfile:
-        outfile.write(indexTemplate.render(rules=rules, timestamp=timestamp))
+        outfile.write(indexTemplate.render(rules=rules, timestamp=timestamp, files=files))
     return violation_ctr
+
+def filepath_to_filename(filename):
+    return filename.replace("/", "_")
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-d','--download', action='store_true', help='Download or update the directory')
     parser.add_argument('-l','--language', default="de", help='The language directory to use/extract')
+    parser.add_argument('-i','--individual-reports',  action='store_true', help='Also create outputs for all individual files')
     parser.add_argument('outdir', nargs='?', default="output", help='The HTML output file')
     args = parser.parse_args()
 
@@ -117,3 +121,12 @@ if __name__ == "__main__":
 
     ctr = hitsToHTML(poFiles, args.outdir)
     print ("Found %d rule violations" % ctr)
+
+    if args.individual_reports:
+        print (black("Generating individual reports...", bold=True))
+        for poFilename, poFile in poFiles.items():
+            filename = filepath_to_filename(poFilename)
+            curOutdir = os.path.join(args.outdir, filename)
+            if not os.path.isdir(curOutdir):
+                os.mkdir(curOutdir)
+            hitsToHTML({poFilename: poFile}, curOutdir)
