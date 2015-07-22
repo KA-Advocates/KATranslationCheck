@@ -15,6 +15,7 @@ import re
 import os
 import os.path
 import shutil
+import datetime
 from multiprocessing import Pool
 from ansicolor import red, black, blue
 from jinja2 import Environment, FileSystemLoader
@@ -70,7 +71,10 @@ def download(lang="de"):
 def hitsToHTML(poFiles, outdir):
     #Initialize template engine
     env = Environment(loader=FileSystemLoader('templates'))
-    template = env.get_template("template.html")
+    ruleTemplate = env.get_template("template.html")
+    indexTemplate = env.get_template("index.html")
+    # Get timestamp
+    timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
     # Stats
     violation_ctr = 0
     # Generate out
@@ -81,9 +85,13 @@ def hitsToHTML(poFiles, outdir):
         # Run outfile path
         outfilePath = os.path.join(outdir, "%s.html" % rule.get_machine_name())
         with open(outfilePath, "w") as outfile:
-            outfile.write(template.render(hits=hits))
+            outfile.write(ruleTemplate.render(hits=hits, timestamp=timestamp))
         # Stats
         violation_ctr += len(hits)
+        rule.custom_info["numhits"] = len(hits)
+    # Render index page
+    with open(os.path.join(outdir, "index.html"), "w") as outfile:
+        outfile.write(indexTemplate.render(rules=rules, timestamp=timestamp))
     return violation_ctr
 
 if __name__ == "__main__":

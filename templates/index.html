@@ -7,9 +7,6 @@
     <style type="text/css">
       #maincontainer {padding-top: 80px;}
       #timestamprow {margin-bottom: 10px;}
-      .tcomment {margin-left: 25px; color: #444;}
-      /*.hit {text-decoration: none; font-weight: normal;   font-family: Monospace;} */
-      .hitno {font-weight: bold;}
     </style>
   </head>
   <body>
@@ -42,15 +39,12 @@
         <div id="timestamprow" class="row">
           Page generated at {{timestamp}}
         </div>
-        {% for entry, hit, filename in hits %}
+        <div class="row">
+          <h3>Rules</h3>
+        </div>
+        {% for rule in rules %}
           <div class="row">
-            <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hit">{{hit}}</code> in {{filename}}</h3>
-            <div class="tcomment">{{entry.tcomment.replace("\n","<br/>")}}</div>
-            <h4>Translated text:</h4>
-            <pre>{{entry.msgstr}}</pre>
-            <h4>Original text:</h4>
-            <pre>{{entry.msgid}}</pre>
-            <hr/>
+            <a href="{{rule.get_machine_name()}}.html">{{rule.name}}</a> ({{rule.custom_info["numhits"]}} hits)
           </div>
         {% endfor %}
       </ul>
