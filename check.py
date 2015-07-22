@@ -16,6 +16,7 @@ import os
 import os.path
 import shutil
 import datetime
+import collections
 from multiprocessing import Pool
 from ansicolor import red, black, blue
 from jinja2 import Environment, FileSystemLoader
@@ -68,7 +69,7 @@ def download(lang="de"):
     if os.path.isfile("khanacademy.zip"):
         os.remove("khanacademy.zip")
 
-def hitsToHTML(poFiles, outdir, write_files=True):
+def hitsToHTML(poFiles, outdir, write_files=True, statsByFile={}):
     """
     Apply a rule and write a directory of output HTML files
     """
@@ -81,7 +82,8 @@ def hitsToHTML(poFiles, outdir, write_files=True):
     # Stats
     violation_ctr = 0
     # Generate output HTML for each rule
-    files = {filename: filepath_to_filename(filename) for filename in poFiles.keys()} if write_files else None
+    files = {filename: filepath_to_filename(filename) for filename in poFiles.keys()} if write_files else {}
+    files = collections.OrderedDict(sorted(files.items()))
     for rule in rules:
         #Run rule
         hits = list(rule.apply_to_po_set(poFiles))
@@ -94,7 +96,7 @@ def hitsToHTML(poFiles, outdir, write_files=True):
         rule.custom_info["numhits"] = len(hits)
     # Render index page
     with open(os.path.join(outdir, "index.html"), "w") as outfile:
-        outfile.write(indexTemplate.render(rules=rules, timestamp=timestamp, files=files))
+        outfile.write(indexTemplate.render(rules=rules, timestamp=timestamp, files=files, statsByFile=statsByFile))
     return violation_ctr
 
 def filepath_to_filename(filename):
@@ -122,9 +124,7 @@ if __name__ == "__main__":
     poFiles = readPOFiles(args.language)
     print(black("Read %d files" % len(poFiles), bold=True))
 
-    ctr = hitsToHTML(poFiles, args.outdir)
-    print ("Found %d rule violations" % ctr)
-
+    statsByFile = {}
     if args.individual_reports:
         print (black("Generating individual reports...", bold=True))
         for poFilename, poFile in poFiles.items():
@@ -132,4 +132,7 @@ if __name__ == "__main__":
             curOutdir = os.path.join(args.outdir, filename)
             if not os.path.isdir(curOutdir):
                 os.mkdir(curOutdir)
-            hitsToHTML({poFilename: poFile}, curOutdir, write_files=False)
+            ctr = hitsToHTML({poFilename: poFile}, curOutdir, write_files=False)
+            statsByFile[poFilename] = ctr
+    ctr = hitsToHTML(poFiles, args.outdir, statsByFile=statsByFile)
+    print ("Found %d rule violations" % ctr)

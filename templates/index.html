@@ -55,6 +55,9 @@
           {% for filename, filelink in files.items() %}
             <div class="row">
               <a href="{{filelink}}">{{filename}}</a>
+              {% if filename in statsByFile %}
+                <span>({{statsByFile[filename]}} hits)</span>
+              {% endif %}
             </div>
           {% endfor %}
         {% endif %}
