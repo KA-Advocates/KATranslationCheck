@@ -65,7 +65,7 @@ def download():
     import subprocess
     url = "https://crowdin.com/download/project/khanacademy.zip"
     subprocess.check_output(["wget", url])
-    subprocess.check_output(["unzip", "khanacademy.zip", "de"])
+    subprocess.check_output(["unzip", "khanacademy.zip", "de/*"], shell=False)
 
 #Coordinate separated by comma instead of |
 commaSeparatedCoordinate = r"\$\(\d+\s*\,\s*\d+\)\$"
