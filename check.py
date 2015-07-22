@@ -150,7 +150,7 @@ if __name__ == "__main__":
     print ("Found overall %d rule violations" % ctr)
     #Write stats by file
     filestats = {
-        filename: {"hits": numHits, "link": filepath_to_filename("_")}
+        filename: {"hits": numHits, "link": filepath_to_filename(filename)}
         for filename, numHits in statsByFile.items()
     }
     with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
