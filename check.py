@@ -68,6 +68,11 @@ def download(lang="de"):
     #Now that we have the de folder we don't need the zip any more
     if os.path.isfile("khanacademy.zip"):
         os.remove("khanacademy.zip")
+    #Set download timestamp
+    timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
+    if os.path.isfile("lastdownload.txt"):
+        with open("lastdownload.txt", "w") as outfile:
+            outfile.write(timestamp)
 
 def hitsToHTML(poFiles, outdir, write_files=True, statsByFile={}):
     """
@@ -79,6 +84,11 @@ def hitsToHTML(poFiles, outdir, write_files=True, statsByFile={}):
     indexTemplate = env.get_template("index.html")
     # Get timestamp
     timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
+    if os.path.isfile("lastdownload.txt"):
+        with open("lastdownload.txt") as infile:
+            downloadTimestamp = infile.read().strip()
+    else:
+        downloadTimestamp = None
     # Stats
     violation_ctr = 0
     # Generate output HTML for each rule
@@ -90,13 +100,14 @@ def hitsToHTML(poFiles, outdir, write_files=True, statsByFile={}):
         # Run outfile path
         outfilePath = os.path.join(outdir, "%s.html" % rule.get_machine_name())
         with open(outfilePath, "w") as outfile:
-            outfile.write(ruleTemplate.render(hits=hits, timestamp=timestamp))
+            outfile.write(ruleTemplate.render(hits=hits, timestamp=timestamp, downloadTimestamp=downloadTimestamp))
         # Stats
         violation_ctr += len(hits)
         rule.custom_info["numhits"] = len(hits)
     # Render index page
     with open(os.path.join(outdir, "index.html"), "w") as outfile:
-        outfile.write(indexTemplate.render(rules=rules, timestamp=timestamp, files=files, statsByFile=statsByFile))
+        outfile.write(indexTemplate.render(rules=rules, timestamp=timestamp, files=files, statsByFile=statsByFile,
+                      downloadTimestamp=downloadTimestamp))
     return violation_ctr
 
 def filepath_to_filename(filename):

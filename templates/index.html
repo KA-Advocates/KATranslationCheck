@@ -38,7 +38,10 @@
     </nav>
     <div id="maincontainer" class="container">
         <div id="timestamprow" class="row">
-          Page generated at {{timestamp}}
+          Page generated at {{timestamp}}<br/>
+          {% if downloadTimestamp %}
+            Translations downloaded at {{downloadTimestamp}}<br/>
+          {% endif %}
         </div>
         <div class="row">
           <h3>Overall statistics</h3>
