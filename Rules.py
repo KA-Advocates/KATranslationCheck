@@ -115,6 +115,22 @@ rules = [
     SimpleSubstringRule("Occurrence of untranslated 'is'", " is "),
     #word problems no
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben", r"word\s+problem", "Textaufgabe"),
+    #Bing issues
+    SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
+    SimpleRegexRule("Bing (1)", r"!\s+\[\]\("),
+    SimpleRegexRule("False Bing translation of interactive-graphic", r"[Ii]nteraktive\s+Grafik"),
+    SimpleRegexRule("False Bing translation of Radio", r"Radio"),
+    SimpleRegexRule("False Bing translation of input-number", r"[Ee]ingabe-Zahl"),
+    SimpleRegexRule("False Bing translation of input-number", r"[Ee]ingabe-Nummer"),
+    SimpleRegexRule("False Bing translation of numeric-input", r"[Nn]umerische[-\s]+Eingabe"),
+    SimpleRegexRule("False Bing translation of numeric-input", r"[Nn]umerische[-\s]+Eingang"),
+    SimpleRegexRule("False Bing translation of image", r"☃\s+Bild"),
+    SimpleRegexRule("Missing translation of **How", r"\*\*[Hh]ow"),
+    SimpleRegexRule("Missing translation of **What", r"\*\*[Ww]hat"),
+    SimpleRegexRule("Missing translation of ones", r"\\text\{\s*ones\}\}"),
+    SimpleRegexRule("Missing translation of ten(s)", r"\\text\{\s*tens?\}\}"),
+    SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}"),
+
 ]
 
 def findRule(name):
