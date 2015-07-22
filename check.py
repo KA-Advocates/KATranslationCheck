@@ -64,6 +64,8 @@ def findByRule(poFiles, msgstrRegexStr):
 def download():
     import subprocess
     url = "https://crowdin.com/download/project/khanacademy.zip"
+    if os.path.isfile("khanacademy.zip"):
+        os.remove("khanacademy.zip")
     subprocess.check_output(["wget", url])
     subprocess.check_output(["unzip", "khanacademy.zip", "de/*"], shell=False)
 
