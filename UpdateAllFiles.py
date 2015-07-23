@@ -9,6 +9,7 @@ import requests
 import json
 import re
 import os
+import errno
 import os.path
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
@@ -37,7 +38,8 @@ def downloadTranslationFilemap(lang="de"):
     """
     Create a filename -> info map for a given Crowdin.
     The info contains all crowdin info plus the "id" property,
-    containing the numeric file ID on Crowdin.
+    containing the numeric file ID on Crowdin and the "path" property
+    containing the path inside the language directory.
     """
     # Extract filemap
     response = requests.get("http://crowdin.khanacademy.org/project/khanacademy/%s" % lang)
@@ -46,10 +48,15 @@ def downloadTranslationFilemap(lang="de"):
     jsonStr = scripttext.partition("PROJECT_FILES = ")[2]
     jsonStr = jsonStr.rpartition(", DOWNLOAD_PERMISSIONS")[0].replace("\\/", "/")
     projectFiles = json.loads(jsonStr)
+    # Build map for the directory structure
+    directoryMap = {
+        v["id"]: v["name"] + "/"
+        for k, v in projectFiles.items()
+        if v["node_type"] == "0"} #0 -> directory
     # Filter only POT. Create filename -> object map with "id" property set
     idRegex = re.compile("/khanacademy/(\d+)/enus-de")
     return {
-        v["name"]: dict(v.items() | [("id", int(idRegex.match(v["editor_url"]).group(1)))])
+        v["name"]: dict(v.items() | [("id", int(v["id"])), ("path", directoryMap[v["parent_id"]] + v["name"])])
         for k, v in projectFiles.items()
         if v["name"].endswith(".pot")}
 
@@ -70,7 +77,7 @@ def performPOTDownload(argtuple):
         raise Exception("Crowdin export failed: " + response.text)
     # Trigger download
     # Store in file
-    with open(filepath, "wb") as outfile:
+    with open(filepath, "w+b") as outfile:
         response = s.get(urlPrefix + "download", stream=True)
 
         if not response.ok:
@@ -112,20 +119,21 @@ if __name__ == "__main__":
     parser.add_argument('-j', '--num-processes', default=1, type=int, help='Number of processes to use for parallel download')
     args = parser.parse_args()
 
-    # Create directory
-    if not os.path.isdir(args.language):
-        os.mkdir(args.language)
-
     # Get map that contains (besides other stuff)
     #  the crowdin ID for a given file
     translationFilemap = getTranslationFilemapCache()
 
-
-
     # Collect valid downloadable files for parallel processing
     fileinfos = []
     for filename, fileinfo in translationFilemap.items():
-        filepath = os.path.join(args.language, filename)
+        filepath = os.path.join(args.language, fileinfo["path"])
+        # Create dir if not exists
+        try: os.makedirs(os.path.dirname(filepath))
+        except OSError as exc:
+            if exc.errno == errno.EEXIST:
+                pass
+            else:
+                raise
         fileid = fileinfo["id"]
         fileinfos.append((fileid, filepath))
     # Perform parallel download
