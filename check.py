@@ -119,7 +119,7 @@ if __name__ == "__main__":
     parser.add_argument('-d','--download', action='store_true', help='Download or update the directory')
     parser.add_argument('-l','--language', default="de", help='The language directory to use/extract')
     parser.add_argument('--no-individual-reports',  action='store_true', help='Only create overview')
-    parser.add_argument('outdir', nargs='?', default="output", help='The HTML output file')
+    parser.add_argument('outdir', nargs='?', default="output", help='The output directory to use')
     args = parser.parse_args()
 
     # Download / update if requested
