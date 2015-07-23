@@ -104,6 +104,8 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract')
+    parser.add_argument('-j', '--num-processes', default=1, type=int, help='Number of processes to use for parallel download')
+    parser.add_argument('outdir', nargs='?', default="output", help='The output directory to use')
     args = parser.parse_args()
 
     # Create directory
@@ -121,5 +123,9 @@ if __name__ == "__main__":
         fileid = fileinfo["id"]
         fileinfos.append((fileid, filepath))
     # Perform parallel download
-    pool = Pool(16)
-    pool.map(performPOTDownload, fileinfos)
+    if args.num_processes > 1:
+        pool = Pool(args.num_processes)
+        pool.map(performPOTDownload, fileinfos)
+    else:
+        for t in fileinfos:
+            performPOTDownload(t)

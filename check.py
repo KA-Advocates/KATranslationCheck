@@ -38,7 +38,7 @@ def readPOFiles(directory):
         for (curdir, _, files) in os.walk(directory):
             for f in files:
                 #Ignore non-PO files
-                if not f.endswith(".po"): continue
+                if not f.endswith(".po") and not f.endswith(".pot"): continue
                 #Add to list of files to process
                 poFilenames.append(os.path.join(curdir, f))
     # Parsing is computationally expensive.
