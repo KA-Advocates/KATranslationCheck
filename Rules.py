@@ -87,7 +87,7 @@ class TranslationConstraintRule(Rule):
         self.regex_translated_str = regexTranslated
     def __call__(self, msgstr, msgid):
         if self.reOrig.search(msgid) and not self.reTranslated.search(msgstr):
-            return "<failed constraint>"
+            return "[failed constraint]"
         return None
 
 def SimpleGlobRule(name, glob):

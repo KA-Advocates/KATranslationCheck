@@ -156,4 +156,3 @@ if __name__ == "__main__":
     with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
         json.dump(filestats, outfile)
     print (black("Generated JSON API files", bold=True))
-
