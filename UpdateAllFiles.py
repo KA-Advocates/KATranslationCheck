@@ -69,10 +69,15 @@ def performPOTDownload(argtuple):
     if exportResponse.json()["success"] != True:
         raise Exception("Crowdin export failed: " + response.text)
     # Trigger download
-    response = s.get(urlPrefix + "download")
     # Store in file
-    with open(filepath, "w") as outfile:
-        outfile.write(response.text)
+    with open(filepath, "wb") as outfile:
+        response = s.get(urlPrefix + "download", stream=True)
+
+        if not response.ok:
+            raise Exception("Download error")
+
+        for block in response.iter_content(1024):
+            outfile.write(block)
     print(green("Downloaded %s" % filepath))
 
 def findExistingPOFiles(lang="de", directory="de"):
@@ -115,7 +120,7 @@ if __name__ == "__main__":
     #  the crowdin ID for a given file
     translationFilemap = getTranslationFilemapCache()
 
-    
+
 
     # Collect valid downloadable files for parallel processing
     fileinfos = []
