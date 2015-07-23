@@ -60,3 +60,5 @@ target/
 de
 output
 lastdownload.txt
+crowdin-credentials.json
+translation-filemap.cache.json
