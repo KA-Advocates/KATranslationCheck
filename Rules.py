@@ -139,6 +139,8 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'few(er)'", r"\b[Ff]ew(er)?\b"),
     SimpleRegexRule("Occurrence of untranslated 'equal(s)'", r"\b[E]quals?\b"),
     SimpleRegexRule("Occurrence of untranslated 'percent'", r"\b[Pp]ercents?\b"),
+    SimpleRegexRule("Occurrence of untranslated 'to'", r"\b[Tt]o\b"),
+    SimpleRegexRule("Occurrence of untranslated 'axis'", r"\b[Aa]xis\b"),
     SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!\\)[Bb]lue\b"),
     SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)[Pp]urple\b"),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)[Rr]ed\b"),
