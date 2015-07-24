@@ -119,6 +119,17 @@ class NegativeTranslationConstraintRule(Rule):
             return "[failed constraint]"
         return None
 
+class BooleanNotRule(Rule):
+    """Apply a boolean NOT to a child rule"""
+    def __init__(self, child):
+        super().__init__(child.name)
+        self.child = child
+    def __call__(self, msgstr, msgid):
+        if self.child(msgstr, msgid):
+            return None
+        else:
+            return "[failed boolean NOT]"
+
 
 def SimpleGlobRule(name, glob):
     """Rule wrapper that translates a glob-ish rule to a regex rule"""
