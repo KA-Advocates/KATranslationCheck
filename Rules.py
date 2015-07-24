@@ -126,6 +126,8 @@ rules = [
     SimpleRegexRule("Simple number with decimal point instead of comma", r"\$[-]?\s*\d+\.\d+\s+\$"),
     #Simple currency value in dollar (matches comma separated and decimal point)
     SimpleRegexRule("Value with embedded dollar symbol", r"\$\s*\\\\\$\s*\d+([.,]\d+)?\s*\$"),
+    #Errors in thousands separation
+    SimpleRegexRule("Value with multiple or mixed commata or dots", r"(\d+[.,]){2,}\d+"), #Should be space
     #Dollar not embedded as a symbol 234$ dollar
     SimpleRegexRule("Value suffixed by dollar", r"\d+\$\s*dollars"),
     # Translator missed english-only world
@@ -135,8 +137,11 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'and'", r"\b[A]nd\b"),
     SimpleRegexRule("Occurrence of dollar as string", r"[Dd]ollars?"),
     SimpleSubstringRule("Dollar symbol in formula", r"\\\\$"),
-    #word problems no
-    TranslationConstraintRule("'word problems' not translated to 'Textaufgaben", r"word\s+problem", r"[Tt]extaufgabe"),
+    #Recommended translations
+    TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleichung", flags=re.UNICODE | re.IGNORECASE),
     #Bing issues
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
     SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),
