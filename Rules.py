@@ -8,6 +8,14 @@ if sys.version_info[0] < 3:
     print("This script requires Python version 3.x")
     sys.exit(1)
 
+aHrefLinkTextRegex = re.compile(r'<a\s+href="[^"]+">(.+?)</a>\s*')
+
+def cleanupTranslatedString(s):
+    """Minor but fast cleanup of the msgstr in order to avoid hits in invisible parts"""
+    if not "</a>" in s:
+        return s
+    return aHrefLinkTextRegex.sub(r"\1", s)
+
 class Rule(object):
     """
     A baseclass for rules.
@@ -33,8 +41,10 @@ class Rule(object):
                 # This accounts for the fact that we don't know how
                 if ignore_untranslated and entry.msgstr == entry.msgid:
                     continue
+                # Translated string cleanup
+                msgstr = cleanupTranslatedString(entry.msgstr)
                 # Apply the rule
-                hit = self(entry.msgstr, entry.msgid)
+                hit = self(msgstr, entry.msgid)
                 if hit:
                     yield (entry, hit, filename)
 
