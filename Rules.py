@@ -74,7 +74,7 @@ class SimpleSubstringRule(Rule):
 class TranslationConstraintRule(Rule):
     """
     Enforces that a certain regex in the original string will
-    be translated,
+    be translated a certain way
 
     i.e. the rule hits when regexOrig has >= 1 match in the msgid
     while regexTranslated has 0 machte
@@ -90,6 +90,26 @@ class TranslationConstraintRule(Rule):
             return "[failed constraint]"
         return None
 
+class NegativeTranslationConstraintRule(Rule):
+    """
+    Enforces that a certain regex in the original string will
+    NOT be translated a certain way,
+
+    i.e. the rule hits when regexOrig has >= 1 match in the msgid
+    while regexTranslated has a match.
+    """
+    def __init__(self, name, regexOrig, regexTranslated, flags=re.UNICODE):
+        super().__init__(name)
+        self.reOrig = re.compile(regexOrig, flags)
+        self.reTranslated = re.compile(regexTranslated, flags)
+        self.regex_orig_str = regexOrig
+        self.regex_translated_str = regexTranslated
+    def __call__(self, msgstr, msgid):
+        if self.reOrig.search(msgid) and self.reTranslated.search(msgstr):
+            return "[failed constraint]"
+        return None
+
+
 def SimpleGlobRule(name, glob):
     """Rule wrapper that translates a glob-ish rule to a regex rule"""
     return SimpleRegexRule(name, fnmatch.translate(glob))
@@ -100,25 +120,24 @@ def SimpleGlobRule(name, glob):
 # Currently hardcoded for DE language
 rules = [
     #Coordinate separated by comma instead of |
-    SimpleRegexRule("Comma in coordinate", r"\$\(\d+\s*\,\s*\d+\)\$"),
+    SimpleRegexRule("Comma in integral coordinate", r"\$\(\d+\s*\,\s*\d+\)\$"),
+    SimpleRegexRule("Comma in non-integral coordinate", r"\$\(\d+[\.,]\d+\s*\,\s*\d+[\.,]\d+\)\$"),
     #The most simple case of using a decimal point instead
-    SimpleRegexRule("Simple number with decimal point", r"\$\s*\d+\.\d+\s+\$"),
+    SimpleRegexRule("Simple number with decimal point instead of comma", r"\$[-]?\s*\d+\.\d+\s+\$"),
     #Simple currency value in dollar (matches comma separated and decimal point)
     SimpleRegexRule("Value with embedded dollar symbol", r"\$\s*\\\\\$\s*\d+([.,]\d+)?\s*\$"),
     #Dollar not embedded as a symbol 234$ dollar
     SimpleRegexRule("Value suffixed by dollar", r"\d+\$\s*dollars"),
-    #Did not translate "years"
+    # Translator missed english-only world
     SimpleRegexRule("Occurrence of untranslated 'year'", r"(?<!%\()[Yy]ear(?!\)s)"), # These are lookbehind/lookhead assertions ;-)
-    #Did not translate "time"
     SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?(?![A-Za-z])"),
-    #Did not translate "time"
     SimpleSubstringRule("Occurrence of untranslated 'is'", " is "),
     #word problems no
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben", r"word\s+problem", "Textaufgabe"),
     #Bing issues
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
     SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),
-    SimpleRegexRule("False Bing translation of interactive-graphic", r"[Ii]nteraktive\s+Grafik"),
+    NegativeTranslationConstraintRule("False Bing translation of interactive-graphic", r"☃\s+interactive-graph", r"[Ii]nteraktive\s+Grafik"),
     SimpleRegexRule("False Bing translation of Radio", r"Radio"),
     SimpleRegexRule("False Bing translation of input-number", r"[Ee]ingabe-Zahl"),
     SimpleRegexRule("False Bing translation of input-number", r"[Ee]ingabe-Nummer"),
@@ -130,6 +149,7 @@ rules = [
     SimpleRegexRule("Missing translation of ones", r"\\text\{\s*ones\}\}"),
     SimpleRegexRule("Missing translation of ten(s)", r"\\text\{\s*tens?\}\}"),
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}"),
+    # Unser
 
 ]
 
