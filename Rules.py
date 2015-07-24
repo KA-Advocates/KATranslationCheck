@@ -131,7 +131,10 @@ rules = [
     # Translator missed english-only world
     SimpleRegexRule("Occurrence of untranslated 'year'", r"(?<!%\()[Yy]ear(?!\)s)"), # These are lookbehind/lookhead assertions ;-)
     SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?(?![A-Za-z])"),
-    SimpleSubstringRule("Occurrence of untranslated 'is'", " is "),
+    SimpleRegexRule("Occurrence of untranslated 'is'", r"\b[Ii]s\b"),
+    SimpleRegexRule("Occurrence of untranslated 'and'", r"\b[A]nd\b"),
+    SimpleRegexRule("Occurrence of dollar as string", r"[Dd]ollars?"),
+    SimpleSubstringRule("Dollar symbol in formula", r"\\\\$"),
     #word problems no
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben", r"word\s+problem", "Textaufgabe"),
     #Bing issues
@@ -149,7 +152,7 @@ rules = [
     SimpleRegexRule("Missing translation of ones", r"\\text\{\s*ones\}\}"),
     SimpleRegexRule("Missing translation of ten(s)", r"\\text\{\s*tens?\}\}"),
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}"),
-    # Unser
+    # Unsorted rules
 
 ]
 
