@@ -130,6 +130,30 @@ class BooleanNotRule(Rule):
         else:
             return "[failed boolean NOT]"
 
+class BooleanAndRule(Rule):
+    """Apply a boolean AND to a child rule. Returns the hit of the first child."""
+    def __init__(self, name, childA, childB):
+        super().__init__(name)
+        self.childA = childA
+        self.childB = childB
+    def __call__(self, msgstr, msgid):
+        hitA = self.childA(msgstr, msgid)
+        if not hitA: return None # Shortcut-return
+        hitB = self.childB(msgstr, msgid)
+        if hitB: return hitA
+        return None
+
+class BooleanOrRule(Rule):
+    """Apply a boolean AND to a child rule. Returns the hit of the first child."""
+    def __init__(self, name, childA, childB):
+        super().__init__(name)
+        self.childA = childA
+        self.childB = childB
+    def __call__(self, msgstr, msgid):
+        hitA = self.childA(msgstr, msgid)
+        if hitA: return hitA # Shortcut-return
+        return self.childB(msgstr, msgid)
+
 
 def SimpleGlobRule(name, glob):
     """Rule wrapper that translates a glob-ish rule to a regex rule"""
