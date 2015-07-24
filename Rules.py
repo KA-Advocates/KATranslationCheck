@@ -141,11 +141,11 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'percent'", r"\b[Pp]ercents?\b"),
     SimpleRegexRule("Occurrence of untranslated 'to'", r"\b[Tt]o\b"),
     SimpleRegexRule("Occurrence of untranslated 'axis'", r"\b[Aa]xis\b"),
-    SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!\\)[Bb]lue\b"),
-    SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)[Pp]urple\b"),
-    SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)[Rr]ed\b"),
-    SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)[Gg]reen\b"),
-    SimpleRegexRule("Occurrence of untranslated 'pink' (not as color specifier)", r"(?<!\\)[Pp]ink\b"),
+    SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!\\)\b[Bb]lue\b"),
+    SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b"),
+    SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b"),
+    SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)\b[Gg]reen\b"),
+    SimpleRegexRule("Occurrence of untranslated 'pink' (not as color specifier)", r"(?<!\\)\b[Pp]ink\b"),
     SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?"), #US-Dollars? allowed
     SimpleSubstringRule("Escaped dollar symbol in formula", r"\\$"),
     #Recommended translations
