@@ -146,7 +146,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)[Rr]ed\b"),
     SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)[Gg]reen\b"),
     SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?"), #US-Dollars? allowed
-    SimpleSubstringRule("Escaped dollar symbol in formula", r"\\\\$"),
+    SimpleSubstringRule("Escaped dollar symbol in formula", r"\\$"),
     #Recommended translations
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", flags=re.UNICODE | re.IGNORECASE),
