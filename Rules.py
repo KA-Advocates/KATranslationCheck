@@ -187,7 +187,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'equivalent", r"\b[Ee]quivalent\b"),
     SimpleRegexRule("Occurrence of untranslated 'piece(s)", r"\b[Pp]ieces?\b"),
     SimpleRegexRule("Occurrence of untranslated 'percent'", r"\b[Pp]ercents?\b"),
-    SimpleRegexRule("Occurrence of untranslated 'shade(d)'", r"\b[Ss]haded?\b"),
+    SimpleRegexRule("Occurrence of untranslated 'shade(d)'", r"(\b|-)[Ss]haded?\b"),
     SimpleRegexRule("Occurrence of untranslated 'to'", r"(?<!\\)\b[Tt]o\b"),
     SimpleRegexRule("Occurrence of untranslated 'axis'", r"\b[Aa]xis\b"),
     SimpleRegexRule("Occurrence of untranslated 'multiply'", r"\b[Mm]ultiply\b"),
