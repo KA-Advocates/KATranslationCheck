@@ -146,6 +146,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'is'", r"\b[Ii]s\b"),
     SimpleRegexRule("Occurrence of untranslated 'and'", r"\b[A]nd\b"),
     SimpleRegexRule("Occurrence of untranslated 'great(er)'", r"\b[Gg]reat(er)?\b"),
+    SimpleRegexRule("Occurrence of untranslated 'less'", r"\b[L]ess\b"),
     SimpleRegexRule("Occurrence of untranslated 'few(er)'", r"\b[Ff]ew(er)?\b"),
     SimpleRegexRule("Occurrence of untranslated 'equal(s)'", r"\b[E]quals?\b"),
     SimpleRegexRule("Occurrence of untranslated 'percent'", r"\b[Pp]ercents?\b"),
