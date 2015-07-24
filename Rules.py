@@ -172,7 +172,7 @@ rules = [
     #Simple currency value in dollar (matches comma separated and decimal point)
     SimpleRegexRule("Value with embedded dollar symbol", r"\$\s*\\\\\$\s*\d+([.,]\d+)?\s*\$"),
     #Errors in thousands separation
-    SimpleRegexRule("Value with multiple or mixed commata or dots", r"(\d+[.,]){2,}\d+"), #Should be space
+    SimpleRegexRule("Value with multiple or mixed commata or dots", r"(\d+(\.|\{,\})){2,}\d+"), #Should be space. Comma without {} ignored.
     #Dollar not embedded as a symbol 234$ dollar
     SimpleRegexRule("Value suffixed by dollar", r"\d+\$\s*dollars"),
     # Translator missed english-only world
