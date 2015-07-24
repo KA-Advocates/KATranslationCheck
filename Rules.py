@@ -199,7 +199,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'numerator'", r"\b[Nn]umerator\b"),
     SimpleRegexRule("Occurrence of untranslated 'denominator'", r"\b[Dd]enominator\b"),
     SimpleRegexRule("Occurrence of untranslated 'diameter'", r"\b[Dd]iameter\b"),
-    SimpleRegexRule("Occurrence of untranslated 'perimeter'", r"\b[Pp]erimeter\b"),
+    SimpleRegexRule("Occurrence of untranslated 'perimeter'", r"(?<!SHAPE\.)\b[Pp]erimeter\b"),
     SimpleRegexRule("Occurrence of untranslated 'measurement'", r"\b[Mm]easurement\b"),
     SimpleRegexRule("Occurrence of untranslated 'marking'", r"\b[Mm]arkings?\b"),
     SimpleRegexRule("Occurrence of untranslated 'low(er)'", r"\b[Ll]ow(er)?\b"),
