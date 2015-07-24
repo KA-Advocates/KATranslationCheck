@@ -136,7 +136,7 @@ rules = [
     SimpleRegexRule("Occurrence of dollar as string", r"[Dd]ollars?"),
     SimpleSubstringRule("Dollar symbol in formula", r"\\\\$"),
     #word problems no
-    TranslationConstraintRule("'word problems' not translated to 'Textaufgaben", r"word\s+problem", "Textaufgabe"),
+    TranslationConstraintRule("'word problems' not translated to 'Textaufgaben", r"word\s+problem", r"[Tt]extaufgabe"),
     #Bing issues
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
     SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),
