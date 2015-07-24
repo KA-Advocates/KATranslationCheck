@@ -11,6 +11,7 @@ import re
 import os
 import errno
 import os.path
+import datetime
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
 from ansicolor import red, black, blue, green
@@ -143,3 +144,7 @@ if __name__ == "__main__":
     else:
         for t in fileinfos:
             performPOTDownload(t)
+    #Set download timestamp
+    timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
+    with open("lastdownload.txt", "w") as outfile:
+        outfile.write(timestamp)
