@@ -146,7 +146,7 @@ rules = [
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
     SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),
     NegativeTranslationConstraintRule("False Bing translation of interactive-graphic", r"☃\s+interactive-graph", r"[Ii]nteraktive\s+Grafik"),
-    SimpleRegexRule("False Bing translation of Radio", r"Radio"),
+    SimpleRegexRule("False Bing translation of Radio", r"Radio\b"),
     SimpleRegexRule("False Bing translation of input-number", r"[Ee]ingabe-Zahl"),
     SimpleRegexRule("False Bing translation of input-number", r"[Ee]ingabe-Nummer"),
     SimpleRegexRule("False Bing translation of numeric-input", r"[Nn]umerische[-\s]+Eingabe"),
