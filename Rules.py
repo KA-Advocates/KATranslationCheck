@@ -188,7 +188,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'piece(s)", r"\b[Pp]ieces?\b"),
     SimpleRegexRule("Occurrence of untranslated 'percent'", r"\b[Pp]ercents?\b"),
     SimpleRegexRule("Occurrence of untranslated 'pair'", r"\b[Pp]airs?\b"),
-    SimpleRegexRule("Occurrence of untranslated 'shade(d)'", r"(\b|-)[Ss]haded?\b"),
+    SimpleRegexRule("Occurrence of untranslated 'shade(d)'", r"(\b|-)[Ss]haded?\b"),    
     SimpleRegexRule("Occurrence of untranslated 'to'", r"(?<!\\)\b[Tt]o\b"),
     SimpleRegexRule("Occurrence of untranslated 'axis'", r"\b[Aa]xis\b"),
     SimpleRegexRule("Occurrence of untranslated 'multiply'", r"\b[Mm]ultiply\b"),
@@ -219,6 +219,8 @@ rules = [
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleichung", flags=re.UNICODE | re.IGNORECASE),
+    NegativeTranslationConstraintRule("'shaded' translated to 'schraffiert'", r"shaded", r"schraffiert", flags=re.UNICODE | re.IGNORECASE),
+    NegativeTranslationConstraintRule("'shaded' translated to 'schattiert'", r"shaded", r"schattiert", flags=re.UNICODE | re.IGNORECASE),
     #Bing issues
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
     SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),
@@ -247,7 +249,7 @@ def findRule(name):
 
 if __name__ == "__main__":
     #Rule tests. python3 Rules.py to run
-    assert(findRule("Comma in coordinate")("$(12,3)$"))
+    assert(findRule("Comma in integral coordinate")("$(12,3)$", ""))
     assert(findRule("Simple number with decimal point")("$(12,3)$"))
     assert(findRule("Value with embedded dollar symbol")("$\\\\$12$"))
     assert(findRule("Value with embedded dollar symbol")("$\\\\$12.5$"))
