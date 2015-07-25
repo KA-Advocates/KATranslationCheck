@@ -21,7 +21,7 @@ import collections
 from multiprocessing import Pool
 from ansicolor import red, black, blue
 from jinja2 import Environment, FileSystemLoader
-from Rules import rules
+from de import rules
 
 def readPOFiles(directory):
     """
