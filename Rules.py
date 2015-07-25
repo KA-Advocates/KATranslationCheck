@@ -159,6 +159,28 @@ def SimpleGlobRule(name, glob):
     """Rule wrapper that translates a glob-ish rule to a regex rule"""
     return SimpleRegexRule(name, fnmatch.translate(glob))
 
+class ExactCopyRule(Rule):
+    """
+    Requires that when a list of regex matches is present in the orignal text,
+    the exact same list of matches is also present in the same order.
+
+    This can be used, for example, 
+    """
+    def __init__(self, name, regex):
+        super().__init__(name)
+        self.regex = re.compile(regex)
+    def __call__(self, msgstr, msgid):
+        origMatches = self.regex.findall(msgid)
+        translatedMatches = self.regex.findall(msgstr)
+        # Find index of first mismatch
+        try:
+            idx = next(idx for idx, (x, y) in
+                       enumerate(zip(origMatches, translatedMatches)) if x != y)
+            return "[First expression mismatch at index %d]" % (idx + 1)
+        except StopIteration:  # No mismatch
+            return None
+
+
 ########################
 ### Initialize rules ###
 ########################
@@ -237,6 +259,8 @@ rules = [
     SimpleRegexRule("Missing translation of ones", r"\\text\{\s*ones\}\}"),
     SimpleRegexRule("Missing translation of ten(s)", r"\\text\{\s*tens?\}\}"),
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}"),
+    # Machine-readable stuff must be identical in the translation
+    ExactCopyRule("All image URLs must match in order", r"!\[\]\s*\([^\)]+\)")
     # Unsorted rules
 
 ]
