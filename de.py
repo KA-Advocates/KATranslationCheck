@@ -65,7 +65,7 @@ rules = [
     TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleichung", flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schraffiert'", r"shaded", r"schraffiert", flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schattiert'", r"shaded", r"schattiert", flags=re.UNICODE | re.IGNORECASE),
-    SimpleRegexRule("Wrong syntax of E-Mail", r"(eMail|email|Email|EMail|e-Mail|e-mail)"),
+    SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(eMail|email|Email|EMail|e-Mail|e-mail)"),
     #Bing issues
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
     SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),

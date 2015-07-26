@@ -164,7 +164,8 @@ class ExactCopyRule(Rule):
     Requires that when a list of regex matches is present in the orignal text,
     the exact same list of matches is also present in the same order.
 
-    This can be used, for example, 
+    This can be used, for example, to ensure GUI elements, numbers or URLs are the same in
+    both the translated text and the original.
     """
     def __init__(self, name, regex):
         super().__init__(name)
