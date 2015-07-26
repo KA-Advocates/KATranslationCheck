@@ -83,8 +83,8 @@
       $(".report-button").click(function(event) {
         var hit = $(this).parent();
         var filenameVal = $(hit).find(".filename").text();
-        var msgstrVal = $(hit).find(".translated").text();
-        var msgidVal = $(hit).find(".original").text();
+        var msgstrVal = $(hit).find(".translated").html();
+        var msgidVal = $(hit).find(".original").html();
         var hitVal = $(hit).find(".hittext").text();
         var urlVal = window.location.href;
         //Ask user for reason
