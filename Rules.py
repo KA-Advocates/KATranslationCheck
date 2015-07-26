@@ -36,6 +36,7 @@ class Rule(object):
         Yields tuples entry, hit, filename
         """
         for filename, po in poset.items():
+            self.current_filename = filename
             for entry in po:
                 # Ignore strings which are the same orig/msgid
                 # This accounts for the fact that we don't know how
@@ -180,6 +181,22 @@ class ExactCopyRule(Rule):
             return "[First expression mismatch at index %d]" % (idx + 1)
         except StopIteration:  # No mismatch
             return None
+
+class IgnoreByFilenameRegexRuleWrapper(Rule):
+    """
+    Ignore a rule (i.e. force zero hits) for a set of filenames defined by a regex.
+
+    If you want to ignore a rule for all filenames starting with "learn.", you'd use:
+    
+    """
+    def __init__(self, filenameRegex, child):
+        super().__init__(child.name)
+        self.child = child
+        self.filenameRegex = re.compile(filenameRegex)
+    def __call__(self, msgstr, msgid):
+        if filenameRegex.match(self.current_filename):
+            return None
+        return self.child(msgstr, msgid)
 
 def findRule(rules, name):
     "Find a rule by name"

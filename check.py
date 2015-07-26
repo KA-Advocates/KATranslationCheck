@@ -74,41 +74,47 @@ def download(lang="de"):
     with open("lastdownload.txt", "w") as outfile:
         outfile.write(timestamp)
 
-def hitsToHTML(poFiles, outdir, write_files=True, statsByFile={}):
+class HTMLHitRenderer(object):
     """
-    Apply a rule and write a directory of output HTML files
+    A state container for the code which applies rules and generates HTML.
     """
-    #Initialize template engine
-    env = Environment(loader=FileSystemLoader('templates'))
-    ruleTemplate = env.get_template("template.html")
-    indexTemplate = env.get_template("index.html")
-    # Get timestamp
-    timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
-    if os.path.isfile("lastdownload.txt"):
-        with open("lastdownload.txt") as infile:
-            downloadTimestamp = infile.read().strip()
-    else:
-        downloadTimestamp = None
-    # Stats
-    violation_ctr = 0
-    # Generate output HTML for each rule
-    files = {filename: filepath_to_filename(filename) for filename in poFiles.keys()} if write_files else {}
-    files = collections.OrderedDict(sorted(files.items()))
-    for rule in rules:
-        #Run rule
-        hits = list(rule.apply_to_po_set(poFiles))
-        # Run outfile path
-        outfilePath = os.path.join(outdir, "%s.html" % rule.get_machine_name())
-        with open(outfilePath, "w") as outfile:
-            outfile.write(ruleTemplate.render(hits=hits, timestamp=timestamp, downloadTimestamp=downloadTimestamp))
+    def __init__(self, outdir):
+        self.outdir = outdir
+        #Initialize template engine
+        env = Environment(loader=FileSystemLoader('templates'))
+        self.ruleTemplate = env.get_template("template.html")
+        self.indexTemplate = env.get_template("index.html")
+        # Get timestamp
+        self.timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
+        if os.path.isfile("lastdownload.txt"):
+            with open("lastdownload.txt") as infile:
+                self.downloadTimestamp = infile.read().strip()
+        else:
+            self.downloadTimestamp = None
+    def hitsToHTML(self, poFiles, write_filelist=True, statsByFile={}):
+        """
+        Apply a rule and write a directory of output HTML files
+        """
         # Stats
-        violation_ctr += len(hits)
-        rule.custom_info["numhits"] = len(hits)
-    # Render index page
-    with open(os.path.join(outdir, "index.html"), "w") as outfile:
-        outfile.write(indexTemplate.render(rules=rules, timestamp=timestamp, files=files, statsByFile=statsByFile,
-                      downloadTimestamp=downloadTimestamp))
-    return violation_ctr
+        violation_ctr = 0
+        # Generate output HTML for each rule
+        files = {filename: filepath_to_filename(filename) for filename in poFiles.keys()} if write_filelist else {}
+        files = collections.OrderedDict(sorted(files.items()))
+        for rule in rules:
+            #Run rule
+            hits = list(rule.apply_to_po_set(poFiles))
+            # Run outfile path
+            outfilePath = os.path.join(self.outdir, "%s.html" % rule.get_machine_name())
+            with open(outfilePath, "w") as outfile:
+                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp))
+            # Stats
+            violation_ctr += len(hits)
+            rule.custom_info["numhits"] = len(hits)
+        # Render index page
+        with open(os.path.join(self.outdir, "index.html"), "w") as outfile:
+            outfile.write(self.indexTemplate.render(rules=rules, timestamp=self.timestamp, files=files, statsByFile=statsByFile,
+                          downloadTimestamp=self.downloadTimestamp))
+        return violation_ctr
 
 def filepath_to_filename(filename):
     return filename.replace("/", "_")
@@ -130,10 +136,14 @@ if __name__ == "__main__":
     if not os.path.isdir(args.outdir):
         os.mkdir(args.outdir)
 
+
     # Import
     print(black("Reading files from %s folder..." % args.language, bold=True))
     poFiles = readPOFiles(args.language)
     print(black("Read %d files" % len(poFiles), bold=True))
+
+    # Initialize renderer
+    renderer = HTMLHitRenderer(args.outdir)
 
     statsByFile = {}
     if not args.no_individual_reports:
@@ -143,7 +153,7 @@ if __name__ == "__main__":
             curOutdir = os.path.join(args.outdir, filename)
             if not os.path.isdir(curOutdir):
                 os.mkdir(curOutdir)
-            ctr = hitsToHTML({poFilename: poFile}, curOutdir, write_files=False)
+            ctr = renderer.hitsToHTML({poFilename: poFile}, write_filelist=False)
             statsByFile[poFilename] = ctr
     ctr = hitsToHTML(poFiles, args.outdir, statsByFile=statsByFile)
 

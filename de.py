@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# coding: utf-8
 from Rules import *
 
 ########################
@@ -9,6 +10,7 @@ rules = [
     #Coordinate separated by comma instead of |
     SimpleRegexRule("Comma in integral coordinate", r"\$\(\d+\s*\,\s*\d+\)\$"),
     SimpleRegexRule("Comma in non-integral coordinate", r"\$\(\d+[\.,]\d+\s*\,\s*\d+[\.,]\d+\)\$"),
+    SimpleRegexRule("{\ } instead of {\,} inside number", r"\d+\{\\\s+\}\d+"),
     #The most simple case of using a decimal point instead
     SimpleRegexRule("Simple number with decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$"),
     #Simple currency value in dollar (matches comma separated and decimal point)
@@ -57,12 +59,13 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'pink' (not as color specifier)", r"(?<!\\)\b[Pp]ink\b"),
     SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?"), #US-Dollars? allowed
     SimpleSubstringRule("Escaped dollar symbol in formula", r"\\$"),
-    SimpleSubstringRule("'Sie' instead of 'Du'", r"Sie"),
-    SimpleSubstringRule("'Ihre' instead of 'Deine'", r"Ihre"),
+    SimpleRegexRule("'Sie' instead of 'Du'", r"\bSie\b"),
+    SimpleRegexRule("'Ihre' instead of 'Deine'", r"\bIhre[rms]?\b"),
     #Recommended translations
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleichung", flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'inverse function' not translated to 'Umkehrfunktion'", r"inverse\s+function", r"Umkehrfunktion", flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schraffiert'", r"shaded", r"schraffiert", flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schattiert'", r"shaded", r"schattiert", flags=re.UNICODE | re.IGNORECASE),
     SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(eMail|email|Email|EMail|e-Mail|e-mail)"),
