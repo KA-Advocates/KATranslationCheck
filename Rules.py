@@ -187,7 +187,7 @@ class ExactCopyRule(Rule):
         except StopIteration:  # No mismatch
             return None
 
-class IgnoreByFilenameRegexRuleWrapper(Rule):
+class IgnoreByFilenameRegexWrapper(Rule):
     """
     Ignore a rule (i.e. force zero hits) for a set of filenames defined by a regex.
 
@@ -199,9 +199,25 @@ class IgnoreByFilenameRegexRuleWrapper(Rule):
         self.child = child
         self.filenameRegex = re.compile(filenameRegex)
     def __call__(self, msgstr, msgid, filename=None):
-        if filenameRegex.match(self.current_filename):
+        if self.filenameRegex.match(filename):
             return None
         return self.child(msgstr, msgid)
+
+class IgnoreByMsgidRegexWrapper(Rule):
+    """
+    Ignore a rule if a regex search in the msgid returns a certain value.
+
+    This can be useful to ignore special cases of translation
+    """
+    def __init__(self, msgidRegex, child):
+        super().__init__(child.name)
+        self.child = child
+        self.msgidRegex = re.compile(msgidRegex)
+    def __call__(self, msgstr, msgid, filename=None):
+        if self.msgidRegex.search(msgid):
+            return None
+        return self.child(msgstr, msgid)
+
 
 def findRule(rules, name):
     "Find a rule by name"
