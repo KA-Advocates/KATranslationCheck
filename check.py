@@ -13,6 +13,7 @@ Instructions:
 import polib
 import re
 import json
+import itertools
 import os
 import os.path
 import shutil
@@ -44,7 +45,7 @@ def readPOFiles(directory):
     # Parsing is computationally expensive.
     # Distribute processing amongst distinct processing
     #  if there is a significant number of files
-    if len(poFilenames) > 3:
+    if len(poFilenames) > 10:
         pool = Pool(None) #As many as CPUs
         parsedFiles = pool.map(polib.pofile, poFilenames)
         return {path: parsedFile
@@ -78,8 +79,9 @@ class HTMLHitRenderer(object):
     """
     A state container for the code which applies rules and generates HTML.
     """
-    def __init__(self, outdir):
+    def __init__(self, outdir, rules):
         self.outdir = outdir
+        self.rules = rules
         #Initialize template engine
         env = Environment(loader=FileSystemLoader('templates'))
         self.ruleTemplate = env.get_template("template.html")
@@ -91,40 +93,100 @@ class HTMLHitRenderer(object):
                 self.downloadTimestamp = infile.read().strip()
         else:
             self.downloadTimestamp = None
-    def hitsToHTML(self, poFiles, write_filelist=True, statsByFile={}):
+        # Initialize multiprocessing pool
+
+    def filepath_to_url(self, filename):
+        return filename.replace("/", "_")
+    def computeRuleHits(self, po, filename="[unknown filename]"):
+        """
+        Compute all rule hits for a single parsed PO file
+        """
+        return {
+            rule: list(rule.apply_to_po(po, filename=filename))
+            for rule in self.rules
+        }
+    def computeRuleHitsForFileSet(self, poFiles):
+        """
+        For each file in the given filename -> PO object dictionary,
+        compute the Rule -> Hits dictonary.
+
+        Stores the information in the current instance.
+        Does not return anything
+        """
+        # Compute dict with sorted & prettified filenames
+        files = {filename: self.filepath_to_url(filename) for filename in poFiles.keys()}
+        self.files = collections.OrderedDict(sorted(files.items()))
+        # Apply rules
+        self.fileRuleHits = {
+            filename: self.computeRuleHits(po, filename)
+            for filename, po in poFiles.items()
+        }
+        # Compute total stats by file
+        self.statsByFile = {
+                filename: sum((len(hits) for hits in ruleHits.values()))
+                for filename, ruleHits in self.fileRuleHits.items()
+            }
+        # Compute by-rule stats per file
+        self.statsByFileAndRule = {
+            filename: {rule: len(hits) for rule, hits in ruleHits.items()}
+            for filename, ruleHits in self.fileRuleHits.items()
+        }
+        # Compute total stats per rule
+        self.totalStatsByRule = {
+            rule: sum((stat[rule] for stat in self.statsByFileAndRule.values()))
+            for rule in self.rules
+        }
+    def writeStatsJSON(self):
+        """
+        Write a statistics-by-filename JSON to outdir/filestats.sjon
+        """
+        # Write file
+        with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
+            stats = {
+                    filename: {"hits": sum([len(hits) for _, hits in ruleHits.items()]),
+                               "link": self.filepath_to_url(filename)}
+                    for filename, ruleHits in self.fileRuleHits.items()
+                }
+            json.dump(stats, outfile)
+    def _renderDirectory(self, ruleHits, ruleStats, directory, filename, filelist={}):
+        # Generate output HTML for each rule
+        for rule, hits in ruleHits.items():
+            # Render hits for individual rule
+            outfilePath = os.path.join(directory, "%s.html" % rule.get_machine_name())
+            with open(outfilePath, "w") as outfile:
+                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp))
+        # Render file index page (no filelist)
+        with open(os.path.join(directory, "index.html"), "w") as outfile:
+            outfile.write(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
+                          statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename))
+    def hitsToHTML(self):
         """
         Apply a rule and write a directory of output HTML files
         """
-        # Stats
-        violation_ctr = 0
-        # Generate output HTML for each rule
-        files = {filename: filepath_to_filename(filename) for filename in poFiles.keys()} if write_filelist else {}
-        files = collections.OrderedDict(sorted(files.items()))
-        for rule in rules:
-            #Run rule
-            hits = list(rule.apply_to_po_set(poFiles))
-            # Run outfile path
-            outfilePath = os.path.join(self.outdir, "%s.html" % rule.get_machine_name())
-            with open(outfilePath, "w") as outfile:
-                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp))
-            # Stats
-            violation_ctr += len(hits)
-            rule.custom_info["numhits"] = len(hits)
-        # Render index page
-        with open(os.path.join(self.outdir, "index.html"), "w") as outfile:
-            outfile.write(self.indexTemplate.render(rules=rules, timestamp=self.timestamp, files=files, statsByFile=statsByFile,
-                          downloadTimestamp=self.downloadTimestamp))
-        return violation_ctr
-
-def filepath_to_filename(filename):
-    return filename.replace("/", "_")
+        for filename, ruleHits in self.fileRuleHits.items():
+            filepath = self.filepath_to_url(filename)
+            ruleStats = self.statsByFileAndRule[filename]
+            # Ensure output directory is present
+            directory = os.path.join(self.outdir, filepath)
+            if not os.path.isdir(directory):
+                os.mkdir(directory)
+            # Perform rendering
+            self._renderDirectory(ruleHits, ruleStats, directory, filename, {})
+        #####################
+        ## Render overview ##
+        #####################
+        # Compute global hits for every rule
+        overviewHits = {
+            rule: itertools.chain(*(fileHits[rule] for fileHits in self.fileRuleHits.values()))
+            for rule in self.rules
+        }
+        self._renderDirectory(overviewHits, self.totalStatsByRule, self.outdir, filename="all files", filelist=self.files)
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-d','--download', action='store_true', help='Download or update the directory')
     parser.add_argument('-l','--language', default="de", help='The language directory to use/extract')
-    parser.add_argument('--no-individual-reports',  action='store_true', help='Only create overview')
     parser.add_argument('outdir', nargs='?', default="output", help='The output directory to use')
     args = parser.parse_args()
 
@@ -142,27 +204,16 @@ if __name__ == "__main__":
     poFiles = readPOFiles(args.language)
     print(black("Read %d files" % len(poFiles), bold=True))
 
-    # Initialize renderer
-    renderer = HTMLHitRenderer(args.outdir)
+    # Compute hits
+    print(black("Computing rules...", bold=True))
+    renderer = HTMLHitRenderer(args.outdir, rules)
+    renderer.computeRuleHitsForFileSet(poFiles)
+    # Ensure the HUGE po stuff goes out of scope ASAP
+    poFiles = None
 
-    statsByFile = {}
-    if not args.no_individual_reports:
-        print (black("Generating individual reports...", bold=True))
-        for poFilename, poFile in poFiles.items():
-            filename = filepath_to_filename(poFilename)
-            curOutdir = os.path.join(args.outdir, filename)
-            if not os.path.isdir(curOutdir):
-                os.mkdir(curOutdir)
-            ctr = renderer.hitsToHTML({poFilename: poFile}, write_filelist=False)
-            statsByFile[poFilename] = ctr
-    ctr = renderer.hitsToHTML(poFiles, args.outdir, statsByFile=statsByFile)
+    # Generate HTML
+    print(black("Rendering HTML...", bold=True))
+    renderer.hitsToHTML()
 
-    print ("Found overall %d rule violations" % ctr)
-    #Write stats by file
-    filestats = {
-        filename: {"hits": numHits, "link": filepath_to_filename(filename)}
-        for filename, numHits in statsByFile.items()
-    }
-    with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
-        json.dump(filestats, outfile)
-    print (black("Generated JSON API files", bold=True))
+    print (black("Generating JSON API files...", bold=True))
+    renderer.writeStatsJSON()

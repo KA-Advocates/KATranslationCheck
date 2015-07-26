@@ -30,24 +30,22 @@ class Rule(object):
     def get_machine_name(self):
         """Get a machine-readable name from a rule name"""
         return self.name.lower().replace(" ", "-").replace("'", "").replace("\"", "").replace("(","").replace(")","").replace("{","").replace("}","").replace("\\", "")
-    def apply_to_po_set(self, poset, ignore_untranslated=True):
+    def apply_to_po(self, po, filename="[unknown file]", ignore_untranslated=True):
         """
         Apply to a dictionary of parsed PO files.
         Yields tuples entry, hit, filename
         """
-        for filename, po in poset.items():
-            self.current_filename = filename
-            for entry in po:
-                # Ignore strings which are the same orig/msgid
-                # This accounts for the fact that we don't know how
-                if ignore_untranslated and entry.msgstr == entry.msgid:
-                    continue
-                # Translated string cleanup
-                msgstr = cleanupTranslatedString(entry.msgstr)
-                # Apply the rule
-                hit = self(msgstr, entry.msgid)
-                if hit:
-                    yield (entry, hit, filename)
+        for entry in po:
+            # Ignore strings which are the same orig/msgid
+            # This accounts for the fact that we don't know how
+            if ignore_untranslated and entry.msgstr == entry.msgid:
+                continue
+            # Translated string cleanup
+            msgstr = cleanupTranslatedString(entry.msgstr)
+            # Apply the rule
+            hit = self(msgstr, entry.msgid, filename=filename)
+            if hit:
+                yield (entry, hit, filename)
 
 class SimpleRegexRule(Rule):
     """
@@ -58,7 +56,7 @@ class SimpleRegexRule(Rule):
         super().__init__(name)
         self.re = re.compile(regex, flags)
         self.regex_str = regex
-    def __call__(self, msgstr, msgid):
+    def __call__(self, msgstr, msgid, filename=None):
         hit = self.re.search(msgstr)
         if hit:
             return hit.group(0)
@@ -74,7 +72,7 @@ class SimpleSubstringRule(Rule):
         self.ci = case_insensitive
         if self.ci:
             self.substr = self.substr.lower()
-    def __call__(self, msgstr, msgid):
+    def __call__(self, msgstr, msgid, filename=None):
         # Case-insensitive preprocessing
         if self.ci:
             msgstr = msgstr.lower()
@@ -96,7 +94,7 @@ class TranslationConstraintRule(Rule):
         self.reTranslated = re.compile(regexTranslated, flags)
         self.regex_orig_str = regexOrig
         self.regex_translated_str = regexTranslated
-    def __call__(self, msgstr, msgid):
+    def __call__(self, msgstr, msgid, filename=None):
         if self.reOrig.search(msgid) and not self.reTranslated.search(msgstr):
             return "[failed constraint]"
         return None
@@ -115,7 +113,7 @@ class NegativeTranslationConstraintRule(Rule):
         self.reTranslated = re.compile(regexTranslated, flags)
         self.regex_orig_str = regexOrig
         self.regex_translated_str = regexTranslated
-    def __call__(self, msgstr, msgid):
+    def __call__(self, msgstr, msgid, filename=None):
         if self.reOrig.search(msgid) and self.reTranslated.search(msgstr):
             return "[failed constraint]"
         return None
@@ -125,7 +123,7 @@ class BooleanNotRule(Rule):
     def __init__(self, child):
         super().__init__(child.name)
         self.child = child
-    def __call__(self, msgstr, msgid):
+    def __call__(self, msgstr, msgid, filename=None):
         if self.child(msgstr, msgid):
             return None
         else:
@@ -137,7 +135,7 @@ class BooleanAndRule(Rule):
         super().__init__(name)
         self.childA = childA
         self.childB = childB
-    def __call__(self, msgstr, msgid):
+    def __call__(self, msgstr, msgid, filename=None):
         hitA = self.childA(msgstr, msgid)
         if not hitA: return None # Shortcut-return
         hitB = self.childB(msgstr, msgid)
@@ -150,7 +148,7 @@ class BooleanOrRule(Rule):
         super().__init__(name)
         self.childA = childA
         self.childB = childB
-    def __call__(self, msgstr, msgid):
+    def __call__(self, msgstr, msgid, filename=None):
         hitA = self.childA(msgstr, msgid)
         if hitA: return hitA # Shortcut-return
         return self.childB(msgstr, msgid)
@@ -171,7 +169,7 @@ class ExactCopyRule(Rule):
     def __init__(self, name, regex):
         super().__init__(name)
         self.regex = re.compile(regex)
-    def __call__(self, msgstr, msgid):
+    def __call__(self, msgstr, msgid, filename=None):
         origMatches = self.regex.findall(msgid)
         translatedMatches = self.regex.findall(msgstr)
         # Find index of first mismatch
@@ -193,7 +191,7 @@ class IgnoreByFilenameRegexRuleWrapper(Rule):
         super().__init__(child.name)
         self.child = child
         self.filenameRegex = re.compile(filenameRegex)
-    def __call__(self, msgstr, msgid):
+    def __call__(self, msgstr, msgid, filename=None):
         if filenameRegex.match(self.current_filename):
             return None
         return self.child(msgstr, msgid)

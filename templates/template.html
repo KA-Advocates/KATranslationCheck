@@ -12,6 +12,7 @@
       /*.hit {text-decoration: none; font-weight: normal;   font-family: Monospace;} */
       .hitno {font-weight: bold;}
       .highlight { background-color: yellow }
+      .report-buttom {float: right;}
     </style>
     <script>
 
@@ -53,8 +54,8 @@
         <div class="hitlist">
         {% for entry, hit, filename in hits %}
           <div class="row hit" data-hitfile="{{filename}}">
+            <button class="btn-danger btn report-button">Report error</button>
             <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hittext">{{hit}}</code> in <span class="filename">{{filename}}</span></h3>
-            <button class="btn-error btn report-button">Report error</button>
             <div class="tcomment">{{entry.tcomment.replace("\n","<br/>")}}</div>
             <h4>Translated text:</h4>
             <pre class="translated">{{entry.msgstr}}</pre>
@@ -87,10 +88,10 @@
         var hitVal = $(hit).find(".hittext").text();
         var urlVal = window.location.href;
         //Ask user for reason
-        prompt("Please enter the reason for your report", "");
+        var reason = prompt("Please enter the reason for your report", "");
         //Submit report
         $.post("/report.php", {filename: filenameVal, msgstr: msgstrVal, msgid: msgidVal, url: urlVal, hit:hitVal, reason: reason});
-      }
+      });
     })
     </script>
   </body>

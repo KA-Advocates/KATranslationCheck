@@ -47,9 +47,9 @@
           <h3>Overall statistics</h3>
         </div>
         {% for rule in rules %}
-          {% if rule.custom_info["numhits"] > 0 %}
+          {% if statsByRule[rule] > 0 %}
           <div class="row">
-            <a href="{{rule.get_machine_name()}}.html">{{rule.name}}</a> ({{rule.custom_info["numhits"]}} hits)
+            <a href="{{rule.get_machine_name()}}.html">{{rule.name}}</a> ({{statsByRule[rule]}} hits)
           </div>
           {% endif %}
         {% endfor %}
