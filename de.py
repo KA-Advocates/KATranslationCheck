@@ -57,6 +57,8 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'pink' (not as color specifier)", r"(?<!\\)\b[Pp]ink\b"),
     SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?"), #US-Dollars? allowed
     SimpleSubstringRule("Escaped dollar symbol in formula", r"\\$"),
+    SimpleSubstringRule("'Sie' instead of 'Du'", r"Sie"),
+    SimpleSubstringRule("'Ihre' instead of 'Deine'", r"Ihre"),
     #Recommended translations
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", flags=re.UNICODE | re.IGNORECASE),
