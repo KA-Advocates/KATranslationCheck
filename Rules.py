@@ -29,7 +29,14 @@ class Rule(object):
         self.custom_info = {}
     def get_machine_name(self):
         """Get a machine-readable name from a rule name"""
-        return self.name.lower().replace(" ", "-").replace("'", "").replace("\"", "").replace("(","").replace(")","").replace("{","").replace("}","").replace("\\", "")
+        name = self.name.lower().replace("'", "").replace("\"", "")
+        name = name.replace("(","").replace(")","").replace("{","")
+        name = name.replace("}","").replace("\\", "").replace(",","")
+        name = name.replace("*","")
+        name = re.sub(r"\s+", "-", name)
+        name = re.sub(r"-+", "-", name)
+        name = re.sub(r"^-", "", name)
+        return name
     def apply_to_po(self, po, filename="[unknown file]", ignore_untranslated=True):
         """
         Apply to a dictionary of parsed PO files.
