@@ -29,7 +29,7 @@ class Rule(object):
         self.custom_info = {}
     def get_machine_name(self):
         """Get a machine-readable name from a rule name"""
-        return self.name.lower().replace(" ", "-").replace("'", "").replace("\"", "").replace("(","").replace(")","")
+        return self.name.lower().replace(" ", "-").replace("'", "").replace("\"", "").replace("(","").replace(")","").replace("{","").replace("}","").replace("\\", "")
     def apply_to_po_set(self, poset, ignore_untranslated=True):
         """
         Apply to a dictionary of parsed PO files.
@@ -187,7 +187,7 @@ class IgnoreByFilenameRegexRuleWrapper(Rule):
     Ignore a rule (i.e. force zero hits) for a set of filenames defined by a regex.
 
     If you want to ignore a rule for all filenames starting with "learn.", you'd use:
-    
+
     """
     def __init__(self, filenameRegex, child):
         super().__init__(child.name)
