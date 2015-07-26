@@ -69,7 +69,8 @@ rules = [
     TranslationConstraintRule("'inverse function' not translated to 'Umkehrfunktion'", r"inverse\s+function", r"Umkehrfunktion", flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schraffiert'", r"shaded", r"schraffiert", flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schattiert'", r"shaded", r"schattiert", flags=re.UNICODE | re.IGNORECASE),
-    SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(eMail|email|Email|EMail|e-Mail|e-mail)"),
+    # Email has many special cases, e.g. different notations of {{email}}
+    SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(?<!\{\{)?\s*(eMail|email|Email|EMail|e-Mail|e-mail)\s*"),
     #Bing issues
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
     SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),

@@ -207,7 +207,11 @@ class IgnoreByMsgidRegexWrapper(Rule):
     """
     Ignore a rule if a regex search in the msgid returns a certain value.
 
-    This can be useful to ignore special cases of translation
+    This can be useful to ignore special cases of translation which
+    are distinguishable by the untranslated (english) text, e.g.
+    "Green's theorem" as a special case of untranslated "green".
+
+    Note that if a single regex hit is found, the entire string is ignore
     """
     def __init__(self, msgidRegex, child):
         super().__init__(child.name)
@@ -217,7 +221,6 @@ class IgnoreByMsgidRegexWrapper(Rule):
         if self.msgidRegex.search(msgid):
             return None
         return self.child(msgstr, msgid)
-
 
 def findRule(rules, name):
     "Find a rule by name"
