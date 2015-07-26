@@ -155,7 +155,7 @@ if __name__ == "__main__":
                 os.mkdir(curOutdir)
             ctr = renderer.hitsToHTML({poFilename: poFile}, write_filelist=False)
             statsByFile[poFilename] = ctr
-    ctr = hitsToHTML(poFiles, args.outdir, statsByFile=statsByFile)
+    ctr = renderer.hitsToHTML(poFiles, args.outdir, statsByFile=statsByFile)
 
     print ("Found overall %d rule violations" % ctr)
     #Write stats by file
