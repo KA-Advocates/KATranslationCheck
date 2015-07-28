@@ -47,6 +47,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'measurement'", r"\b[Mm]easurement\b"),
     SimpleRegexRule("Occurrence of untranslated 'marking'", r"\b[Mm]arkings?\b"),
     SimpleRegexRule("Occurrence of untranslated 'low(er)'", r"\b[Ll]ow(er)?\b"),
+    SimpleRegexRule("Occurrence of untranslated 'mass'", r"\b[Mm]ass\b"),
     SimpleRegexRule("Occurrence of untranslated 'high(er)'", r"\b[Hh]igh(er)?\b"),
     SimpleRegexRule("Occurrence of untranslated 'Its'", r"\b[Dd]It'?s\b"),
     SimpleRegexRule("Occurrence of untranslated 'dot(s)", r"\b[Dd]dots?\b"),
