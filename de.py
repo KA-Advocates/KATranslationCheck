@@ -68,8 +68,11 @@ rules = [
     TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleichung", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'inverse function' not translated to 'Umkehrfunktion'", r"inverse\s+function", r"Umkehrfunktion", flags=re.UNICODE | re.IGNORECASE),
-    NegativeTranslationConstraintRule("'shaded' translated to 'schraffiert'", r"shaded", r"schraffiert", flags=re.UNICODE | re.IGNORECASE),
-    NegativeTranslationConstraintRule("'shaded' translated to 'schattiert'", r"shaded", r"schattiert", flags=re.UNICODE | re.IGNORECASE),
+    NegativeTranslationConstraintRule("'shaded' translated to 'schraffiert' instead of 'eingefärbt'", r"shaded", r"schraffiert", flags=re.UNICODE | re.IGNORECASE),
+    NegativeTranslationConstraintRule("'shaded' translated to 'schattiert' instead of 'eingefärbt'", r"shaded", r"schattiert", flags=re.UNICODE | re.IGNORECASE),
+    NegativeTranslationConstraintRule("'Coach' translated to 'Trainer' instead of 'Coach'", r"coach", r"trainer", flags=re.UNICODE | re.IGNORECASE),
+    NegativeTranslationConstraintRule("'Challenge' translated to 'Herausforderung' instead of 'challenge'", r"challenge", r"herausforderung", flags=re.UNICODE | re.IGNORECASE),
+    NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"post", r"post", flags=re.UNICODE | re.IGNORECASE),
     # E-Mail must be written exactly "E-Mail". Exceptions: {{email}}, %(error_email), %(email), {{ email }}
     SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(?<!%\(error_)(?<!\{\{)(?<!\{\{ )(eMail|email|Email|EMail|e-Mail|e-mail)s?"),
     #Bing issues
