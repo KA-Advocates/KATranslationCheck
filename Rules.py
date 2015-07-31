@@ -8,7 +8,7 @@ if sys.version_info[0] < 3:
     print("This script requires Python version 3.x")
     sys.exit(1)
 
-aHrefLinkTextRegex = re.compile(r'<a\s+([a-z]+=("[^"]+"|\'[^\']+\')\s*)+>(.+?)</a>\s*')
+aHrefLinkTextRegex = re.compile(r'<(a|span|div)\s+([a-z]+=("[^"]+"|\'[^\']+\')\s*)+>(.+?)</a>\s*')
 
 def cleanupTranslatedString(s):
     """Minor but fast cleanup of the msgstr in order to avoid hits in invisible parts"""
