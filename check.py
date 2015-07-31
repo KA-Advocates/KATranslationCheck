@@ -22,6 +22,7 @@ import collections
 from multiprocessing import Pool
 from ansicolor import red, black, blue
 from jinja2 import Environment, FileSystemLoader
+from UpdateAllFiles import getTranslationFilemapCache
 from de import rules
 
 def readPOFiles(directory):
@@ -79,7 +80,7 @@ class HTMLHitRenderer(object):
     """
     A state container for the code which applies rules and generates HTML.
     """
-    def __init__(self, outdir, rules):
+    def __init__(self, outdir, rules, lang="de"):
         self.outdir = outdir
         self.rules = rules
         #Initialize template engine
@@ -93,7 +94,13 @@ class HTMLHitRenderer(object):
                 self.downloadTimestamp = infile.read().strip()
         else:
             self.downloadTimestamp = None
-        # Initialize multiprocessing pool
+        # Initialize translation ID/URL map
+        translationFilemapCache = getTranslationFilemapCache()
+        self.translationURLs = {
+            lang + "/" + v["path"]: "https://crowdin.com/translate" + v["editor_url"]
+            for v in translationFilemapCache.values()
+        }
+        print(self.translationURLs)
 
     def filepath_to_url(self, filename):
         return filename.replace("/", "_")
@@ -154,11 +161,11 @@ class HTMLHitRenderer(object):
             # Render hits for individual rule
             outfilePath = os.path.join(directory, "%s.html" % rule.get_machine_name())
             with open(outfilePath, "w") as outfile:
-                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp))
+                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs))
         # Render file index page (no filelist)
         with open(os.path.join(directory, "index.html"), "w") as outfile:
             outfile.write(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
-                          statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename))
+                          statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename, translationURLs=self.translationURLs))
     def hitsToHTML(self):
         """
         Apply a rule and write a directory of output HTML files
