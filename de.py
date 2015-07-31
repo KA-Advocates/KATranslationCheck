@@ -34,6 +34,8 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'pair'", r"\b[Pp]airs?\b"),
     SimpleRegexRule("Occurrence of untranslated 'shade(d)'", r"(\b|-)[Ss]haded?\b"),    
     SimpleRegexRule("Occurrence of untranslated 'to'", r"(?<!\\)\b[Tt]o\b"),
+    SimpleRegexRule("Occurrence of untranslated 'not'", r"(?<!\\)\b[Nn]ot\b"),
+    SimpleRegexRule("Occurrence of untranslated 'does", r"(?<!\\)\b[Dd]oesn?\b"),
     SimpleRegexRule("Occurrence of untranslated 'axis'", r"\b[Aa]xis\b"),
     SimpleRegexRule("Occurrence of untranslated 'multiply'", r"\b[Mm]ultiply\b"),
     SimpleRegexRule("Occurrence of untranslated 'multiplier'", r"\b[Mm]ultiplier\b"),
