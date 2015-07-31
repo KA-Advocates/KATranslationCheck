@@ -32,6 +32,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'piece(s)", r"\b[Pp]ieces?\b"),
     SimpleRegexRule("Occurrence of untranslated 'percent'", r"\b[Pp]ercents?\b"),
     SimpleRegexRule("Occurrence of untranslated 'pair'", r"\b[Pp]airs?\b"),
+    SimpleRegexRule("Occurrence of untranslated 'has/had'", r"\b[Hh]a[sd]\b"),
     SimpleRegexRule("Occurrence of untranslated 'shade(d)'", r"(\b|-)[Ss]haded?\b"),    
     SimpleRegexRule("Occurrence of untranslated 'to'", r"(?<!\\)\b[Tt]o\b"),
     SimpleRegexRule("Occurrence of untranslated 'not'", r"(?<!\\)(?<!in)\s*\b[Nn]ot\b"),
