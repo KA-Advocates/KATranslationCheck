@@ -9,7 +9,7 @@ if sys.version_info[0] < 3:
     sys.exit(1)
 
 cleanupRegex = re.compile(r'<(a|span|div)\s+([a-z]+=("[^"]+"|\'[^\']+\')\s*)+>(.+?)</a>\s*')
-cleanupDetectRegex = "<(a|span|div)"
+cleanupDetectRegex = re.compile(r"<(a|span|div)")
 
 def cleanupTranslatedString(s):
     """Minor but fast cleanup of the msgstr in order to avoid hits in invisible parts"""
