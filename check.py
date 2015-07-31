@@ -100,8 +100,6 @@ class HTMLHitRenderer(object):
             lang + "/" + v["path"]: "https://crowdin.com/translate" + v["editor_url"]
             for v in translationFilemapCache.values()
         }
-        print(self.translationURLs)
-
     def filepath_to_url(self, filename):
         return filename.replace("/", "_")
     def computeRuleHits(self, po, filename="[unknown filename]"):
