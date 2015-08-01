@@ -56,18 +56,19 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'Its'", r"\b[Dd]It'?s\b"),
     SimpleRegexRule("Occurrence of untranslated 'dot(s)", r"\b[Dd]dots?\b"),
     SimpleRegexRule("Occurrence of untranslated '(counter)clockwise", r"\b([Cc]ounter)?-?[Cc]clockwise\b"),
-    SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!\\)\b[Bb]lue\b"),
+    SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!\\color\{)(?<!\\)\b[Bb]lue\b"),
     SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b"),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b"),
     IgnoreByMsgidRegexWrapper(r"(Summer|Hour|Art|Lots)\s+of\s+(Code|Scripting|Webpage|Databases|Problem|Fun)",
         SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b")),
     SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)\b[Gg]reen\b"),
-    SimpleRegexRule("Occurrence of untranslated 'pink' (not as color specifier)", r"(?<!\\)\b[Pp]ink\b"),
     SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?(?!ville)"), #US-Dollars? & Dollarville allowed
     SimpleSubstringRule("Escaped dollar symbol", r"\\+$"),
     SimpleRegexRule("'Sie' instead of 'Du'", r"\bSie\b"),
     SimpleRegexRule("'Ihre' instead of 'Deine'", r"\bIhre[rms]?\b"),
-    #Recommended translations
+    # Something was translated that must NOT be translated
+    SimpleRegexRule("Translated color in command", r"(\\color\{|\\\\)([Bb]lau|[Rr]ot|[Gg]elb|[Gg]rün|[Vv]iolett|[Ll]ila)"),
+    # Recommended translations
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleich(ung|heit|zeichen)", flags=re.UNICODE | re.IGNORECASE),
