@@ -60,7 +60,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b"),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b"),
     IgnoreByMsgidRegexWrapper(r"", SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b")),
-    IgnoreByMsgidRegexWrapper(r"(Summer|Hour|Art)\s+of\s+(Code|Scripting|Webpage|Databases|Problem)",
+    IgnoreByMsgidRegexWrapper(r"(Summer|Hour|Art|Lots)\s+of\s+(Code|Scripting|Webpage|Databases|Problem|Fun)",
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)",
             r"(?<!\\)\b[Gg]reen\b")),
     SimpleRegexRule("Occurrence of untranslated 'pink' (not as color specifier)", r"(?<!\\)\b[Pp]ink\b"),
