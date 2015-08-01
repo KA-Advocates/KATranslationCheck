@@ -81,7 +81,7 @@ def genCrowdinSearchString(entry):
     s = entry.msgstr[:100].replace('*', ' ')
     s = s.replace('$', ' ').replace('\\', ' ').replace(',', ' ')
     s = s.replace('.', ' ').replace('?', ' ').replace('!', ' ')
-    return urllib.parse.quote(s.replace('☃', ' '))
+    return urllib.parse.quote(s.replace('☃', ' ').replace("|", " "))
 
 class HTMLHitRenderer(object):
     """
