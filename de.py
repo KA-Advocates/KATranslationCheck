@@ -86,6 +86,7 @@ rules = [
     #Bing issues
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
     SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),
+    SimpleRegexRule("Bing (3)", r"!\s+\[\]\s+\("),
     NegativeTranslationConstraintRule("False Bing translation of interactive-graphic", r"☃\s+interactive-graph", r"[Ii]nteraktive\s+Grafik"),
     SimpleRegexRule("False Bing translation of Radio", r"☃\s+Radio\b"),
     SimpleRegexRule("False Bing translation of input-number", r"[Ee]ingabe-Zahl"),
