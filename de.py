@@ -36,7 +36,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'school'", r"\b[S]chool\b"),
     SimpleRegexRule("Occurrence of untranslated 'shade(d)'", r"(\b|-)[Ss]haded?\b"),    
     SimpleRegexRule("Occurrence of untranslated 'to'", r"(?<!\\)\b[Tt]o\b"),
-    SimpleRegexRule("Occurrence of untranslated 'not'", r"(?<!\\)(?<!in)\s*\b[Nn]ot\b"),
+    SimpleRegexRule("Occurrence of untranslated 'not'", r"(?<!\\)(?<!in)\s*\bnot\b"),
     SimpleRegexRule("Occurrence of untranslated 'does", r"(?<!\\)\b[Dd]oesn?\b"),
     SimpleRegexRule("Occurrence of untranslated 'axis'", r"\b[Aa]xis\b"),
     SimpleRegexRule("Occurrence of untranslated 'multiply'", r"\b[Mm]ultiply\b"),
