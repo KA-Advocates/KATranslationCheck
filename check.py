@@ -78,10 +78,10 @@ def download(lang="de"):
         outfile.write(timestamp)
 
 def genCrowdinSearchString(entry):
-    s = urllib.parse.quote(entry.msgstr[:100].replace('*', ' '))
+    s = entry.msgstr[:100].replace('*', ' ')
     s = s.replace('$', ' ').replace('\\', ' ').replace(',', ' ')
     s = s.replace('.', ' ').replace('?', ' ').replace('!', ' ')
-    return s.replace('☃', ' ')
+    return urllib.parse.quote(s.replace('☃', ' '))
 
 class HTMLHitRenderer(object):
     """
