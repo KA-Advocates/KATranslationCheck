@@ -77,6 +77,12 @@ def download(lang="de"):
     with open("lastdownload.txt", "w") as outfile:
         outfile.write(timestamp)
 
+def genCrowdinSearchString(entry):
+    s = urllib.parse.quote(entry.msgstr[:100].replace('*', ' '))
+    s = s.replace('$', ' ').replace('\\', ' ').replace(',', ' ')
+    s = s.replace('.', ' ').replace('?', ' ').replace('!', ' ')
+    return s.replace('☃', ' ')
+
 class HTMLHitRenderer(object):
     """
     A state container for the code which applies rules and generates HTML.
@@ -129,9 +135,9 @@ class HTMLHitRenderer(object):
         }
         # Compute total stats by file
         self.statsByFile = {
-                filename: sum((len(hits) for hits in ruleHits.values()))
-                for filename, ruleHits in self.fileRuleHits.items()
-            }
+            filename: sum((len(hits) for hits in ruleHits.values()))
+            for filename, ruleHits in self.fileRuleHits.items()
+        }
         # Compute by-rule stats per file
         self.statsByFileAndRule = {
             filename: {rule: len(hits) for rule, hits in ruleHits.items()}
@@ -149,10 +155,10 @@ class HTMLHitRenderer(object):
         # Write file
         with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
             stats = {
-                    filename: {"hits": sum([len(hits) for _, hits in ruleHits.items()]),
-                               "link": self.filepath_to_url(filename)}
-                    for filename, ruleHits in self.fileRuleHits.items()
-                }
+                filename: {"hits": sum([len(hits) for _, hits in ruleHits.items()]),
+                           "link": self.filepath_to_url(filename)}
+                for filename, ruleHits in self.fileRuleHits.items()
+            }
             json.dump(stats, outfile)
     def _renderDirectory(self, ruleHits, ruleStats, directory, filename, filelist={}):
         # Generate output HTML for each rule
@@ -160,7 +166,7 @@ class HTMLHitRenderer(object):
             # Render hits for individual rule
             outfilePath = os.path.join(directory, "%s.html" % rule.get_machine_name())
             with open(outfilePath, "w") as outfile:
-                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs, urllib=urllib))
+                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs, urllib=urllib, rule=rule, genCrowdinSearchString=genCrowdinSearchString))
         # Render file index page (no filelist)
         with open(os.path.join(directory, "index.html"), "w") as outfile:
             outfile.write(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,

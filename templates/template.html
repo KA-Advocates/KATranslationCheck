@@ -45,6 +45,9 @@
       <!-- /.container -->
     </nav>
     <div id="maincontainer" class="container">
+        <div class="row">
+          <h2>{{rule.name}}</h2>
+        </div>
         <div id="timestamprow" class="row">
           Page generated at {{timestamp}}<br/>
           {% if downloadTimestamp %}
@@ -52,10 +55,10 @@
           {% endif %}
         </div>
         <div class="hitlist">
-        {% for entry, hit, filename in hits %}
+        {% for entry, hit, filename, origImages, translatedImages in hits %}
           <div class="row hit" data-hitfile="{{filename}}">
             <button class="btn-danger btn report-button">Report error</button>
-            <a href="{{translationURLs[filename]}}#q={{urllib.parse.quote(entry.msgstr[:100].replace('*', ' ').replace('$',' ').replace('\\',' ').replace(',', ' ').replace('.', ' ').replace('?', ' ').replace('!', ' ').replace('☃', ' '))}}" class="btn-success btn translate-button">Translate on Crowdin</a>
+            <a href="{{translationURLs[filename]}}#q={{genCrowdinSearchString(entry)}}" class="btn-success btn translate-button">Translate on Crowdin</a>
             <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hittext">{{hit}}</code> in
               <a href="{{translationURLs[filename]}}" class="filename">{{filename}}</a></h3>  
             <div class="tcomment">{{entry.tcomment.replace("\n","<br/>")}}</div>
@@ -63,6 +66,19 @@
             <pre class="translated">{{entry.msgstr}}</pre>
             <h4>Original text:</h4>
             <pre class="original">{{entry.msgid}}</pre>
+            {% if (origImages or translatedImages) %}
+            <div class="imagelist">
+              <button class="btn-primary btn show-images-button">Show images</button>
+              <h4>Original images</h4>
+                {% for img in origImages %}
+                  <a class="image-link" href="{{img}}">{{img}}</a>
+                {% endfor %}
+              <h4>Translated images</h4>
+                {% for img in translatedImages %}
+                  <a class="image-link" href="{{img}}">{{img}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
             <hr/>
           </div>
         {% else %}
@@ -93,6 +109,14 @@
         var reason = prompt("Please enter the reason for your report", "");
         //Submit report
         $.post("/report.php", {filename: filenameVal, msgstr: msgstrVal, msgid: msgidVal, url: urlVal, hit:hitVal, reason: reason});
+      });
+
+      $(".show-images-button").click(function(event) {
+        var imagelist = $(this).parent();
+        $(imagelist).find(".image-link").each(function(index) {
+            var href = $(this).attr('href');
+            $(this).replaceWith('<a href="' + href + '"><img src="' + href + '"/></a>');
+        });
       });
     })
     </script>

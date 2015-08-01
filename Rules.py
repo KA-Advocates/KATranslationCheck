@@ -8,14 +8,19 @@ if sys.version_info[0] < 3:
     print("This script requires Python version 3.x")
     sys.exit(1)
 
-cleanupRegex = re.compile(r'<(a|span|div)\s+([a-z]+=("[^"]+"|\'[^\']+\')\s*)+>(.+?)</(a|span|div)>\s*')
-cleanupDetectRegex = re.compile(r"<(a|span|div)")
+__cleanupRegex = re.compile(r'<(a|span|div)\s+([a-z]+=("[^"]+"|\'[^\']+\')\s*)+>(.+?)</(a|span|div)>\s*')
+__cleanupDetectRegex = re.compile(r"<(a|span|div)")
 
 def cleanupTranslatedString(s):
-    """Minor but fast cleanup of the msgstr in order to avoid hits in invisible parts"""
-    if not cleanupDetectRegex.search(s):
+    """
+    Minor but fast cleanup of the msgstr in order to avoid hits in
+    invisible parts like HTML.
+    """
+    if not __cleanupDetectRegex.search(s):
         return s
-    return cleanupRegex.sub(r"\1", s)
+    return __cleanupRegex.sub(r"\1", s)
+
+_extractImgRegex = re.compile(r"(https?://ka-perseus-graphie\.s3\.amazonaws\.com/[0-9a-f]{40,40}\.(png|svg))")
 
 class Rule(object):
     """
@@ -53,7 +58,10 @@ class Rule(object):
             # Apply the rule
             hit = self(msgstr, entry.msgid, filename=filename)
             if hit:
-                yield (entry, hit, filename)
+                #Find images in both original and new string
+                origImages = [h[0] for h in _extractImgRegex.findall(entry.msgid)]
+                translatedImages = [h[0] for h in _extractImgRegex.findall(entry.msgstr)]
+                yield (entry, hit, filename, origImages, translatedImages)
 
 class SimpleRegexRule(Rule):
     """
