@@ -17,6 +17,7 @@ import itertools
 import os
 import os.path
 import shutil
+import urllib
 import datetime
 import collections
 from multiprocessing import Pool
