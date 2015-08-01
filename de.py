@@ -14,7 +14,7 @@ rules = [
     #The most simple case of using a decimal point instead
     SimpleRegexRule("Simple number with decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$"),
     #Simple currency value in dollar (matches comma separated and decimal point)
-    SimpleRegexRule("Value with embedded dollar symbol", r"\$\s*\\\\\$\s*\d+([.,]\d+)?\s*\$"),
+    SimpleRegexRule("Value with embedded dollar symbol", r"\$\s*\\\\?\$\s*\d+([.,]\d+)?\s*\$"),
     #Errors in thousands separation
     SimpleRegexRule("Value with multiple or mixed commata or dots", r"(\d+(\.|\{,\})){2,}\d+"), #Should be space. Comma without {} ignored.
     #Dollar not embedded as a symbol 234$ dollar
