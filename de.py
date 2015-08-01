@@ -42,7 +42,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'multiply'", r"\b[Mm]ultiply\b"),
     SimpleRegexRule("Occurrence of untranslated 'multiplier'", r"\b[Mm]ultiplier\b"),
     SimpleRegexRule("Occurrence of untranslated 'since'", r"\b[Ss]ince\b"),
-    SimpleRegexRule("Occurrence of untranslated 'value'", r"\b[Vv]alue\b"),
+    SimpleRegexRule("Occurrence of untranslated 'value'", r"(?<!%\()\b[Vv]alue\b(?!\)s"),
     SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b"),
     SimpleRegexRule("Occurrence of untranslated 'numerator'", r"\b[Nn]umerator\b"),
     SimpleRegexRule("Occurrence of untranslated 'denominator'", r"\b[Dd]enominator\b"),
