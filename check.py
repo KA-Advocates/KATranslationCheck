@@ -159,7 +159,7 @@ class HTMLHitRenderer(object):
             # Render hits for individual rule
             outfilePath = os.path.join(directory, "%s.html" % rule.get_machine_name())
             with open(outfilePath, "w") as outfile:
-                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs))
+                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs, urllib=urllib))
         # Render file index page (no filelist)
         with open(os.path.join(directory, "index.html"), "w") as outfile:
             outfile.write(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
