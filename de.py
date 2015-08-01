@@ -64,7 +64,7 @@ rules = [
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)",
             r"(?<!\\)\b[Gg]reen\b")),
     SimpleRegexRule("Occurrence of untranslated 'pink' (not as color specifier)", r"(?<!\\)\b[Pp]ink\b"),
-    SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?"), #US-Dollars? allowed
+    SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?(?!ville)"), #US-Dollars? & Dollarville allowed
     SimpleSubstringRule("Escaped dollar symbol", r"\\+$"),
     SimpleRegexRule("'Sie' instead of 'Du'", r"\bSie\b"),
     SimpleRegexRule("'Ihre' instead of 'Deine'", r"\bIhre[rms]?\b"),
