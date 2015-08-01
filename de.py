@@ -13,6 +13,7 @@ rules = [
     SimpleRegexRule("{\ } instead of {\,} inside number", r"\d+\{\\\s+\}\d+"),
     #The most simple case of using a decimal point instead
     SimpleRegexRule("Simple number with decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$"),
+    SimpleRegexRule("Wrong or missing space between number and € ({\\,} required)", r"\d+( |  |\{,\}|\{\\ \})?€"),
     #Simple currency value in dollar (matches comma separated and decimal point)
     SimpleRegexRule("Value with embedded dollar symbol", r"\$\s*\\\\?\$\s*\d+([.,]\d+)?\s*\$"),
     #Errors in thousands separation
