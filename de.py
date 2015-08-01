@@ -52,7 +52,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'marking'", r"\b[Mm]arkings?\b"),
     SimpleRegexRule("Occurrence of untranslated 'low(er)'", r"\b[Ll]ow(er)?\b"),
     SimpleRegexRule("Occurrence of untranslated 'mass'", r"\b[Mm]ass\b"),
-    SimpleRegexRule("Occurrence of untranslated 'high(er)'", r"(?<!Junior)(?<!Senior)(?<!Ridgemont)(?<!Riverside)\s*\b[Hh]igh(er)?\b(?!-[Ss]chool)(?! [Ss]chool)"),
+    SimpleRegexRule("Occurrence of untranslated 'high(er)'", r"(?<!Junior)(?<!Senior)(?<!Ridgemont)(?<!Riverside)\s*\b[Hh]igh(er)?\b(?!-[Ss]chool)(?! [Ss]chool)(?! Tides)"),
     SimpleRegexRule("Occurrence of untranslated 'Its'", r"\b[Dd]It'?s\b"),
     SimpleRegexRule("Occurrence of untranslated 'dot(s)", r"\b[Dd]dots?\b"),
     SimpleRegexRule("Occurrence of untranslated '(counter)clockwise", r"\b([Cc]ounter)?-?[Cc]clockwise\b"),
