@@ -60,7 +60,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b"),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b"),
     IgnoreByMsgidRegexWrapper(r"", SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b")),
-    IgnoreByMsgidRegexWrapper(r"Summer\s+of\s+(Code|Scripting)",  # Matches 'Green's and Stokes theorem'
+    IgnoreByMsgidRegexWrapper(r"(Summer|Hour)\s+of\s+(Code|Scripting|Webpage)",
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)",
             r"(?<!\\)\b[Gg]reen\b")),
     SimpleRegexRule("Occurrence of untranslated 'pink' (not as color specifier)", r"(?<!\\)\b[Pp]ink\b"),
