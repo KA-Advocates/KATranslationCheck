@@ -8,7 +8,7 @@ if sys.version_info[0] < 3:
     print("This script requires Python version 3.x")
     sys.exit(1)
 
-cleanupRegex = re.compile(r'<(a|span|div)\s+([a-z]+=("[^"]+"|\'[^\']+\')\s*)+>(.+?)</a>\s*')
+cleanupRegex = re.compile(r'<(a|span|div)\s+([a-z]+=("[^"]+"|\'[^\']+\')\s*)+>(.+?)</(a|span|div)>\s*')
 cleanupDetectRegex = re.compile(r"<(a|span|div)")
 
 def cleanupTranslatedString(s):
