@@ -55,7 +55,7 @@
         {% for entry, hit, filename in hits %}
           <div class="row hit" data-hitfile="{{filename}}">
             <button class="btn-danger btn report-button">Report error</button>
-            <a href="{{translationURLs[filename]}}#q={{urllib.parse.quote(entry.msgstr[:100].replace('*', ' ').replace('$',' ').replace('\\',' '))}}" class="btn-success btn translate-button">Translate on Crowdin</a>
+            <a href="{{translationURLs[filename]}}#q={{urllib.parse.quote(entry.msgstr[:100].replace('*', ' ').replace('$',' ').replace('\\',' ').replace(',', ' '))}}" class="btn-success btn translate-button">Translate on Crowdin</a>
             <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hittext">{{hit}}</code> in
               <a href="{{translationURLs[filename]}}" class="filename">{{filename}}</a></h3>  
             <div class="tcomment">{{entry.tcomment.replace("\n","<br/>")}}</div>
