@@ -56,7 +56,6 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'Its'", r"\b[Dd]It'?s\b"),
     SimpleRegexRule("Occurrence of untranslated 'dot(s)", r"\b[Dd]dots?\b"),
     SimpleRegexRule("Occurrence of untranslated '(counter)clockwise", r"\b([Cc]ounter)?-?[Cc]clockwise\b"),
-    SimpleRegexRule("Occurrence of untranslated 'inverse' (case-sensitive)", r"\binverse\b"),
     SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!\\)\b[Bb]lue\b"),
     SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b"),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b"),
