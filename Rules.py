@@ -204,6 +204,19 @@ class IgnoreByFilenameRegexWrapper(Rule):
             return None
         return self.child(msgstr, msgid)
 
+class IgnoreByFilenameListWrapper(Rule):
+    """
+    Ignore a rule (i.e. force zero hits) for a set of filenames defined by a list of exact hits.
+    """
+    def __init__(self, filenames, child):
+        super().__init__(child.name)
+        self.child = child
+        self.filenames = frozenset(filenames)
+    def __call__(self, msgstr, msgid, filename=None):
+        if filename in self.filenames:
+            return None
+        return self.child(msgstr, msgid)
+
 class IgnoreByMsgidRegexWrapper(Rule):
     """
     Ignore a rule if a regex search in the msgid returns a certain value.
