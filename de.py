@@ -43,7 +43,6 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'multiplier'", r"\b[Mm]ultiplier\b"),
     SimpleRegexRule("Occurrence of untranslated 'since'", r"\b[Ss]ince\b"),
     SimpleRegexRule("Occurrence of untranslated 'value'", r"(?<!%\()\b[Vv]alues?\b(?!\)s)"),
-    SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b"),
     SimpleRegexRule("Occurrence of untranslated 'numerator'", r"\b[Nn]umerator\b"),
     SimpleRegexRule("Occurrence of untranslated 'denominator'", r"\b[Dd]enominator\b"),
     SimpleRegexRule("Occurrence of untranslated 'diameter'", r"\b[Dd]iameter\b"),
@@ -60,7 +59,8 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!\\)\b[Bb]lue\b"),
     SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b"),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b"),
-    IgnoreByMsgidRegexWrapper(r"Green's.*[Tt]heorem",  # Matches 'Green's and Stokes theorem'
+    IgnoreByMsgidRegexWrapper(r"", SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b")),
+    IgnoreByMsgidRegexWrapper(r"Summer\s+of\s+(Code|Scripting)",  # Matches 'Green's and Stokes theorem'
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)",
             r"(?<!\\)\b[Gg]reen\b")),
     SimpleRegexRule("Occurrence of untranslated 'pink' (not as color specifier)", r"(?<!\\)\b[Pp]ink\b"),
