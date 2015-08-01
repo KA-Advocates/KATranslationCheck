@@ -55,7 +55,7 @@
         {% for entry, hit, filename in hits %}
           <div class="row hit" data-hitfile="{{filename}}">
             <button class="btn-danger btn report-button">Report error</button>
-            <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hittext">{{hit}}</code> in <a href="{{translationURLs[filename]}}" class="filename">{{filename}}</span></h3>  
+            <h3><span class="hitno">Hit #{{loop.index}}:</span> <code class="hittext">{{hit}}</code> in <a href="{{translationURLs[filename]}}" class="filename">{{filename}}</a></h3>  
             <div class="tcomment">{{entry.tcomment.replace("\n","<br/>")}}</div>
             <h4>Translated text:</h4>
             <pre class="translated">{{entry.msgstr}}</pre>
