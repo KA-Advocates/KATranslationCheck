@@ -79,7 +79,7 @@ rules = [
     NegativeTranslationConstraintRule("'Challenge' translated to 'Herausforderung' instead of 'challenge'", r"challenge", r"herausforderung", flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"\bpost\s*(?!card)(?!office)", r"\bpost(?!karte)(?!amt)(?!en)(?!e)", flags=re.UNICODE | re.IGNORECASE),
     # E-Mail must be written exactly "E-Mail". Exceptions: {{email}}, %(error_email), %(email), %(coach_email) {{ email }}
-    SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(?<!%\(coach_)(?<!%\(error_)(?<!\{\{)(?<!\{\{ )(eMail|email|Email|EMail|e-Mail|e-mail)s?"),
+    SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(?<!%\(coach_)(?<!%\(error_)(?<!\{\{)(?<!\{\{)\s*(eMail|email|Email|EMail|e-Mail|e-mail)s?"),
     #Bing issues
     SimpleRegexRule("Bing (1)", r"!\[\]\s+\("),
     SimpleRegexRule("Bing (2)", r"!\s+\[\]\("),
