@@ -38,7 +38,7 @@ class Rule(object):
         name = self.name.lower().replace("'", "").replace("\"", "")
         name = name.replace("(","").replace(")","").replace("{","")
         name = name.replace("}","").replace("\\", "").replace(",","")
-        name = name.replace("*","").replace("/", "-")
+        name = name.replace("*","").replace("/", "-").replace("%", "")
         name = re.sub(r"\s+", "-", name)
         name = re.sub(r"-+", "-", name)
         name = re.sub(r"^-", "", name)
