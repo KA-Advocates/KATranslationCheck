@@ -20,7 +20,8 @@ rules = [
     SimpleRegexRule("Value with multiple or mixed commata or dots", r"(\d+(\.|\{,\})){2,}\d+"), #Should be space. Comma without {} ignored.
     #Dollar not embedded as a symbol 234$ dollar
     SimpleRegexRule("Value suffixed by dollar", r"\d+\$\s*dollars?"),
-    SimpleRegexRule("Percent value not written as {\\,}\\%", r"(?<!\{\\,\}\\)%(?!\()"),
+    SimpleRegexRule("Percent value not written as {\\,}\\%", r"(?<!\{\\,\}\\)%\s*\$"),
+    SimpleRegexRule("Percent value not escaped and used as string substitution", r"(?<!\\)%(?!\()"),
     # Translator missed english-only world
     SimpleRegexRule("Occurrence of untranslated 'year'", r"(?<!%\()[Yy]ear(?!\)s)"), # These are lookbehind/lookhead assertions ;-)
     SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?(?![A-Za-z])"),
