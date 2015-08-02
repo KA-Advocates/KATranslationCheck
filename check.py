@@ -34,7 +34,7 @@ def readPOFiles(directory):
 
     Also supports using a single file as argument.
     """
-    if os.path.isfile(directory): #Single file
+    if os.path.isfile(directory): #Single file>=
         poFilenames = [directory]
     else:
         poFilenames = []
@@ -116,7 +116,12 @@ class HTMLHitRenderer(object):
         }
         # Compute total stats by file
         self.statsByFile = {
-            filename: sum((len(hits) for hits in ruleHits.values()))
+            filename: {"hits": self.countRuleHitsAboveSeverity(ruleHits, Severity.standard),
+               "warnings": self.countRuleHitsAboveSeverity(ruleHits, Severity.warning),
+               "errors": self.countRuleHitsAboveSeverity(ruleHits, Severity.dangerous),
+               "infos": self.countRuleHitsAboveSeverity(ruleHits, Severity.info),
+               "notices": self.countRuleHitsAboveSeverity(ruleHits, Severity.notice),
+               "link": self.filepath_to_url(filename)}
             for filename, ruleHits in self.fileRuleHits.items()
         }
         # Compute by-rule stats per file
@@ -132,6 +137,9 @@ class HTMLHitRenderer(object):
     def countRuleHitsAboveSeverity(self, ruleHits, severity):
         """In a rule -> hitlist mapping, count the total number of hits above a given severity"""
         return sum([len(hits) for rule, hits in ruleHits.items() if rule.severity >= severity])
+    def countRuleHitsAtSeverity(self, ruleHits, severity):
+        """In a rule -> hitlist mapping, count the total number of hits above a given severity"""
+        return sum([len(hits) for rule, hits in ruleHits.items() if rule.severity == severity])
     def writeStatsJSON(self):
         """
         Write a statistics-by-filename JSON to outdir/filestats.sjon

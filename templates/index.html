@@ -58,11 +58,25 @@
             <h3>Files</h3>
           </div>
           {% for filename, filelink in files.items() %}
-            {% if statsByFile[filename] %}
+            {% if statsByFile[filename]["notices"] > 0 %}
                 <div class="row">
                   <a href="{{filelink}}">{{filename}}</a>
                   {% if filename in statsByFile %}
-                    <span>({{statsByFile[filename]}} hits)</span>
+                    <span>(
+                      {% if statsByFile[filename]["errors"] > 0 %}
+                        <span class="text-danger">{{statsByFile[filename]["errors"]}} errors</span>,
+                      {% endif %}
+                      {% if statsByFile[filename]["warnings"] > 0 %}
+                        <span class="text-warning">{{statsByFile[filename]["warnings"]}} warnings</span>,
+                      {% endif %}
+                      {% if statsByFile[filename]["hits"] > 0 %}
+                        <span class="text-primary">{{statsByFile[filename]["hits"]}} hits</span>,
+                      {% endif %}
+                      {% if statsByFile[filename]["infos"] > 0 %}
+                        <span class="text-success">{{statsByFile[filename]["infos"]}} infos</span>,
+                      {% endif %}
+                      <span class="text-muted">{{statsByFile[filename]["notices"]}} notices</span>
+                      )</span>
                   {% endif %}
                 </div>
             {% endif %}
