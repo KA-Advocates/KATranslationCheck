@@ -68,7 +68,8 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'marking'", r"\b[Mm]arkings?\b"),
     SimpleRegexRule("Occurrence of untranslated 'low(er)'", r"\b[Ll]ow(er)?\b"),
     SimpleRegexRule("Occurrence of untranslated 'mass'", r"\b[Mm]ass\b"),
-    SimpleRegexRule("Occurrence of untranslated 'high(er)'", r"(?<!Junior)(?<!Senior)(?<!Ridgemont)(?<!Riverside)\s*\b[Hh]igh(er)?\b(?!-[Ss]chool)(?! [Ss]chool)(?! Tides)"),
+    IgnoreByMsgidRegexWrapper(r"(Ridgemont|Junior|Senior|Riverside)\s+High\b",
+        SimpleRegexRule("Occurrence of untranslated 'high(er)'", r"\b[Hh]igh(er)?\b(?!-[Ss]chool)(?! [Ss]chool)(?! Tides)")),
     SimpleRegexRule("Occurrence of untranslated 'Its'", r"\b[Dd]It'?s\b"),
     SimpleRegexRule("Occurrence of untranslated 'dot(s)", r"\b[Dd]dots?\b"),
     SimpleRegexRule("Occurrence of untranslated '(counter)clockwise", r"\b([Cc]ounter)?-?[Cc]clockwise\b"),
@@ -79,7 +80,7 @@ rules = [
         SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b(?!-)")), #Also allow of inside links etc.
     IgnoreByMsgidRegexWrapper(r"[Gg]reen'?s.+[Tt]heorem",
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)\b[Gg]reen\b")),
-    IgnoreByTcommentRegexWrapper("/measuring-and-converting-money-word-problems", # Ignore for conversion exercises
+    IgnoreByTcommentRegexWrapper("/measuring-and-converting-money-word-problems", # Ignore for conversion exercises 
         SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?(?!ville)(?!-Schein)")), #US-Dollars? & Dollarville allowed
     SimpleSubstringRule("Escaped dollar symbol", r"\\+$"),
     IgnoreByFilenameRegexWrapper(r"^de/1_high_priority_platform", SimpleRegexRule("'Sie' instead of 'Du'", r"\bSie\b"), invert=True),
