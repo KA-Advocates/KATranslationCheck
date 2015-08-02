@@ -185,7 +185,7 @@ class ExactCopyRule(Rule):
     def __init__(self, name, regex, aliases={}):
         super().__init__(name)
         self.regex = re.compile(regex)
-        self.aliases = alises
+        self.aliases = aliases
     def __call__(self, msgstr, msgid, filename=None):
         origMatches = self.regex.findall(msgid)
         translatedMatches = self.regex.findall(msgstr)
