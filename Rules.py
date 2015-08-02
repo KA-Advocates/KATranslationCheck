@@ -51,21 +51,21 @@ class Rule(object):
     def get_machine_name(self):
         """Get a machine-readable name from a rule name"""
         name = self.name.lower().replace("'", "").replace("\"", "")
-        name = name.replace("(","").replace(")","").replace("{","")
-        name = name.replace("}","").replace("\\", "").replace(",","")
-        name = name.replace("*","").replace("/", "-").replace("%", "")
+        name = name.replace("(", "").replace(")", "").replace("{", "")
+        name = name.replace("}", "").replace("\\", "").replace(",", "")
+        name = name.replace("*", "").replace("/", "-").replace("%", "")
         name = re.sub(r"\s+", "-", name)
         name = re.sub(r"-+", "-", name)
         name = re.sub(r"^-", "", name)
         return name
     def getBootstrapColor(self):
         """Get a bootstrap color class (text-...) depending on the severity"""
-        if self.severity == Severity.notice: return "text-mute"
+        if self.severity == Severity.notice: return "text-muted"
         elif self.severity == Severity.info: return "text-success"
         elif self.severity == Severity.standard: return "text-primary"
         elif self.severity == Severity.warning: return "text-warning"
         elif self.severity == Severity.dangerous: return "text-danger"
-        return "text-info"
+        else: return "text-info"
     def __lt__(self, other):
         if self.severity != other.severity:
             return self.severity < other.severity
