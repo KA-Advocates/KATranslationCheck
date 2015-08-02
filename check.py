@@ -25,6 +25,7 @@ from ansicolor import red, black, blue
 from jinja2 import Environment, FileSystemLoader
 from UpdateAllFiles import getTranslationFilemapCache
 from de import rules
+from Rules import Severity
 
 def readPOFiles(directory):
     """
@@ -128,6 +129,9 @@ class HTMLHitRenderer(object):
             rule: sum((stat[rule] for stat in self.statsByFileAndRule.values()))
             for rule in self.rules
         }
+    def countRuleHitsAboveSeverity(self, ruleHits, severity):
+        """In a rule -> hitlist mapping, count the total number of hits above a given severity"""
+        return sum([len(hits) for rule, hits in ruleHits.items() if rule.severity >= severity])
     def writeStatsJSON(self):
         """
         Write a statistics-by-filename JSON to outdir/filestats.sjon
@@ -135,7 +139,11 @@ class HTMLHitRenderer(object):
         # Write file
         with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
             stats = {
-                filename: {"hits": sum([len(hits) for _, hits in ruleHits.items()]),
+                filename: {"hits": self.countRuleHitsAboveSeverity(ruleHits, Severity.standard),
+                           "warnings": self.countRuleHitsAboveSeverity(ruleHits, Severity.warning),
+                           "errors": self.countRuleHitsAboveSeverity(ruleHits, Severity.dangerous),
+                           "infos": self.countRuleHitsAboveSeverity(ruleHits, Severity.info),
+                           "notices": self.countRuleHitsAboveSeverity(ruleHits, Severity.notice),
                            "link": self.filepath_to_url(filename)}
                 for filename, ruleHits in self.fileRuleHits.items()
             }
