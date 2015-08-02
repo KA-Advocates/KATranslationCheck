@@ -32,7 +32,7 @@ rules = [
     SimpleRegexRule("Value with multiple or mixed commata or dots", r"(\d+(\.|\{,\})){2,}\d+"), #Should be space. Comma without {} ignored.
     #Dollar not embedded as a symbol 234$ dollar
     SimpleRegexRule("Value suffixed by dollar", r"\d+\$\s*dollars?"),
-    SimpleRegexRule("Additional spaces after * for cursive word", r"(?<!\*)\*\s+\w+\s+\*(?!\*)"),
+    SimpleRegexRule("Additional spaces after * for italic word", r"(?<!\*)(?<!\w)\*\s+\w+\s+\*(?!\*)"), # Need to avoid hit for *kleiner* oder *größer* etc.
     SimpleRegexRule("Percent value not written as {\\,}\\%", r"(?<!\{\\,\}\\)%\s*\$"),
     SimpleRegexRule("Percent value in formula not escaped", r"(?<!\\)%\s*\$"),
     # Translator missed english-only world
