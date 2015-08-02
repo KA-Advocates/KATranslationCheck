@@ -68,7 +68,7 @@ class HTMLHitRenderer(object):
     """
     def __init__(self, outdir, rules, lang="de"):
         self.outdir = outdir
-        self.rules = rules
+        self.rules = sorted(rules, reverse=True)
         #Initialize template engine
         env = Environment(loader=FileSystemLoader('templates'))
         self.ruleTemplate = env.get_template("template.html")

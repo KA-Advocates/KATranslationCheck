@@ -7,10 +7,15 @@ from collections import defaultdict
 from enum import IntEnum
 
 class Severity(IntEnum):
+    # Notice should be used for rules where a significant number of unfixable false-positives are expected
     notice = 1
+    # Info should be used for rules that have less impact and more false positives than standard rules.
     info = 2
+    # Standard values should have impact on the readability that does not lead to misunderstandins.
     standard = 3
+    # Warning values should have clearly visible impact on the readability.
     warning = 4
+    # Dangerous values should harm the readability of the text significantly and have virtually no false-positives
     dangerous = 5
 
 if sys.version_info[0] < 3:
