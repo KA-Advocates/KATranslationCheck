@@ -203,12 +203,17 @@ class IgnoreByFilenameRegexWrapper(Rule):
     If you want to ignore a rule for all filenames starting with "learn.", you'd use:
 
     """
-    def __init__(self, filenameRegex, child):
+    def __init__(self, filenameRegex, child, invert=False):
+        """
+        Keyword arguments:
+            invert: Set this to true to invert this regex, i.e. mismatches of the regex lead to a ignored entry
+        """
         super().__init__(child.name)
         self.child = child
+        self.invert = invert
         self.filenameRegex = re.compile(filenameRegex)
     def __call__(self, msgstr, msgid, filename=None):
-        if self.filenameRegex.match(filename):
+        if bool(self.filenameRegex.match(filename)) == self.invert:
             return None
         return self.child(msgstr, msgid)
 
