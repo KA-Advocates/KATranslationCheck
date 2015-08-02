@@ -9,6 +9,7 @@ def readImageAliases():
         reader = csv.reader(csvfile, delimiter=',')
         aliases = defaultdict(str)
         aliases.update({"![](" + row[0] + ")": "![](" + row[1] + ")" for row in reader})
+        return aliases
 
 imageAliases = readImageAliases()
 
