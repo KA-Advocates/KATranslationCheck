@@ -101,7 +101,7 @@ rules = [
     SimpleRegexRule("False Bing translation of image", r"☃\s+Bild"),
     SimpleRegexRule("Missing translation of **How", r"\*\*[Hh]ow"),
     SimpleRegexRule("Missing translation of **What", r"\*\*[Ww]hat"),
-    SimpleRegexRule("Space inserted between **", r"\* \*"),
+    SimpleRegexRule("Space inserted between **", r"(?<!\*)\* \*(?!\*)"),
     SimpleRegexRule("Missing translation of ones", r"\\text\{\s*ones\}\}"),
     SimpleRegexRule("Missing translation of ten(s)", r"\\text\{\s*tens?\}\}"),
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}"),
