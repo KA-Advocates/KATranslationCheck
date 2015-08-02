@@ -4,13 +4,14 @@ import re
 import sys
 import fnmatch
 from collections import defaultdict
-from enum import Enum
+from enum import IntEnum
 
-class Severity(Enum):
+class Severity(IntEnum):
     notice = 1
-    warning = 2
-    severe = 3
-    dangerous = 4
+    info = 2
+    standard = 3
+    warning = 4
+    dangerous = 5
 
 if sys.version_info[0] < 3:
     print("This script requires Python version 3.x")
@@ -36,7 +37,7 @@ class Rule(object):
     Remember to implement __call__(self, msgstr, msgid),
     which must return the hit or None if no hit is found.
     """
-    def __init__(self, name, severity=Severity.notice):
+    def __init__(self, name, severity=Severity.standard):
         self.name = name
         # If you need to save some state, you can do it here.
         # This MUST NOT be filled by subclasses.
@@ -52,6 +53,18 @@ class Rule(object):
         name = re.sub(r"-+", "-", name)
         name = re.sub(r"^-", "", name)
         return name
+    def getBootstrapColor(self):
+        """Get a bootstrap color class (text-...) depending on the severity"""
+        if self.severity == Severity.notice: return "text-mute"
+        elif self.severity == Severity.info: return "text-success"
+        elif self.severity == Severity.standard: return "text-primary"
+        elif self.severity == Severity.warning: return "text-warning"
+        elif self.severity == Severity.dangerous: return "text-danger"
+        return "text-info"
+    def __lt__(self, other):
+        if self.severity != other.severity:
+            return self.severity < other.severity
+        return self.name < other.name
     def apply_to_po(self, po, filename="[unknown file]", ignore_untranslated=True):
         """
         Apply to a dictionary of parsed PO files.
@@ -77,7 +90,7 @@ class SimpleRegexRule(Rule):
     A simple rule type that matches a regex to the translated string.
     Partial matches (via re.search) are considered hits.
     """
-    def __init__(self, name, regex, severity=Severity.notice, flags=re.UNICODE):
+    def __init__(self, name, regex, severity=Severity.standard, flags=re.UNICODE):
         super().__init__(name, severity)
         self.re = re.compile(regex, flags)
         self.regex_str = regex
@@ -93,7 +106,7 @@ class SimpleSubstringRule(Rule):
     """
     A simple rule type that hits when a given substring is found in the msgstr.
     """
-    def __init__(self, name, substr, severity=Severity.notice, case_insensitive=False):
+    def __init__(self, name, substr, severity=Severity.standard, case_insensitive=False):
         super().__init__(name, severity)
         self.substr = substr
         self.ci = case_insensitive
@@ -117,7 +130,7 @@ class TranslationConstraintRule(Rule):
     i.e. the rule hits when regexOrig has >= 1 match in the msgid
     while regexTranslated has 0 machte
     """
-    def __init__(self, name, regexOrig, regexTranslated, severity=Severity.notice, flags=re.UNICODE):
+    def __init__(self, name, regexOrig, regexTranslated, severity=Severity.standard, flags=re.UNICODE):
         super().__init__(name, severity)
         self.reOrig = re.compile(regexOrig, flags)
         self.reTranslated = re.compile(regexTranslated, flags)
@@ -138,7 +151,7 @@ class NegativeTranslationConstraintRule(Rule):
     i.e. the rule hits when regexOrig has >= 1 match in the msgid
     while regexTranslated has a match.
     """
-    def __init__(self, name, regexOrig, regexTranslated, severity=Severity.notice, flags=re.UNICODE):
+    def __init__(self, name, regexOrig, regexTranslated, severity=Severity.standard, flags=re.UNICODE):
         super().__init__(name, severity)
         self.reOrig = re.compile(regexOrig, flags)
         self.reTranslated = re.compile(regexTranslated, flags)
@@ -206,7 +219,7 @@ class ExactCopyRule(Rule):
     This can be used, for example, to ensure GUI elements, numbers or URLs are the same in
     both the translated text and the original.
     """
-    def __init__(self, name, regex, severity=Severity.notice, aliases=defaultdict(str)):
+    def __init__(self, name, regex, severity=Severity.standard, aliases=defaultdict(str)):
         super().__init__(name, severity)
         self.regex = re.compile(regex)
         self.regex_str = regex

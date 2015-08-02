@@ -12,6 +12,7 @@ Instructions:
 """
 import polib
 import re
+import operator
 import json
 import itertools
 import os
@@ -91,10 +92,11 @@ class HTMLHitRenderer(object):
         """
         Compute all rule hits for a single parsed PO file
         """
-        return {
+        unsorted = {
             rule: list(rule.apply_to_po(po, filename=filename))
             for rule in self.rules
         }
+        return collections.OrderedDict(sorted(unsorted.items(), key=operator.itemgetter(0)))
     def computeRuleHitsForFileSet(self, poFiles):
         """
         For each file in the given filename -> PO object dictionary,

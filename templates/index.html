@@ -49,7 +49,7 @@
         {% for rule in rules %}
           {% if statsByRule[rule] > 0 %}
           <div class="row">
-            <a href="{{rule.get_machine_name()}}.html">{{rule.name}}</a> ({{statsByRule[rule]}} hits)
+            <a href="{{rule.get_machine_name()}}.html" class="{{rule.getBootstrapColor()}}">{{rule.name}}</a> ({{statsByRule[rule]}} hits)
           </div>
           {% endif %}
         {% endfor %}
