@@ -97,7 +97,7 @@
         var hittext = $(this).find(".hittext")
         $(this).find(".translated").highlight(hittext.text())
       });
-
+      //Add report functionality
       $(".report-button").click(function(event) {
         var hit = $(this).parent();
         var filenameVal = $(hit).find(".filename").text();
@@ -110,7 +110,7 @@
         //Submit report
         $.post("/report.php", {filename: filenameVal, msgstr: msgstrVal, msgid: msgidVal, url: urlVal, hit:hitVal, reason: reason});
       });
-
+      //Add show image functionality
       $(".show-images-button").click(function(event) {
         var imagelist = $(this).parent();
         $(imagelist).find(".image-link").each(function(index) {
@@ -118,6 +118,8 @@
             $(this).replaceWith('<a href="' + href + '"><img src="' + href + '"/></a>');
         });
       });
+      //Open comment links in new tab
+      $(".tcomment a").attr("target", "_blank");
     })
     </script>
   </body>
