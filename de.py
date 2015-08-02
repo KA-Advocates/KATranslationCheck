@@ -86,7 +86,7 @@ rules = [
     NegativeTranslationConstraintRule("'scientific notation' translated to 'wissenschaftliche Schreibweise' instead of 'Exponentialschreibweise'", r"scientific\s+notation", r"wissenschaftliche\s+schreibweise", flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'Coach' translated to 'Trainer' instead of 'Coach'", r"coach", r"trainer", flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'Challenge' translated to 'Herausforderung' instead of 'challenge'", r"challenge", r"herausforderung", flags=re.UNICODE | re.IGNORECASE),
-    NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"\bpost\s*(?!card)(?!man)(?!office)", r"\bpost(?!karte)(?!amt)(?!en)(?!e)", flags=re.UNICODE | re.IGNORECASE),
+    NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"\bpost\s*(?!card)(?!alCode)(?!man)(?!office)", r"\bpost(?!karte)(?!amt)(?!en)(?!e)", flags=re.UNICODE | re.IGNORECASE),
     # E-Mail must be written exactly "E-Mail". Exceptions: {{email}}, %(error_email), %(email), %(coach_email) {{ email }}
     SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(?<!%\(coach_)(?<!%\(error_)(?<!\{\{)(?<!\{\{)\s*(eMail|email|Email|EMail|e-Mail|e-mail)s?"),
     #Bing issues
