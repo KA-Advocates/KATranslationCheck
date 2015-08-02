@@ -213,7 +213,7 @@ class IgnoreByFilenameRegexWrapper(Rule):
         self.invert = invert
         self.filenameRegex = re.compile(filenameRegex)
     def __call__(self, msgstr, msgid, filename=None):
-        if bool(self.filenameRegex.match(filename)) == self.invert:
+        if bool(self.filenameRegex.match(filename)) != self.invert:
             return None
         return self.child(msgstr, msgid)
 
