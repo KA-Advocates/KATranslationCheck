@@ -105,8 +105,8 @@ rules = [
     SimpleRegexRule("Missing translation of **What", r"\*\*[Ww]hat"),
     SimpleRegexRule("Space inserted between **", r"(?<!\*)\* \*(?!\*)"),
     SimpleRegexRule("Missing translation of ones", r"\\text\{\s*ones\}\}"),
-    SimpleRegexRule("Missing translation of ten(s)", r"\\text\{\s*tens?\}\}"),
-    SimpleRegexRule("Missing translation of hundred(s)", r"(?<!\d\{)\\text\{\s*hundreds?\}\}"),
+    SimpleRegexRule("Missing translation of ten(s)", r"(?<!\d\{)\\text\{\s*tens?\}\}"),
+    SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}"),
     # Machine-readable stuff must be identical in the translation
     ExactCopyRule("All image URLs must match in order", r"!\[\]\s*\([^\)]+\)"),
     ExactCopyRule("All GUI elements must match in order", r"\[\[☃\s+[a-z-]+\s*\d*\]\]"),
