@@ -76,7 +76,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!\\color\{)(?<!\\)\b[Bb]lue\b"),
     SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b"),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b"),
-    IgnoreByMsgidRegexWrapper(r"(Summer|Hour|Art|Lots)\s+of\s+(Drawing|Code|Scripting|Webpage|Databases|Problem|Fun)",
+    IgnoreByMsgidRegexWrapper(r"(Summer|Hour|Art|Lots)\s+of\s+(Drawing|Code|Script(ing)?|Webpage|Databases|Problem|Fun)",
         SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b(?!-)")), #Also allow of inside links etc.
     IgnoreByMsgidRegexWrapper(r"[Gg]reen'?s.+[Tt]heorem",
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)\b[Gg]reen\b")),
