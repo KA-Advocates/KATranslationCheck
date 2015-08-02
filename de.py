@@ -21,7 +21,7 @@ rules = [
     #Dollar not embedded as a symbol 234$ dollar
     SimpleRegexRule("Value suffixed by dollar", r"\d+\$\s*dollars?"),
     SimpleRegexRule("Percent value not written as {\\,}\\%", r"(?<!\{\\,\}\\)%\s*\$"),
-    SimpleRegexRule("Percent value not escaped and used as string substitution", r"(?<!\\)%(?!\()"),
+    SimpleRegexRule("Percent value in formula not escaped", r"(?<!\\)%\s*\$"),
     # Translator missed english-only world
     SimpleRegexRule("Occurrence of untranslated 'year'", r"(?<!%\()[Yy]ear(?!\)s)"), # These are lookbehind/lookhead assertions ;-)
     SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?(?![A-Za-z])"),
