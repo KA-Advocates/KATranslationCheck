@@ -67,7 +67,7 @@ rules = [
         SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b")),
     IgnoreByMsgidRegexWrapper(r"[Gg]reen'?s.+[Tt]heorem",
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)\b[Gg]reen\b")),
-    SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?(?!ville)"), #US-Dollars? & Dollarville allowed
+    SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?(?!ville)(?!-Scheine)"), #US-Dollars? & Dollarville allowed
     SimpleSubstringRule("Escaped dollar symbol", r"\\+$"),
     IgnoreByFilenameRegexWrapper(r"^de/1_high_priority_platform", SimpleRegexRule("'Sie' instead of 'Du'", r"\bSie\b"), invert=True),
     IgnoreByFilenameRegexWrapper(r"^de/1_high_priority_platform", SimpleRegexRule("'Ihre' instead of 'Deine'", r"\bIhre[rms]?\b"), invert=True),
