@@ -64,7 +64,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b"),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b"),
     IgnoreByMsgidRegexWrapper(r"(Summer|Hour|Art|Lots)\s+of\s+(Code|Scripting|Webpage|Databases|Problem|Fun)",
-        SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b")),
+        SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b(?!-)")), #Also allow of inside links etc.
     IgnoreByMsgidRegexWrapper(r"[Gg]reen'?s.+[Tt]heorem",
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)\b[Gg]reen\b")),
     SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?(?!ville)(?!-Scheine)"), #US-Dollars? & Dollarville allowed
