@@ -57,7 +57,7 @@ class Rule(object):
             # Translated string cleanup
             msgstr = cleanupTranslatedString(entry.msgstr)
             # Apply the rule
-            hit = self(msgstr, entry.msgid, filename=filename)
+            hit = self(msgstr, entry.msgid, entry.tcomment, filename=filename)
             if hit:
                 #Find images in both original and new string
                 origImages = [h[0] for h in _extractImgRegex.findall(entry.msgid)]
@@ -73,7 +73,7 @@ class SimpleRegexRule(Rule):
         super().__init__(name)
         self.re = re.compile(regex, flags)
         self.regex_str = regex
-    def __call__(self, msgstr, msgid, filename=None):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
         hit = self.re.search(msgstr)
         if hit:
             return hit.group(0)
@@ -89,7 +89,7 @@ class SimpleSubstringRule(Rule):
         self.ci = case_insensitive
         if self.ci:
             self.substr = self.substr.lower()
-    def __call__(self, msgstr, msgid, filename=None):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
         # Case-insensitive preprocessing
         if self.ci:
             msgstr = msgstr.lower()
@@ -111,7 +111,7 @@ class TranslationConstraintRule(Rule):
         self.reTranslated = re.compile(regexTranslated, flags)
         self.regex_orig_str = regexOrig
         self.regex_translated_str = regexTranslated
-    def __call__(self, msgstr, msgid, filename=None):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.reOrig.search(msgid) and not self.reTranslated.search(msgstr):
             return "[failed constraint]"
         return None
@@ -130,7 +130,7 @@ class NegativeTranslationConstraintRule(Rule):
         self.reTranslated = re.compile(regexTranslated, flags)
         self.regex_orig_str = regexOrig
         self.regex_translated_str = regexTranslated
-    def __call__(self, msgstr, msgid, filename=None):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.reOrig.search(msgid) and self.reTranslated.search(msgstr):
             return "[failed constraint]"
         return None
@@ -140,8 +140,8 @@ class BooleanNotRule(Rule):
     def __init__(self, child):
         super().__init__(child.name)
         self.child = child
-    def __call__(self, msgstr, msgid, filename=None):
-        if self.child(msgstr, msgid):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
+        if self.child(msgstr, msgid, tcomment, filename):
             return None
         else:
             return "[failed boolean NOT]"
@@ -152,10 +152,10 @@ class BooleanAndRule(Rule):
         super().__init__(name)
         self.childA = childA
         self.childB = childB
-    def __call__(self, msgstr, msgid, filename=None):
-        hitA = self.childA(msgstr, msgid)
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
+        hitA = self.childA(msgstr, msgid, tcomment, filename)
         if not hitA: return None # Shortcut-return
-        hitB = self.childB(msgstr, msgid)
+        hitB = self.childB(msgstr, msgid, tcomment, filename)
         if hitB: return hitA
         return None
 
@@ -165,10 +165,10 @@ class BooleanOrRule(Rule):
         super().__init__(name)
         self.childA = childA
         self.childB = childB
-    def __call__(self, msgstr, msgid, filename=None):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
         hitA = self.childA(msgstr, msgid)
         if hitA: return hitA # Shortcut-return
-        return self.childB(msgstr, msgid)
+        return self.childB(msgstr, msgid, tcomment, filename)
 
 
 def SimpleGlobRule(name, glob):
@@ -187,7 +187,7 @@ class ExactCopyRule(Rule):
         super().__init__(name)
         self.regex = re.compile(regex)
         self.aliases = aliases
-    def __call__(self, msgstr, msgid, filename=None):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
         origMatches = self.regex.findall(msgid)
         translatedMatches = self.regex.findall(msgstr)
         # Apply aliases
@@ -217,10 +217,10 @@ class IgnoreByFilenameRegexWrapper(Rule):
         self.child = child
         self.invert = invert
         self.filenameRegex = re.compile(filenameRegex)
-    def __call__(self, msgstr, msgid, filename=None):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if bool(self.filenameRegex.match(filename)) != self.invert:
             return None
-        return self.child(msgstr, msgid)
+        return self.child(msgstr, msgid, tcomment, filename)
 
 class IgnoreByFilenameListWrapper(Rule):
     """
@@ -230,10 +230,10 @@ class IgnoreByFilenameListWrapper(Rule):
         super().__init__(child.name)
         self.child = child
         self.filenames = frozenset(filenames)
-    def __call__(self, msgstr, msgid, filename=None):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if filename in self.filenames:
             return None
-        return self.child(msgstr, msgid)
+        return self.child(msgstr, msgid, tcomment, filename)
 
 class IgnoreByMsgidRegexWrapper(Rule):
     """
@@ -249,10 +249,29 @@ class IgnoreByMsgidRegexWrapper(Rule):
         super().__init__(child.name)
         self.child = child
         self.msgidRegex = re.compile(msgidRegex)
-    def __call__(self, msgstr, msgid, filename=None):
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.msgidRegex.search(msgid):
             return None
-        return self.child(msgstr, msgid)
+        return self.child(msgstr, msgid, tcomment, filename)
+
+class IgnoreByTcommentRegexWrapper(Rule):
+    """
+    Ignore a rule if a regex search in the tcomment returns a certain value.
+
+    This can be useful to ignore special cases of translation which
+    are distinguishable by the untranslated (english) text, e.g.
+    "Green's theorem" as a special case of untranslated "green".
+
+    Note that if a single regex hit is found, the entire string is ignore
+    """
+    def __init__(self, tcommentRegex, child):
+        super().__init__(child.name)
+        self.child = child
+        self.tcommentRegex = re.compile(tcommentRegex)
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
+        if self.tcommentRegex.search(tcomment):
+            return None
+        return self.child(msgstr, msgid, tcomment, filename)
 
 def findRule(rules, name):
     "Find a rule by name"
