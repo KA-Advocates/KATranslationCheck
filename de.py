@@ -65,7 +65,8 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b"),
     IgnoreByMsgidRegexWrapper(r"(Summer|Hour|Art|Lots)\s+of\s+(Code|Scripting|Webpage|Databases|Problem|Fun)",
         SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b")),
-    SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)\b[Gg]reen\b"),
+    IgnoreByMsgidRegexWrapper(r"[Gg]reen'?s.+[Tt]heorem",
+        SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)\b[Gg]reen\b")),
     SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?(?!ville)"), #US-Dollars? & Dollarville allowed
     SimpleSubstringRule("Escaped dollar symbol", r"\\+$"),
     IgnoreByFilenameRegexWrapper(r"^de/1_high_priority_platform", SimpleRegexRule("'Sie' instead of 'Du'", r"\bSie\b"), invert=True),
