@@ -73,6 +73,8 @@ class SimpleRegexRule(Rule):
         super().__init__(name)
         self.re = re.compile(regex, flags)
         self.regex_str = regex
+    def description(self):
+        return "Matches regular expression '%s'" % self.regex_str
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         hit = self.re.search(msgstr)
         if hit:
@@ -89,6 +91,8 @@ class SimpleSubstringRule(Rule):
         self.ci = case_insensitive
         if self.ci:
             self.substr = self.substr.lower()
+    def description(self):
+        return "Matches substring '%s'" % self.substr
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         # Case-insensitive preprocessing
         if self.ci:
@@ -111,6 +115,8 @@ class TranslationConstraintRule(Rule):
         self.reTranslated = re.compile(regexTranslated, flags)
         self.regex_orig_str = regexOrig
         self.regex_translated_str = regexTranslated
+    def description(self):
+        return "Matches '%s' if translated as '%s'" % (self.regex_orig_str, self.regex_translated_str)
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.reOrig.search(msgid) and not self.reTranslated.search(msgstr):
             return "[failed constraint]"
@@ -130,6 +136,8 @@ class NegativeTranslationConstraintRule(Rule):
         self.reTranslated = re.compile(regexTranslated, flags)
         self.regex_orig_str = regexOrig
         self.regex_translated_str = regexTranslated
+    def description(self):
+        return "Matches '%s' if NOT translated as '%s'" % (self.regex_orig_str, self.regex_translated_str)
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.reOrig.search(msgid) and self.reTranslated.search(msgstr):
             return "[failed constraint]"
@@ -152,6 +160,8 @@ class BooleanAndRule(Rule):
         super().__init__(name)
         self.childA = childA
         self.childB = childB
+    def description(self):
+        return "(%s) and (%s)" % (self.childA.description(), self.childB.description())
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         hitA = self.childA(msgstr, msgid, tcomment, filename)
         if not hitA: return None # Shortcut-return
@@ -165,6 +175,8 @@ class BooleanOrRule(Rule):
         super().__init__(name)
         self.childA = childA
         self.childB = childB
+    def description(self):
+        return "(%s) or (%s)" % (self.childA.description(), self.childB.description())
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         hitA = self.childA(msgstr, msgid)
         if hitA: return hitA # Shortcut-return
@@ -186,7 +198,10 @@ class ExactCopyRule(Rule):
     def __init__(self, name, regex, aliases=defaultdict(str)):
         super().__init__(name)
         self.regex = re.compile(regex)
+        self.regex_str = regex
         self.aliases = aliases
+    def description(self):
+        return "Matches if all instances of '%s' are the same (with %d aliases)" % (self.regex_str, len(self.aliases))
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         origMatches = self.regex.findall(msgid)
         translatedMatches = self.regex.findall(msgstr)
@@ -208,7 +223,7 @@ class IgnoreByFilenameRegexWrapper(Rule):
     If you want to ignore a rule for all filenames starting with "learn.", you'd use:
 
     """
-    def __init__(self, filenameRegex, child, invert=False):
+    def __init__(self, filename_regex, child, invert=False):
         """
         Keyword arguments:
             invert: Set this to true to invert this regex, i.e. mismatches of the regex lead to a ignored entry
@@ -216,9 +231,15 @@ class IgnoreByFilenameRegexWrapper(Rule):
         super().__init__(child.name)
         self.child = child
         self.invert = invert
-        self.filenameRegex = re.compile(filenameRegex)
+        self.filename_regex = re.compile(filename_regex)
+        self.filename_regex_str = filename_regex
+    def description(self):
+        if self.invert:
+            return "%s (only applied to filenames matching '%s')" % (self.child.description(), self.filename_regex_str)
+        else:
+            return "%s (ignored for filenames matching '%s')" % (self.child.description(), self.filename_regex_str)
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
-        if bool(self.filenameRegex.match(filename)) != self.invert:
+        if bool(self.filename_regex.match(filename)) != self.invert:
             return None
         return self.child(msgstr, msgid, tcomment, filename)
 
@@ -230,6 +251,8 @@ class IgnoreByFilenameListWrapper(Rule):
         super().__init__(child.name)
         self.child = child
         self.filenames = frozenset(filenames)
+    def description(self):
+        return "%s (ignored for files %s)" % (self.child.description(), str(self.filenames))
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if filename in self.filenames:
             return None
@@ -245,12 +268,15 @@ class IgnoreByMsgidRegexWrapper(Rule):
 
     Note that if a single regex hit is found, the entire string is ignore
     """
-    def __init__(self, msgidRegex, child):
+    def __init__(self, msgid_regex, child):
         super().__init__(child.name)
         self.child = child
-        self.msgidRegex = re.compile(msgidRegex)
+        self.msgid_regex = re.compile(msgid_regex)
+        self.msgid_regex_str = msgid_regex
+    def description(self):
+        return "%s (ignored for msgids matching '%s')" % (self.child.description(), self.msgid_regex_str)
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
-        if self.msgidRegex.search(msgid):
+        if self.msgid_regex.search(msgid):
             return None
         return self.child(msgstr, msgid, tcomment, filename)
 
@@ -268,6 +294,9 @@ class IgnoreByTcommentRegexWrapper(Rule):
         super().__init__(child.name)
         self.child = child
         self.tcommentRegex = re.compile(tcommentRegex)
+        self.tcomment_regex_str = tcommentRegex
+    def description(self):
+        return "%s (ignored for tcomments matching '%s')" % (self.child.description(), self.tcomment_regex_str)
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.tcommentRegex.search(tcomment):
             return None

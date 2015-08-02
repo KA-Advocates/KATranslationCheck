@@ -46,7 +46,14 @@
     </nav>
     <div id="maincontainer" class="container">
         <div class="row">
-          <h2>{{rule.name}}</h2>
+          <h1>{{rule.name}}</h1>
+        </div>
+        <div class="row">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              {{rule.description() | e}}
+            </div>
+          </div>
         </div>
         <div id="timestamprow" class="row">
           Page generated at {{timestamp}}<br/>
