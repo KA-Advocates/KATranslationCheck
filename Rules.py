@@ -3,6 +3,7 @@
 import re
 import sys
 import fnmatch
+from collections import defaultdict
 
 if sys.version_info[0] < 3:
     print("This script requires Python version 3.x")
@@ -182,7 +183,7 @@ class ExactCopyRule(Rule):
     This can be used, for example, to ensure GUI elements, numbers or URLs are the same in
     both the translated text and the original.
     """
-    def __init__(self, name, regex, aliases={}):
+    def __init__(self, name, regex, aliases=defaultdict(str)):
         super().__init__(name)
         self.regex = re.compile(regex)
         self.aliases = aliases
