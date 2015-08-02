@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 # coding: utf-8
 from Rules import *
+import csv
+from collections import defaultdict
+
+def readImageAliases():
+    with open('de-image-aliases.csv') as csvfile:
+        reader = csv.reader(csvfile, delimiter=',')
+        aliases = defaultdict(str)
+        aliases.update({row[0]: row[1] for row in reader})
+
+imageAliases = readImageAliases()
 
 ########################
 ### Initialize rules ###
@@ -109,7 +119,7 @@ rules = [
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}"),
     # Machine-readable stuff must be identical in the translation
     ExactCopyRule("All image URLs must match in order", r"!\[\]\s*\([^\)]+\)"),
-    ExactCopyRule("All GUI elements must match in order", r"\[\[☃\s+[a-z-]+\s*\d*\]\]"),
+    ExactCopyRule("All GUI elements must match in order", r"\[\[☃\s+[a-z-]+\s*\d*\]\]", aliases=imageAliases),
     # Unsorted rules
 ]
 

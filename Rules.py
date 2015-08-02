@@ -182,12 +182,16 @@ class ExactCopyRule(Rule):
     This can be used, for example, to ensure GUI elements, numbers or URLs are the same in
     both the translated text and the original.
     """
-    def __init__(self, name, regex):
+    def __init__(self, name, regex, aliases={}):
         super().__init__(name)
         self.regex = re.compile(regex)
+        self.aliases = alises
     def __call__(self, msgstr, msgid, filename=None):
         origMatches = self.regex.findall(msgid)
         translatedMatches = self.regex.findall(msgstr)
+        # Apply aliases
+        origMatches = [self.aliases[x] or x for x in origMatches]
+        translatedMatches = [self.aliases[x] or x for x in translatedMatches]
         # Find index of first mismatch
         try:
             idx = next(idx for idx, (x, y) in
