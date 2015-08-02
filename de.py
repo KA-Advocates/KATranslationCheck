@@ -22,6 +22,10 @@ rules = [
     SimpleRegexRule("Comma in integral coordinate", r"\$\(\d+\s*\,\s*\d+\)\$"),
     SimpleRegexRule("Comma in non-integral coordinate", r"\$\(\d+[\.,]\d+\s*\,\s*\d+[\.,]\d+\)\$"),
     SimpleRegexRule("{\ } instead of {\,} inside number", r"\d+\{\\\s+\}\d+"),
+    # Three cases of thin space missing in coordinate
+    SimpleRegexRule("Missing thin space ({\\,}) before and after |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\|\d+([\.,]\d+)?\)\$?"),
+    SimpleRegexRule("Missing thin space ({\\,}) after |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\s+\|\d+([\.,]\d+)?\)\$?"),
+    SimpleRegexRule("Missing thin space ({\\,}) before |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\|\s+\d+([\.,]\d+)?\)\$?"),
     #The most simple case of using a decimal point instead
     SimpleRegexRule("Simple number with decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$"),
     SimpleRegexRule("Wrong or missing space between number and € ({\\,} required)", r"\d+( |  |\{,\}|\{\\ \})?€"),
