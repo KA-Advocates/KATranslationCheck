@@ -4,6 +4,13 @@ import re
 import sys
 import fnmatch
 from collections import defaultdict
+from enum import Enum
+
+class Severity(Enum):
+    notice = 1
+    warning = 2
+    severe = 3
+    dangerous = 4
 
 if sys.version_info[0] < 3:
     print("This script requires Python version 3.x")
@@ -29,11 +36,12 @@ class Rule(object):
     Remember to implement __call__(self, msgstr, msgid),
     which must return the hit or None if no hit is found.
     """
-    def __init__(self, name):
+    def __init__(self, name, severity=Severity.notice):
         self.name = name
         # If you need to save some state, you can do it here.
         # This MUST NOT be filled by subclasses.
         self.custom_info = {}
+        self.severity = severity
     def get_machine_name(self):
         """Get a machine-readable name from a rule name"""
         name = self.name.lower().replace("'", "").replace("\"", "")
@@ -69,8 +77,8 @@ class SimpleRegexRule(Rule):
     A simple rule type that matches a regex to the translated string.
     Partial matches (via re.search) are considered hits.
     """
-    def __init__(self, name, regex, flags=re.UNICODE):
-        super().__init__(name)
+    def __init__(self, name, regex, severity=Severity.notice, flags=re.UNICODE):
+        super().__init__(name, severity)
         self.re = re.compile(regex, flags)
         self.regex_str = regex
     def description(self):
@@ -85,8 +93,8 @@ class SimpleSubstringRule(Rule):
     """
     A simple rule type that hits when a given substring is found in the msgstr.
     """
-    def __init__(self, name, substr, case_insensitive=False):
-        super().__init__(name)
+    def __init__(self, name, substr, severity=Severity.notice, case_insensitive=False):
+        super().__init__(name, severity)
         self.substr = substr
         self.ci = case_insensitive
         if self.ci:
@@ -109,8 +117,8 @@ class TranslationConstraintRule(Rule):
     i.e. the rule hits when regexOrig has >= 1 match in the msgid
     while regexTranslated has 0 machte
     """
-    def __init__(self, name, regexOrig, regexTranslated, flags=re.UNICODE):
-        super().__init__(name)
+    def __init__(self, name, regexOrig, regexTranslated, severity=Severity.notice, flags=re.UNICODE):
+        super().__init__(name, severity)
         self.reOrig = re.compile(regexOrig, flags)
         self.reTranslated = re.compile(regexTranslated, flags)
         self.regex_orig_str = regexOrig
@@ -130,8 +138,8 @@ class NegativeTranslationConstraintRule(Rule):
     i.e. the rule hits when regexOrig has >= 1 match in the msgid
     while regexTranslated has a match.
     """
-    def __init__(self, name, regexOrig, regexTranslated, flags=re.UNICODE):
-        super().__init__(name)
+    def __init__(self, name, regexOrig, regexTranslated, severity=Severity.notice, flags=re.UNICODE):
+        super().__init__(name, severity)
         self.reOrig = re.compile(regexOrig, flags)
         self.reTranslated = re.compile(regexTranslated, flags)
         self.regex_orig_str = regexOrig
@@ -148,6 +156,7 @@ class BooleanNotRule(Rule):
     def __init__(self, child):
         super().__init__(child.name)
         self.child = child
+        self.severity = child.severity
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.child(msgstr, msgid, tcomment, filename):
             return None
@@ -160,6 +169,7 @@ class BooleanAndRule(Rule):
         super().__init__(name)
         self.childA = childA
         self.childB = childB
+        self.severity = childA.severity
     def description(self):
         return "(%s) and (%s)" % (self.childA.description(), self.childB.description())
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
@@ -175,6 +185,7 @@ class BooleanOrRule(Rule):
         super().__init__(name)
         self.childA = childA
         self.childB = childB
+        self.severity = childA.severity
     def description(self):
         return "(%s) or (%s)" % (self.childA.description(), self.childB.description())
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
@@ -195,8 +206,8 @@ class ExactCopyRule(Rule):
     This can be used, for example, to ensure GUI elements, numbers or URLs are the same in
     both the translated text and the original.
     """
-    def __init__(self, name, regex, aliases=defaultdict(str)):
-        super().__init__(name)
+    def __init__(self, name, regex, severity=Severity.notice, aliases=defaultdict(str)):
+        super().__init__(name, severity)
         self.regex = re.compile(regex)
         self.regex_str = regex
         self.aliases = aliases
@@ -233,6 +244,7 @@ class IgnoreByFilenameRegexWrapper(Rule):
         self.invert = invert
         self.filename_regex = re.compile(filename_regex)
         self.filename_regex_str = filename_regex
+        self.severity = child.severity
     def description(self):
         if self.invert:
             return "%s (only applied to filenames matching '%s')" % (self.child.description(), self.filename_regex_str)
@@ -251,6 +263,7 @@ class IgnoreByFilenameListWrapper(Rule):
         super().__init__(child.name)
         self.child = child
         self.filenames = frozenset(filenames)
+        self.severity = child.severity
     def description(self):
         return "%s (ignored for files %s)" % (self.child.description(), str(list(self.filenames)))
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
@@ -273,6 +286,7 @@ class IgnoreByMsgidRegexWrapper(Rule):
         self.child = child
         self.msgid_regex = re.compile(msgid_regex)
         self.msgid_regex_str = msgid_regex
+        self.severity = child.severity
     def description(self):
         return "%s (ignored for msgids matching '%s')" % (self.child.description(), self.msgid_regex_str)
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
@@ -295,6 +309,7 @@ class IgnoreByTcommentRegexWrapper(Rule):
         self.child = child
         self.tcommentRegex = re.compile(tcommentRegex)
         self.tcomment_regex_str = tcommentRegex
+        self.severity = child.severity
     def description(self):
         return "%s (ignored for tcomments matching '%s')" % (self.child.description(), self.tcomment_regex_str)
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
