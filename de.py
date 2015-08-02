@@ -106,7 +106,7 @@ rules = [
     IgnoreByMsgidRegexWrapper(r"post\s+office",
         NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"\bpost\s*(?!card)(?!alCode)(?!man)(?!office)(?!-Money)", r"\bpost(?!karte)(?!amt)(?!en)(?!e)", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE)),
     # E-Mail must be written exactly "E-Mail". Exceptions: {{email}}, %(error_email), %(email), %(coach_email) {{ email }}
-    SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(?<!%\(coach_)(?<!%\(error_)(?<!\{\{)(?<!\{\{)\s*(eMail|email|Email|EMail|e-Mail|e-mail)s?", severity=Severity.info),
+    SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(?<!%\(coach_)(?<!%\(child_)(?<!%\(error_)(?<!\{\{)(?<!\{\{)\s*(eMail|email|Email|EMail|e-Mail|e-mail)s?", severity=Severity.info),
     # Bing issues
     SimpleRegexRule("Space inserted after image URL declaration ('![] (')", r"!\[\]\s+\(", severity=Severity.dangerous),
     SimpleRegexRule("Space inserted before image URL declaration ('! [](')", r"!\s+\[\]\(", severity=Severity.dangerous),
