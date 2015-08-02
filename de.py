@@ -71,6 +71,7 @@ rules = [
     IgnoreByFilenameRegexWrapper(r"^de/1_high_priority_platform", SimpleRegexRule("'Sie' instead of 'Du'", r"\bSie\b"), invert=True),
     IgnoreByFilenameRegexWrapper(r"^de/1_high_priority_platform", SimpleRegexRule("'Ihre' instead of 'Deine'", r"\bIhre[rms]?\b"), invert=True),
     # Something was translated that must NOT be translated
+    SimpleRegexRule("Occurrence of wrongly translated 'Khan Akademie'", r"[Kk]han\s+Akademie"),
     SimpleRegexRule("Translated color in command", r"(\\color\{|\\\\)([Bb]lau|[Rr]ot|[Gg]elb|[Gg]rün|[Vv]iolett|[Ll]ila)"),
     # Recommended translations
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", flags=re.UNICODE | re.IGNORECASE),
