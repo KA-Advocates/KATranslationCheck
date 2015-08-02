@@ -16,7 +16,6 @@ import json
 import itertools
 import os
 import os.path
-import shutil
 import urllib
 import datetime
 import collections
@@ -55,27 +54,6 @@ def readPOFiles(directory):
                    in zip(poFilenames, parsedFiles)}
     else: #Only a small number of files, process directly
         return {path: polib.pofile(path) for path in poFilenames}
-
-def download(lang="de"):
-    import subprocess
-    url = "https://crowdin.com/download/project/khanacademy.zip"
-    #Remove file it it exists
-    if os.path.isfile("khanacademy.zip"):
-        os.remove("khanacademy.zip")
-    #Remove language directory
-    if os.path.exists(lang):
-        shutil.rmtree(lang)
-    #Download using wget. More robust than python solutions.
-    subprocess.check_output(["wget", url])
-    #Extract
-    subprocess.check_output(["unzip", "khanacademy.zip", "%s/*" % lang], shell=False)
-    #Now that we have the de folder we don't need the zip any more
-    if os.path.isfile("khanacademy.zip"):
-        os.remove("khanacademy.zip")
-    #Set download timestamp
-    timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
-    with open("lastdownload.txt", "w") as outfile:
-        outfile.write(timestamp)
 
 def genCrowdinSearchString(entry):
     s = entry.msgstr[:100].replace('*', ' ')
