@@ -252,7 +252,7 @@ class IgnoreByFilenameListWrapper(Rule):
         self.child = child
         self.filenames = frozenset(filenames)
     def description(self):
-        return "%s (ignored for files %s)" % (self.child.description(), str(self.filenames))
+        return "%s (ignored for files %s)" % (self.child.description(), str(list(self.filenames)))
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if filename in self.filenames:
             return None
