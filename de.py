@@ -125,7 +125,8 @@ rules = [
     SimpleRegexRule("Missing translation of **How", r"\*\*[Hh]ow", severity=Severity.dangerous),
     SimpleRegexRule("Missing translation of **What", r"\*\*[Ww]hat", severity=Severity.dangerous),
     SimpleRegexRule("Missing translation of ones", r"\\text\{\s*ones\}\}", severity=Severity.dangerous),
-    SimpleRegexRule("Missing translation of ten(s)", r"(?<!\d)\^?\{?(\\large\{)?\\text\{\s*tens?\}\}", severity=Severity.dangerous),
+    IgnoreByMsgidRegexWrapper(r"\d+\^\{\\large\\text\{ten?",
+        SimpleRegexRule("Missing translation of ten(s)", r"(?<!\d)\^?\{?(\\large)?\\text\{\s*tens?\}\}", severity=Severity.dangerous)),
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}", severity=Severity.dangerous),
     # Machine-readable stuff must be identical in the translation
     ExactCopyRule("All image URLs must match in order", r"!\[\]\s*\([^\)]+\)", severity=Severity.warning, aliases=imageAliases),
