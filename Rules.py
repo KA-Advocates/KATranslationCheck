@@ -216,6 +216,8 @@ def SimpleGlobRule(name, glob):
     """Rule wrapper that translates a glob-ish rule to a regex rule"""
     return SimpleRegexRule(name, fnmatch.translate(glob))
 
+_whitespaceRegex = re.compile("\s+")
+
 class ExactCopyRule(Rule):
     """
     Requires that when a list of regex matches is present in the orignal text,
@@ -224,11 +226,12 @@ class ExactCopyRule(Rule):
     This can be used, for example, to ensure GUI elements, numbers or URLs are the same in
     both the translated text and the original.
     """
-    def __init__(self, name, regex, severity=Severity.standard, aliases=defaultdict(str)):
+    def __init__(self, name, regex, severity=Severity.standard, aliases=defaultdict(str), ignore_whitespace=True):
         super().__init__(name, severity)
         self.regex = re.compile(regex)
         self.regex_str = regex
         self.aliases = aliases
+        self.ignore_whitespace = ignore_whitespace
     def description(self):
         return "Matches if all instances of '%s' are the same (with %d aliases)" % (self.regex_str, len(self.aliases))
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
@@ -237,6 +240,10 @@ class ExactCopyRule(Rule):
         # Apply aliases
         origMatches = [self.aliases[x] or x for x in origMatches]
         translatedMatches = [self.aliases[x] or x for x in translatedMatches]
+        # Apply whitespace filtering
+        if self.ignore_whitespace:
+            origMatches = [_whitespaceRegex.sub("", x) or x for x in origMatches]
+            translatedMatches = [_whitespaceRegex.sub("", x) or x for x in translatedMatches]
         # Find index of first mismatch
         try:
             idx = next(idx for idx, (x, y) in
