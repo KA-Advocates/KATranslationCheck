@@ -19,7 +19,7 @@ imageAliases = readImageAliases()
 # Currently hardcoded for DE language
 rules = [
     #Coordinate separated by comma instead of |
-    SimpleRegexRule("Comma in coordinate (| required)", r"\$\(-?\d+([\.,]\d+)?\s*\,\s*-?\d+([\.,]\d+)?\)\$", severity=Severity.warning),
+    SimpleRegexRule("Comma in coordinate (| required)", r"\$\(-?\d+([\.,]\d+)?\s*,\s*-?\d+([\.,]\d+)?\)\$", severity=Severity.warning),
     SimpleRegexRule("Semicolon in coordinate (| required)", r"\$\(-?\d+([\.,]\d+)?\s*\;\s*-?\d+([\.,]\d+)?\)\$", severity=Severity.warning),
     SimpleRegexRule("{\ } instead of {\,} inside number", r"\d+\{\\\s+\}\d+", severity=Severity.warning),
     # Three cases of thin space missing in coordinate
