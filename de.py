@@ -29,7 +29,7 @@ rules = [
     SimpleRegexRule("Simple number with decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$", severity=Severity.warning),
     SimpleRegexRule("Wrong or missing space between number and € ({\\,} required)", r"\d+( |  |\{,\}|\{\\ \})?€"),
     IgnoreByMsgidRegexWrapper(r"^[^\$]+$", # No dollar in string
-        SimpleRegexRule("Plain comma used instead of {,}", r"\d+,\d+", severity=Severity.warning)),
+        SimpleRegexRule("Plain comma used instead of {,}", r"\d+,\d+", severity=Severity.info)),
     #Simple currency value in dollar (matches comma separated and decimal point)
     SimpleRegexRule("Value with embedded dollar symbol", r"\$\s*\\\\?\$\s*\d+([.,]\d+)?\s*\$", severity=Severity.info),
     #Errors in thousands separation
