@@ -69,8 +69,11 @@ def genCrowdinSearchString(entry):
     s = _multiSpace.sub(" ", s)
     return urllib.parse.quote(s.replace('☃', ' ').replace("|", " "))
 
+# Minification takes half the space but too much CPU time
+#def minifyHTML(html):
+#    return htmlmin.minify(html, remove_empty_space=True)
 def minifyHTML(html):
-    return htmlmin.minify(html, remove_empty_space=True)
+    return html
 
 class HTMLHitRenderer(object):
     """
