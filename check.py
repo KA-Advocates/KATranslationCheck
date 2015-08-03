@@ -58,10 +58,15 @@ def readPOFiles(directory):
     else: #Only a small number of files, process directly
         return {path: polib.pofile(path) for path in poFilenames}
 
+_multiSpace = re.compile("\s+")
+
 def genCrowdinSearchString(entry):
     s = entry.msgstr[:100].replace('*', ' ')
     s = s.replace('$', ' ').replace('\\', ' ').replace(',', ' ')
     s = s.replace('.', ' ').replace('?', ' ').replace('!', ' ')
+    s = s.replace("-", " ").replace(":", " ")
+    #Remove consecutive spaces
+    s = _multiSpace.sub(" ", s)
     return urllib.parse.quote(s.replace('☃', ' ').replace("|", " "))
 
 def minifyHTML(html):
