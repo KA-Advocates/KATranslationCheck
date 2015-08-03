@@ -83,9 +83,9 @@ class HTMLHitRenderer(object):
         self.outdir = outdir
         self.rules = sorted(rules, reverse=True)
         #Initialize template engine
-        env = Environment(loader=FileSystemLoader('templates'))
-        self.ruleTemplate = env.get_template("template.html")
-        self.indexTemplate = env.get_template("index.html")
+        self.env = Environment(loader=FileSystemLoader('templates'))
+        self.ruleTemplate = self.env.get_template("template.html")
+        self.indexTemplate = self.env.get_template("index.html")
         # Get timestamp
         self.timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
         if os.path.isfile("lastdownload.txt"):
@@ -235,5 +235,15 @@ if __name__ == "__main__":
     print(black("Rendering HTML...", bold=True))
     renderer.hitsToHTML()
 
+    # Generate filestats.json
     print (black("Generating JSON API files...", bold=True))
     renderer.writeStatsJSON()
+
+    # If data is present, generate subtitle information
+    if os.path.isfile("videos.json"):
+        print (black("Rendering subtitles overview...", bold=True))
+        with open("videos.json") as infile:
+            exercises = json.load(infile)
+        subtitleTemplate = renderer.env.get_template("subtitles.html")
+        with open(os.path.join(args.outdir, "subtitles.html"), "w") as outf:
+            outf.write(subtitleTemplate.render(exercises=exercises))

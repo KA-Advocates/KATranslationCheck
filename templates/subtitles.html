@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KATranslationCheck output</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+      #maincontainer {padding-top: 80px;}
+      #timestamprow {margin-bottom: 10px;}
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+          <div class="navbar-header page-scroll">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand page-scroll" href="/">KATranslationCheck Deutsch</a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+              <ul class="nav navbar-nav">
+                  <li class="hidden">
+                      <a class="page-scroll" href="#page-top"></a>
+                  </li>
+                  <li class="active">
+                      <a href="/">Home</a>
+                  </li>                    
+              </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container -->
+    </nav>
+    <div id="maincontainer" class="container">
+      {% for exercise in exercises if exercise["videos"] %}
+        <div class="row">
+          <h2><a href="{{exercise['url']}}">{{exercise["title"]}}</a></h2>
+          <table class="table table-striped">
+          <thead>
+            <tr><th>Video</th><th>Length</th><th>Subtitles</th></tr>
+          </thead>
+          <tbody></tbody>
+          {% for video in exercise["videos"] %}
+            <tr>
+              <td><a href="https://www.youtube.com/timedtext_video?v={{video['youtube_id']}}">{{video["title"]}}</a></td>
+              <td>{{video["duration"]}}</td>
+              {% if video["has_subtitles"] %}
+                <td><span class="glyphicon glyphicon-ok" style="color: #00FF00"></span></td>
+              {% else %}
+                <td><span class="glyphicon glyphicon-remove" style="color: #FF0000"></span></td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+          </table>
+        </div>
+      {% endfor %}
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>
