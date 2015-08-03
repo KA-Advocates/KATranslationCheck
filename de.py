@@ -65,6 +65,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'since'", r"\b[Ss]ince\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'value'", r"(?<!%\()\b[Vv]alues?\b(?!\)s)", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'numerator'", r"\b[Nn]umerator\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'column'", r"\b[Cc]olumn\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'denominator'", r"\b[Dd]enominator\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'diameter'", r"\b[Dd]iameter\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'perimeter'", r"(?<!SHAPE\.)\b[Pp]erimeter\b", severity=Severity.standard),
