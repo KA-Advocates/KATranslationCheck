@@ -18,6 +18,7 @@ import itertools
 import os
 import os.path
 import urllib
+import htmlmin
 import datetime
 import collections
 from multiprocessing import Pool
@@ -62,6 +63,9 @@ def genCrowdinSearchString(entry):
     s = s.replace('$', ' ').replace('\\', ' ').replace(',', ' ')
     s = s.replace('.', ' ').replace('?', ' ').replace('!', ' ')
     return urllib.parse.quote(s.replace('☃', ' ').replace("|", " "))
+
+def minifyHTML(html):
+    return htmlmin.minify(html, remove_empty_space=True)
 
 class HTMLHitRenderer(object):
     """
@@ -162,11 +166,11 @@ class HTMLHitRenderer(object):
             # Render hits for individual rule
             outfilePath = os.path.join(directory, "%s.html" % rule.get_machine_name())
             with open(outfilePath, "w") as outfile:
-                outfile.write(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs, urllib=urllib, rule=rule, genCrowdinSearchString=genCrowdinSearchString))
+                outfile.write(minifyHTML(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs, urllib=urllib, rule=rule, genCrowdinSearchString=genCrowdinSearchString)))
         # Render file index page (no filelist)
         with open(os.path.join(directory, "index.html"), "w") as outfile:
-            outfile.write(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
-                          statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename, translationURLs=self.translationURLs))
+            outfile.write(minifyHTML(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
+                          statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename, translationURLs=self.translationURLs)))
     def hitsToHTML(self):
         """
         Apply a rule and write a directory of output HTML files
