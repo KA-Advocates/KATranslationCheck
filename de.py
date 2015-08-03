@@ -24,7 +24,7 @@ rules = [
     SimpleRegexRule("{\ } instead of {\,} inside number", r"\d+\{\\\s+\}\d+", severity=Severity.warning),
     # Three cases of thin space missing in coordinate
     SimpleRegexRule("Space inserted between **", r"(?<!\*)\* \*(?!\*)", severity=Severity.info),
-    SimpleRegexRule("Missing thin space ({\\,}) before or after |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\s*\|\s*\d+([\.,]\d+)?\)\$?", severity=Severity.warning),
+    SimpleRegexRule("Missing thin space ({\\,}) before or after |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\s*\|\s*\d+([\.,]\d+)?\)\$?", severity=Severity.info),
     #The most simple case of using a decimal point instead
     SimpleRegexRule("Simple number with decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$", severity=Severity.warning),
     SimpleRegexRule("Wrong or missing space between number and € ({\\,} required)", r"\d+( |  |\{,\}|\{\\ \})?€"),
