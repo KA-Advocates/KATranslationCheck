@@ -45,13 +45,13 @@
           <h2><a href="{{exercise['url']}}">{{exercise["title"]}}</a></h2>
           <table class="table table-striped">
           <thead>
-            <tr><th>Video</th><th>Length</th><th>Subtitles</th></tr>
+            <tr><th>Video</th><th>Duration</th><th>Subtitles</th></tr>
           </thead>
           <tbody></tbody>
           {% for video in exercise["videos"] %}
             <tr>
               <td><a href="https://www.youtube.com/timedtext_video?v={{video['youtube_id']}}">{{video["title"]}}</a></td>
-              <td>{{video["duration"]}}</td>
+              <td>{{video["duration"]}} s</td>
               {% if video["has_subtitles"] %}
                 <td><span class="glyphicon glyphicon-ok" style="color: #00FF00"></span></td>
               {% else %}
