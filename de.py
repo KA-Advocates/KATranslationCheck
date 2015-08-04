@@ -1,17 +1,9 @@
 #!/usr/bin/env python3
 # coding: utf-8
 from Rules import *
-import csv
-from collections import defaultdict
+from ImageAliases import readImageAliases
 
-def readImageAliases():
-    with open('de-image-aliases.csv') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',')
-        aliases = defaultdict(str)
-        aliases.update({"![](" + row[0] + ")": "![](" + row[1] + ")" for row in reader})
-        return aliases
-
-imageAliases = readImageAliases()
+imageAliases = readImageAliases("177zIAO37SY6xUBUyUE30kn5G_wR7oT-txY8XIN7cecU")
 
 ########################
 ### Initialize rules ###
