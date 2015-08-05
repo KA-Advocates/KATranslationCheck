@@ -97,6 +97,7 @@ rules = [
     SimpleRegexRule("Ausreisser needs to be written as Ausreißer", r"\b[Aa]usreisser\b", severity=Severity.info),
     # Recommended translations
     TranslationConstraintRule("'interquartile range' not translated to 'Interquartilsabstand'", r"interquartile\s+range", r"Interquartilsabstand", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'two-way table' not translated to 'Kontingenztafel'", r"two-way\s+table", r"Kontingenztafel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'relative frequency' not translated to 'relative Häufigkeit'", r"relative\s+(frequency|frequencies)", r"relative\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'absolute frequency' not translated to 'absolute Häufigkeit'", r"absolute\s+(frequency|frequencies)", r"absolute\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
