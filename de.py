@@ -22,7 +22,7 @@ rules = [
     SimpleRegexRule("Missing thin space ({\\,}) before or after |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\s*\|\s*\d+([\.,]\d+)?\)\$?", severity=Severity.info),
     #The most simple case of using a decimal point instead
     SimpleRegexRule("Decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$", severity=Severity.standard),
-    SimpleRegexRule("Escaped dollar symbol (€ required, high TPR)", r"\\\\\$", severity=Severity.info),
+    SimpleRegexRule("Escaped dollar symbol (€ required, high TPR)", r"(?<!\\\\)\\\\\$", severity=Severity.info),
     SimpleRegexRule("Wrong or missing space between number and € ({\\,} required)", r"\d+( |  |\{,\}|\{\\ \})?€", severity=Severity.info),
     IgnoreByMsgidRegexWrapper(r"^[^\$]+$", # No dollar in string
         SimpleRegexRule("Plain comma used instead of {,}", r"\d+,\d+", severity=Severity.info)),
@@ -85,7 +85,6 @@ rules = [
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)\b[Gg]reen\b", severity=Severity.standard)),
     IgnoreByTcommentRegexWrapper("/measuring-and-converting-money-word-problems", # Ignore for conversion exercises 
         SimpleRegexRule("Occurrence of dollar as string", r"(?<!US-)[Dd]ollars?(?!ville)(?!-Schein)", severity=Severity.notice)), #US-Dollars? & Dollarville allowed
-    SimpleSubstringRule("Escaped dollar symbol", r"\\+$"),
     IgnoreByFilenameRegexWrapper(r"^de/1_high_priority_platform", SimpleRegexRule("'Sie' instead of 'Du'", r"\bSie\b", severity=Severity.notice), invert=True),
     IgnoreByFilenameRegexWrapper(r"^de/1_high_priority_platform", SimpleRegexRule("'Ihre' instead of 'Deine'", r"\bIhre[rms]?\b", severity=Severity.notice), invert=True),
     # Something was translated that must NOT be translated
