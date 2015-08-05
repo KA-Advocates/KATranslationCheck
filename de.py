@@ -16,12 +16,12 @@ rules = [
     SimpleRegexRule("{\ } instead of {\,} inside number", r"\d+\{\\\s+\}\d+", severity=Severity.notice),
     SimpleRegexRule("'.* *' needs to be '.**', could cause bad formatting", r"\.\s*\* +\*", severity=Severity.warning),
     IgnoreByMsgidRegexWrapper(r"CC\s+BY-NC-SA\s+\d\.\d",
-        SimpleRegexRule("Decimal dot instead of comma inside number (high sensitivity rule)", r"\d+\.\d+", severity=Severity.info)),
+        SimpleRegexRule("Decimal dot instead of comma inside number (high TPR)", r"\d+\.\d+", severity=Severity.info)),
     # Three cases of thin space missing in coordinate
     SimpleRegexRule("Space inserted between **", r"(?<!\*)\* \*(?!\*)", severity=Severity.info),
     SimpleRegexRule("Missing thin space ({\\,}) before or after |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\s*\|\s*\d+([\.,]\d+)?\)\$?", severity=Severity.info),
     #The most simple case of using a decimal point instead
-    SimpleRegexRule("Simple number with decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$", severity=Severity.warning),
+    SimpleRegexRule("Decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$", severity=Severity.info),
     SimpleRegexRule("Wrong or missing space between number and € ({\\,} required)", r"\d+( |  |\{,\}|\{\\ \})?€", severity=Severity.info),
     IgnoreByMsgidRegexWrapper(r"^[^\$]+$", # No dollar in string
         SimpleRegexRule("Plain comma used instead of {,}", r"\d+,\d+", severity=Severity.info)),
