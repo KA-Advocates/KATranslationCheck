@@ -21,7 +21,7 @@ rules = [
     SimpleRegexRule("Missing thin space ({\\,}) before or after |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\s*\|\s*\d+([\.,]\d+)?\)\$?", severity=Severity.info),
     #The most simple case of using a decimal point instead
     SimpleRegexRule("Simple number with decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$", severity=Severity.warning),
-    SimpleRegexRule("Wrong or missing space between number and € ({\\,} required)", r"\d+( |  |\{,\}|\{\\ \})?€"),
+    SimpleRegexRule("Wrong or missing space between number and € ({\\,} required)", r"\d+( |  |\{,\}|\{\\ \})?€", severity=Severity.info),
     IgnoreByMsgidRegexWrapper(r"^[^\$]+$", # No dollar in string
         SimpleRegexRule("Plain comma used instead of {,}", r"\d+,\d+", severity=Severity.info)),
     #Simple currency value in dollar (matches comma separated and decimal point)
@@ -144,6 +144,7 @@ rules = [
 ]
 
 if __name__ == "__main__":
+    print("Counting %d rules" % len(rules))
     #Rule tests. python3 Rules.py to run
     assert(findRule(rules, "Comma in coordinate (| required)")("$(12,3)$", ""))
     assert(findRule(rules, "Simple number with decimal point instead of comma")("$12.3$", ""))
