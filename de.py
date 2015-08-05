@@ -108,8 +108,8 @@ rules = [
     TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel' (high TPR)", r"supplementary.+angle", r"Ergänzungswinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'corresponding angle' not translated to 'Stufenwinkel'", r"corresponding\s+angle", r"Stufenwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'corresponding angle' not translated to 'Stufenwinkel' (high TPR)", r"corresponding.+angle", r"Stufenwinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'vertical angle' not translated to 'Scheitelwinkel'", r"corresponding\s+angle", r"Scheitelwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'vertical angle' not translated to 'Scheitelwinkel' (high TPR)", r"corresponding.+angle", r"Scheitelwinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'vertical angle' not translated to 'Scheitelwinkel'", r"verticals\s+angle", r"Scheitelwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'vertical angle' not translated to 'Scheitelwinkel' (high TPR)", r"verticals.+angle", r"Scheitelwinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'alternating interior angle' not translated to 'Wechselwinkel'", r"alternating\s+interior\s+angle", r"Wechselwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'alternating interior angle' not translated to 'Wechselwinkel' (high TPR)", r"alternating.+interior.+angle", r"Wechselwinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     # E-Mail must be written exactly "E-Mail". Exceptions: {{email}}, %(error_email), %(email), %(coach_email) {{ email }}
