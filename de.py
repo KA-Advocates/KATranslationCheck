@@ -95,8 +95,6 @@ rules = [
     TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleich(ung|heit|zeichen)", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'inverse function' not translated to 'Umkehrfunktion'", r"inverse\s+function", r"Umkehrfunktion", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel'", r"supplementary\s+angle", r"Ergänzungswinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'corresponding angle' not translated to 'Stufenwinkel'", r"corresponding\s+angle", r"Stufenwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'mile(s)' translated to 'Meile(n)' instead of 'Kilometer'", r"miles?", r"(?<!\")meilen?", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schraffiert' instead of 'eingefärbt'", r"shaded", r"schraffiert", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schattiert' instead of 'eingefärbt'", r"shaded", r"schattiert", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
@@ -105,6 +103,13 @@ rules = [
     NegativeTranslationConstraintRule("'Challenge' translated to 'Herausforderung' instead of 'challenge'", r"challenge", r"herausforderung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     IgnoreByMsgidRegexWrapper(r"[Pp]ost\s*(office|card|alCode|man|-Money)",
         NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"\bpost", r"\bpost(?!karte)(?!amt)(?!en)(?!e)", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE)),
+    # Angle variants
+    TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel'", r"supplementary\s+angle", r"Ergänzungswinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel' (high TPR)", r"supplementary.+angle", r"Ergänzungswinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'corresponding angle' not translated to 'Stufenwinkel'", r"corresponding\s+angle", r"Stufenwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'corresponding angle' not translated to 'Stufenwinkel' (high TPR)", r"corresponding.+angle", r"Stufenwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'vertical angle' not translated to 'Scheitelwinkel'", r"corresponding\s+angle", r"Scheitelwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'vertical angle' not translated to 'Scheitelwinkel' (high TPR)", r"corresponding.+angle", r"Scheitelwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     # E-Mail must be written exactly "E-Mail". Exceptions: {{email}}, %(error_email), %(email), %(coach_email) {{ email }}
     SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(?<!%\(coach_)(?<!%\(child_)(?<!%\(error_)(?<!\{\{)(?<!\{\{)\s*(eMail|email|Email|EMail|e-Mail|e-mail)s?", severity=Severity.info),
     # Bing issues
