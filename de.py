@@ -15,7 +15,8 @@ rules = [
     SimpleRegexRule("Semicolon in coordinate (| required)", r"\$\(-?\d+([\.,]\d+)?\s*\;\s*-?\d+([\.,]\d+)?\)\$", severity=Severity.warning),
     SimpleRegexRule("{\ } instead of {\,} inside number", r"\d+\{\\\s+\}\d+", severity=Severity.notice),
     SimpleRegexRule("'.* *' needs to be '.**', could cause bad formatting", r"\.\s*\* +\*", severity=Severity.warning),
-    SimpleRegexRule("Decimal dot instead of comma inside number (high sensitivity rule)", r"\d+\.\d+", severity=Severity.standard),
+    IgnoreByMsgidRegexWrapper(r"CC\s+BY-NC-SA\s+\d\.\d",
+        SimpleRegexRule("Decimal dot instead of comma inside number (high sensitivity rule)", r"\d+\.\d+", severity=Severity.info)),
     # Three cases of thin space missing in coordinate
     SimpleRegexRule("Space inserted between **", r"(?<!\*)\* \*(?!\*)", severity=Severity.info),
     SimpleRegexRule("Missing thin space ({\\,}) before or after |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\s*\|\s*\d+([\.,]\d+)?\)\$?", severity=Severity.info),
