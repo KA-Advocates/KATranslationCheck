@@ -110,8 +110,8 @@ rules = [
     # Angle variants
     TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel'", r"supplementary\s+angle", r"Ergänzungswinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel' (high TPR)", r"supplementary.+angle", r"Ergänzungswinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'corresponding angle' not translated to 'Stufenwinkel'", r"corresponding\s+angle", r"Stufenwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'corresponding angle' not translated to 'Stufenwinkel' (high TPR)", r"corresponding.+angle", r"Stufenwinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'corresponding angle' not translated to 'Stufenwinkel'", r"corresponding\s+angle\s*(?!measure)", r"Stufenwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'corresponding angle' not translated to 'Stufenwinkel' (high TPR)", r"corresponding.+angle\s*(?!measure)", r"Stufenwinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'vertical angle' not translated to 'Scheitelwinkel'", r"vertical\s+angle", r"Scheitelwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'vertical angle' not translated to 'Scheitelwinkel' (high TPR)", r"vertical.+angle", r"Scheitelwinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'alternating interior angle' not translated to 'Wechselwinkel'", r"alternating\s+interior\s+angle", r"Wechselwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
