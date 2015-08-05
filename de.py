@@ -41,6 +41,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'is'", r"\b[Ii]s\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'and'", r"\b[A]nd\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'because'", r"\b[Bb]ecause\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'due'", r"\b[Dd]ue\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'great(er)'", r"\b[Gg]reat(er)?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'less'", r"\b[L]ess\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'few(er)'", r"\b[Ff]ew(er)?\b", severity=Severity.standard),
@@ -95,6 +96,7 @@ rules = [
     SimpleRegexRule("daß needs to be written as dass", r"\b[Dd]aß\b", severity=Severity.info),
     SimpleRegexRule("Ausreisser needs to be written as Ausreißer", r"\b[Aa]usreisser\b", severity=Severity.info),
     # Recommended translations
+    TranslationConstraintRule("'interquartile range' not translated to 'Interquartilsabstand'", r"interquartile\s+range", r"Interquartilsabstand", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'relative frequency' not translated to 'relative Häufigkeit'", r"relative\s+(frequency|frequencies)", r"relative\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'absolute frequency' not translated to 'absolute Häufigkeit'", r"absolute\s+(frequency|frequencies)", r"absolute\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
