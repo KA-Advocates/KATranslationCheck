@@ -10,7 +10,7 @@ KATC is a set of scripts that valide [Khan Academy](https://www.khanacademy.org/
 ## Getting started.
 
 
-KATC is written as a pure Python3 script. It is assumed that you have already installed a somewhat recent Python3 interpreter. If not available for your platform, I recommend [Anaconda]. In order to install the library dependencies use `pip3 install -r requirements.txt`.
+KATC is written as a pure Python3 script. It is assumed that you have already installed a somewhat recent Python3 interpreter. If not available for your platform, I recommend [Anaconda](http://continuum.io/downloads). In order to install the library dependencies use `pip3 install -r requirements.txt`.
 
 First, fill in your Crowdin credentials into `crowdin-credentials.json` (use `crowdin-credentials.json` as a template9. I recommend not to use your main Crowdin account. No changes or translations are performed using your account. However, an account is required in order to be able to download the POT files (see *Architecture* section below).
 
