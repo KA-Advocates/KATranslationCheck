@@ -93,6 +93,8 @@ rules = [
     SimpleRegexRule("daß needs to be written as dass", r"\b[Dd]aß\b", severity=Severity.info),
     SimpleRegexRule("Ausreisser needs to be written as Ausreißer", r"\b[Aa]usreisser\b", severity=Severity.info),
     # Recommended translations
+    TranslationConstraintRule("'relative frequency' not translated to 'relative Häufigkeit'", r"relative\s+(frequency|frequencies)", r"relative\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'absolute frequency' not translated to 'absolute Häufigkeit'", r"absolute\s+(frequency|frequencies)", r"absolute\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleich(ung|heit|zeichen)", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
