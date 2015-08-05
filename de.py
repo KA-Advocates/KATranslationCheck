@@ -22,6 +22,7 @@ rules = [
     SimpleRegexRule("Missing thin space ({\\,}) before or after |-separated coordinate", r"\$?\(\d+([\.,]\d+)?\s*\|\s*\d+([\.,]\d+)?\)\$?", severity=Severity.info),
     #The most simple case of using a decimal point instead
     SimpleRegexRule("Decimal point instead of comma", r"\$-?\s*\d+\.-?\d+\s*\$", severity=Severity.standard),
+    SimpleRegexRule("Escaped dollar symbol (€ required, high TPR)", r"\\\\\$", severity=Severity.info),
     SimpleRegexRule("Wrong or missing space between number and € ({\\,} required)", r"\d+( |  |\{,\}|\{\\ \})?€", severity=Severity.info),
     IgnoreByMsgidRegexWrapper(r"^[^\$]+$", # No dollar in string
         SimpleRegexRule("Plain comma used instead of {,}", r"\d+,\d+", severity=Severity.info)),
