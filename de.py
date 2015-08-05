@@ -40,6 +40,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?(?![A-Za-z])(?!-[Oo]ut)(?!_\d)", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'is'", r"\b[Ii]s\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'and'", r"\b[A]nd\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'because'", r"\b[Bb]ecause\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'great(er)'", r"\b[Gg]reat(er)?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'less'", r"\b[L]ess\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'few(er)'", r"\b[Ff]ew(er)?\b", severity=Severity.standard),
