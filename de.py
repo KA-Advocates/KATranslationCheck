@@ -123,6 +123,8 @@ rules = [
         NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"\bpost", r"\bpost(?!karte)(?!amt)(?!en)(?!e)", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE)),
     TranslationConstraintRule("'real root(s)' not translated to 'reelle Nullstellen'", r"real\s+roots?", r"reelle Nullstellen", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'complex root(s)' not translated to 'komplexe Nullstellen'", r"complex\s+roots?", r"komplexe Nullstellen", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'DENOMINATOR' not translated to 'DENOMINATOR'", r"DENOMINATOR", r"DENOMINATOR", severity=Severity.warning, flags=re.UNICODE),
+    TranslationConstraintRule("'NUMERATOR' not translated to 'NUMERATOR'", r"NUMERATOR", r"NUMERATOR", severity=Severity.warning, flags=re.UNICODE),
     # Angle variants
     TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel'", r"supplementary\s+angle", r"Ergänzungswinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel' (high TPR)", r"supplementary.+angle", r"Ergänzungswinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
