@@ -75,6 +75,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'low(er)'", r"\b[Ll]ow(er)?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'mass'", r"\b[Mm]ass\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'complex' (use komplex if applicable)", r"\b[Cc]omplex\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'table'", r"\b[Tt]able\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'Quadrilateral'", r"\b[Qq]adrilaterals?\b", severity=Severity.standard),
     IgnoreByMsgidRegexWrapper(r"(Ridgemont|Junior|Senior|Riverside)\s+High\b",
         SimpleRegexRule("Occurrence of untranslated 'high(er)'", r"\b[Hh]igh(er)?\b(?!-[Ss]chool)(?! [Ss]chool)(?! Tides)", severity=Severity.info)),
