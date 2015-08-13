@@ -74,6 +74,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'marking'", r"\b[Mm]arkings?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'low(er)'", r"\b[Ll]ow(er)?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'mass'", r"\b[Mm]ass\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'complex' (use komplex if applicable)", r"\b[Cc]omplex\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'Quadrilateral'", r"\b[Qq]adrilaterals?\b", severity=Severity.standard),
     IgnoreByMsgidRegexWrapper(r"(Ridgemont|Junior|Senior|Riverside)\s+High\b",
         SimpleRegexRule("Occurrence of untranslated 'high(er)'", r"\b[Hh]igh(er)?\b(?!-[Ss]chool)(?! [Ss]chool)(?! Tides)", severity=Severity.info)),
@@ -120,6 +121,8 @@ rules = [
     NegativeTranslationConstraintRule("'Challenge' translated to 'Herausforderung' instead of 'challenge'", r"challenge", r"herausforderung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     IgnoreByMsgidRegexWrapper(r"[Pp]ost\s*(office|card|alCode|man|-Money)",
         NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"\bpost", r"\bpost(?!karte)(?!amt)(?!en)(?!e)", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE)),
+    TranslationConstraintRule("'real root(s)' not translated to 'reelle Nullstellen'", r"real\s+roots?", r"reelle Nullstellen", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'complex root(s)' not translated to 'komplexe Nullstellen'", r"complex\s+roots?", r"komplexe Nullstellen", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
     # Angle variants
     TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel'", r"supplementary\s+angle", r"Ergänzungswinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'supplementary angle' not translated to 'Ergänzungswinkel' (high TPR)", r"supplementary.+angle", r"Ergänzungswinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
