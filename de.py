@@ -115,6 +115,7 @@ rules = [
     TranslationConstraintRule("'Quadrilateral' not translated to 'Viereck'", r"Quadrilateral", r"Viereck", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'isoscel' not translated to 'gleichschenklig'", r"isoscel(es)?", r"gleichschenklig", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'two-step equations' not translated to 'komplexere Gleichungen'", r"two-step\s+equations?", r"komplexe(re)?\s+gleichung(en)?", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'origin' not translated to 'Ursprung'", r"origin", r"Ursprung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     IgnoreByTcommentRegexWrapper(r"(us-customary-distance|metric-system-tutorial)",
         NegativeTranslationConstraintRule("'mile(s)' translated to 'Meile(n)' instead of 'Kilometer'", r"miles?", r"(?<!\")meilen?", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE)),
     NegativeTranslationConstraintRule("'real number' transslated to 'reale ...' instead of 'reelle'", r"real\s+numbers?", r"reale", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
