@@ -32,7 +32,7 @@ rules = [
     SimpleRegexRule("Value with multiple or mixed commata or dots", r"(\d+(\.|\{,\})){2,}\d+", severity=Severity.dangerous), #Should be space. Comma without {} ignored.
     #Dollar not embedded as a symbol 234$ dollar
     SimpleRegexRule("Value suffixed by dollar", r"\d+\$\s*dollars?", severity=Severity.info),
-    SimpleRegexRule("Additional spaces after * for italic word", r"(?<!\*)(?<!\w)\*\s+\w+\s+\*(?!\*)", severity=Severity.info), # Need to avoid hit for *kleiner* oder *größer* etc.
+    SimpleRegexRule("Additional spaces after * for italic word", r"(?<!\*)(?<!^)(?<!\w)\*\s+\w+\s+\*(?!\*)", severity=Severity.info), # Need to avoid hit for *kleiner* oder *größer* etc.
     SimpleRegexRule("Missing thin space before percent (or not escaped correctly) {\\,}\\%", r"(?<!\{\\,\}\\)%\s*\$", severity=Severity.info),
     SimpleRegexRule("Percent symbol in formula not escaped", r"(?<!\\)%\s*\$", severity=Severity.warning),
     # Translator missed english-only world
