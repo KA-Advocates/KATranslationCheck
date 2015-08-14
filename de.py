@@ -47,6 +47,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'few(er)'", r"\b[Ff]ew(er)?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'equal(s)'", r"(?<!-)\b[Ee]quals?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'equivalent", r"\b[Ee]quivalen(t|cy)\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'intercept", r"\b[Ii]ntercepts?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'square", r"(?<!\\)\b[Ss]quares?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'piece(s)", r"\b[Pp]ieces?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'percent'", r"\b[Pp]ercents?\b", severity=Severity.standard),
