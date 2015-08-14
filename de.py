@@ -115,6 +115,7 @@ rules = [
     TranslationConstraintRule("'Triangle' not translated to 'Dreieck'", r"Triangle", r"Dreieck", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Quadrilateral' not translated to 'Viereck'", r"Quadrilateral", r"Viereck", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Pentagon' not translated to 'Fünfeck'", r"\bpentagon\b", r"Fünfeck", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'Hexagon' not translated to 'Sechseck'", r"\bhexagon\b", r"Sechseck", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'isoscel' not translated to 'gleichschenklig'", r"isoscel(es)?", r"gleichschenklig", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'two-step equations' not translated to 'komplexere Gleichungen'", r"two-step\s+equations?", r"komplexe(re)?\s+gleichung(en)?", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'origin' not translated to 'Ursprung'", r"\borigin\b", r"Ursprung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
