@@ -148,7 +148,7 @@ rules = [
     TranslationConstraintRule("'alternating interior angle' not translated to 'Wechselwinkel' (high TPR)", r"alternating.+interior.+angle", r"Wechselwinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'opposite angle' not translated to 'Gegenwinkel'", r"Gegenwinkel\s+angle", r"Gegenwinkel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'opposite angle' not translated to 'Gegenwinkel' (high TPR)", r"Gegenwinkel.+angle", r"Gegenwinkel", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'acute' not translated to 'spitz'", r"acute", r"spitz", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'acute' not translated to 'spitz'", r"(?<!\\)acute", r"spitz", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'obtuse' not translated to 'stumpf'", r"obtuse", r"stumpf", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     # E-Mail must be written exactly "E-Mail". Exceptions: {{email}}, %(error_email), %(email), %(coach_email) {{ email }}
     SimpleRegexRule("Wrong syntax of E-Mail", r"(?<!%\()(?<!%\(coach_)(?<!%\(child_)(?<!%\(error_)(?<!\{\{)(?<!\{\{)\s*(eMail|email|Email|EMail|e-Mail|e-mail)s?", severity=Severity.info),
