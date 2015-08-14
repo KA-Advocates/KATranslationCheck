@@ -83,7 +83,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'Its'", r"\b[Dd]It'?s\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'dot(s)", r"\b[Dd]dots?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated '(counter)clockwise", r"\b([Cc]ounter)?-?[Cc]clockwise\b", severity=Severity.standard),
-    SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!Captain )(?<!\\color\{)(?<!\\)\b[Bb]lue\b", severity=Severity.standard)),
+    SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!Captain )(?<!\\color\{)(?<!\\)\b[Bb]lue\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b(?! Pi)", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b", severity=Severity.standard),
     IgnoreByMsgidRegexWrapper(r"(Summer|Hour|Art|Lots)\s+of\s+(Drawing|Code|Script(ing)?|Webpage|Databases|Problem|Fun)",
