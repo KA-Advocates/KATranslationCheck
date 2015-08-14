@@ -83,7 +83,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'dot(s)", r"\b[Dd]dots?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated '(counter)clockwise", r"\b([Cc]ounter)?-?[Cc]clockwise\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!\\color\{)(?<!\\)\b[Bb]lue\b", severity=Severity.standard),
-    SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b(?! Pi)", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)\b[Rr]ed\b", severity=Severity.standard),
     IgnoreByMsgidRegexWrapper(r"(Summer|Hour|Art|Lots)\s+of\s+(Drawing|Code|Script(ing)?|Webpage|Databases|Problem|Fun)",
         SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b(?!-)", severity=Severity.info)), #Also allow of inside links etc.
