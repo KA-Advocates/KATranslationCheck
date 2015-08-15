@@ -84,7 +84,7 @@ class HTMLHitRenderer(object):
         self.outdir = outdir
         self.rules = sorted(rules, reverse=True)
         #Initialize template engine
-        self.env = Environment(loader=FileSystemLoader('templates'))
+        self.env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True, lstrip_blocks=True)
         self.ruleTemplate = self.env.get_template("template.html")
         self.indexTemplate = self.env.get_template("index.html")
         # Get timestamp
