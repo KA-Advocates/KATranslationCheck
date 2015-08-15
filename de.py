@@ -189,7 +189,8 @@ rules = [
     # Machine-readable stuff must be identical in the translation
     ExactCopyRule("All image URLs must match in order", r"!\[\]\s*\([^\)]+\)", severity=Severity.warning, aliases=imageAliases),
     ExactCopyRule("All GUI elements must match in order", r"\[\[☃\s+[a-z-]+\s*\d*\]\]", severity=Severity.warning),
-    # Unsorted severityes
+    # Unsorted stuff
+    TranslationConstraintRule("'expression' not translated to 'Term'", r"expression", r"term", severity=Severity.notice, flags=re.UNICODE | re.IGNORECASE),
 ]
 
 if __name__ == "__main__":
