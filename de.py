@@ -38,6 +38,8 @@ rules = [
     SimpleRegexRule("Percent symbol not escaped (high TPR)", r"(?<!\\)%", severity=Severity.info),
     SimpleRegexRule("Using {,} instead of {\\,} as thousands separator", r"\d+\{,\}\d\d\d\{,\}\d\d\d", severity=Severity.info),
     SimpleRegexRule("Using {,} instead of {\\,} as thousands separator (high TPR)", r"\d+\{,\}\d\d\d", severity=Severity.notice),
+    SimpleRegexRule("Space(s) before thousands separator or comma (use thin space for thousands separators!)", r"\d+(\s+\{,\}|\{,\}\s+|\s+\{,\}\s+)\d", severity=Severity.info),
+    SimpleRegexRule("Space(s) before thin space thousands separator", r"\d+(\s+\{\\,\}|\{\\,\}\s+|\s+\{\\,\}\s+)\d", severity=Severity.info),
     # Translator missed english-only world
     SimpleRegexRule("Occurrence of untranslated 'year'", r"(?<!%\()[Yy]ear(?!\)s)", severity=Severity.standard), # These are lookbehind/lookhead assertions ;-)
     SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?(?![A-Za-z])(?!-[Oo]ut)(?!_\d)", severity=Severity.standard),
