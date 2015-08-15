@@ -35,6 +35,7 @@ rules = [
     SimpleRegexRule("Additional spaces after * for italic word", r"(?<!\*)(?<!^)(?<!\w)\*\s+\w+\s+\*(?!\*)", severity=Severity.info), # Need to avoid hit for *kleiner* oder *größer* etc.
     SimpleRegexRule("Missing thin space before percent (or not escaped correctly) {\\,}\\%", r"(?<!\{\\,\}\\)%\s*\$", severity=Severity.info),
     SimpleRegexRule("Percent symbol in formula not escaped", r"(?<!\\)%\s*\$", severity=Severity.warning),
+    SimpleRegexRule("Percent symbol not escaped (high TPR)", r"(?<!\\)%", severity=Severity.info),
     # Translator missed english-only world
     SimpleRegexRule("Occurrence of untranslated 'year'", r"(?<!%\()[Yy]ear(?!\)s)", severity=Severity.standard), # These are lookbehind/lookhead assertions ;-)
     SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?(?![A-Za-z])(?!-[Oo]ut)(?!_\d)", severity=Severity.standard),
