@@ -5,3 +5,4 @@ requests
 BeautifulSoup4
 regex
 htmlmin
+compressinja
