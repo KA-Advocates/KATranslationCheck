@@ -1,0 +1,7 @@
+#maincontainer {padding-top: 80px;}
+#timestamprow {margin-bottom: 10px;}
+.tcomment {margin-left: 25px; color: #444;}
+/*.hit {text-decoration: none; font-weight: normal;   font-family: Monospace;} */
+.hitno {font-weight: bold;}
+.highlight { background-color: yellow }
+.report-button, .translate-button {float: right;}
