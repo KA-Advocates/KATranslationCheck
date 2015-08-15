@@ -28,6 +28,7 @@ from jinja2 import Environment, FileSystemLoader
 from UpdateAllFiles import getTranslationFilemapCache
 from de import rules
 from Rules import Severity
+from compressinja.html import HtmlCompressor
 
 def readPOFiles(directory):
     """
@@ -84,7 +85,7 @@ class HTMLHitRenderer(object):
         self.outdir = outdir
         self.rules = sorted(rules, reverse=True)
         #Initialize template engine
-        self.env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True, lstrip_blocks=True, extensions=['jinja2htmlcompress.HTMLCompress'])
+        self.env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True, lstrip_blocks=True, extensions=[HtmlCompressor])
         self.ruleTemplate = self.env.get_template("template.html")
         self.indexTemplate = self.env.get_template("index.html")
         # Get timestamp
