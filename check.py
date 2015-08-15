@@ -205,7 +205,7 @@ class HTMLHitRenderer(object):
         # Copy static files
         shutil.copyfile("templates/katc.js", os.path.join(self.outdir, "katc.js"))
         shutil.copyfile("templates/katc.css", os.path.join(self.outdir, "katc.css"))
-)
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
