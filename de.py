@@ -53,6 +53,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'percent'", r"\b[Pp]ercents?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'only'", r"\b[Oo]nly\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'or'", r"\b[Oo]r\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'onto'", r"\b[Oo]nto\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'pair'", r"\b[Pp]airs?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'has/had'", r"\b[Hh]a[sd]\b", severity=Severity.standard),
     IgnoreByFilenameListWrapper(["de/4_low_priority/about.team.pot"],
