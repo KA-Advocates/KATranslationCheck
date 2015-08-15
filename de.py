@@ -136,7 +136,7 @@ rules = [
     TranslationConstraintRule("'shift left' not translated to 'Verschiebung nach left'", r"\bshift\s+right\b", r"Verschiebung nach left", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     #Others
     IgnoreByTcommentRegexWrapper(r"(us-customary-distance|metric-system-tutorial)",
-        NegativeTranslationConstraintRule("'mile(s)' translated to 'Meile(n)' instead of 'Kilometer'", r"miles?", r"(?<!\")meilen?", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE)),
+        NegativeTranslationConstraintRule("'mile(s)' translated to 'Meile(n)' instead of 'Kilometer'", r"miles?", r"(?<!\")meilen?", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE)),
     NegativeTranslationConstraintRule("'real number' transslated to 'reale ...' instead of 'reelle'", r"real\s+numbers?", r"reale", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schraffiert' instead of 'eingefärbt'", r"shaded", r"schraffiert", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schattiert' instead of 'eingefärbt'", r"shaded", r"schattiert", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
