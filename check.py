@@ -18,6 +18,7 @@ import itertools
 import os
 import os.path
 import urllib
+import shutil
 import htmlmin
 import datetime
 import collections
@@ -201,6 +202,8 @@ class HTMLHitRenderer(object):
             for rule in self.rules
         }
         self._renderDirectory(overviewHits, self.totalStatsByRule, self.outdir, filename="all files", filelist=self.files)
+        # Copy static files
+        shutil.copyfile("templates/katc.js", self.outdir)
 
 if __name__ == "__main__":
     import argparse
