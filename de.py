@@ -114,7 +114,7 @@ rules = [
     TranslationConstraintRule("'interquartile range' not translated to 'Interquartilsabstand'", r"interquartile\s+range", r"Interquartilsabstand", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'two-way table' not translated to 'Kontingenztafel'", r"two-way\s+table", r"Kontingenztafel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'relative frequency' not translated to 'relative Häufigkeit'", r"relative\s+(frequency|frequencies)", r"relative\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'absolute frequency' not translated to 'absolute Häufigkeit'", r"absolute\s+(frequency|frequencies)", r"absolute\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'absolute frequency' not translated to 'absolute Häufigkeit'", r"absolute\s+(frequency|frequencies)", r"absoluten?\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'word problems' not translated to 'Textaufgaben'", r"word\s+problem", r"textaufgabe", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Coordinate Plane' not translated to 'Koordinatensystem'", r"coordinate\s+plane", r"Koordinatensystem", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleich(ung|heit|zeichen)", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
