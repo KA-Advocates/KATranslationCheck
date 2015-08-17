@@ -196,6 +196,11 @@ rules = [
     # Typos
     SimpleRegexRule("Typo: bliden instead of bilden", r"blide[nt]", severity=Severity.info),
     SimpleRegexRule("Typo: sit instead of ist", r"\bsit\b", severity=Severity.info),
+    # Untranslated stuff directly after \n (not machine translated)
+    SimpleRegexRule("Untranslated 'First' after \\n", r"\\nFirst", severity=Severity.standard),
+    SimpleRegexRule("Untranslated 'Second' after \\n", r"\\nSecond", severity=Severity.standard),
+    SimpleRegexRule("Untranslated 'This' after \\n", r"\\nThis", severity=Severity.standard),
+    SimpleRegexRule("Untranslated 'That' after \\n", r"\\nThat", severity=Severity.standard),
     # Machine-readable stuff must be identical in the translation
     ExactCopyRule("All image URLs must match in order", r"!\[\]\s*\([^\)]+\)", severity=Severity.warning, aliases=imageAliases),
     ExactCopyRule("All GUI elements must match in order", r"\[\[☃\s+[a-z-]+\s*\d*\]\]", severity=Severity.warning),
