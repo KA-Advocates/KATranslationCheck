@@ -197,6 +197,7 @@ rules = [
     SimpleRegexRule("Typo: bliden instead of bilden", r"blide[nt]", severity=Severity.info),
     SimpleRegexRule("Typo: sit instead of ist", r"\bsit\b", severity=Severity.info),
     SimpleRegexRule("Typo: spielgeln instead of spiegeln", r"spielgeln", severity=Severity.info),
+    SimpleRegexRule("Typo: zeien instead of zeigen", r"zeien", severity=Severity.info),
     # Untranslated stuff directly after \n (not machine translated)
     SimpleRegexRule("Untranslated 'First' after \\n", r"\\nFirst", severity=Severity.standard),
     SimpleRegexRule("Untranslated 'Second' after \\n", r"\\nSecond", severity=Severity.standard),
