@@ -193,6 +193,9 @@ rules = [
     IgnoreByMsgidRegexWrapper(r"\d+\^\{\\large\\text\{ten?",
         SimpleRegexRule("Missing translation of ten(s)", r"(?<!\d)\^?\{?(\\large)?\\text\{\s*tens?\}\}", severity=Severity.info)),
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}", severity=Severity.dangerous),
+    # Typos
+    SimpleRegexRule("Typo: bliden instead of bilden", r"blide[nt]", severity=Severity.info),
+    SimpleRegexRule("Typo: sit instead of ist", r"\bsit\b", severity=Severity.info),
     # Machine-readable stuff must be identical in the translation
     ExactCopyRule("All image URLs must match in order", r"!\[\]\s*\([^\)]+\)", severity=Severity.warning, aliases=imageAliases),
     ExactCopyRule("All GUI elements must match in order", r"\[\[☃\s+[a-z-]+\s*\d*\]\]", severity=Severity.warning),
