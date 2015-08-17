@@ -55,7 +55,7 @@ class Rule(object):
         name = name.replace("}", "").replace("\\", "").replace(",", "")
         name = name.replace("*", "").replace("/", "-").replace("%", "")
         name = name.replace("<", "").replace(">", "").replace("/", "")
-        name = name.replace("&gt;", "").replace("&lt;", "")
+        name = name.replace("&gt;", "").replace("&lt;", "").replace(":","")
         name = re.sub(r"\s+", "-", name)
         name = re.sub(r"-+", "-", name)
         name = re.sub(r"^-", "", name)
