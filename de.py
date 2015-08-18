@@ -136,14 +136,15 @@ rules = [
     TranslationConstraintRule("'isoscel' not translated to 'gleichschenklig'", r"isoscel(es)?", r"gleichschenklig", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'two-step equations' not translated to 'komplexere Gleichungen'", r"two-step\s+equations?", r"komplexe(re)?\s+gleichung(en)?", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'origin' not translated to 'Ursprung'", r"\borigin\b", r"Ursprung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
-
+    # Operations
     TranslationConstraintRule("'translation' not translated to 'Verschiebung'", r"translations?", r"Verschiebung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
-    #Shift direction
+    TranslationConstraintRule("'reflection' not translated to 'Spiegelung'", r"reflections?", r"Spiegelung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+    # Shift direction
     TranslationConstraintRule("'shift down' not translated to 'Verschiebung nach unten'", r"\bshift\s+down\b", r"Verschiebung nach unten", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'shift up' not translated to 'Verschiebung nach oben'", r"\bshift\s+up\b", r"Verschiebung nach oben", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'shift right' not translated to 'Verschiebung nach rechts'", r"\bshift\s+right\b", r"Verschiebung nach rechts", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'shift left' not translated to 'Verschiebung nach left'", r"\bshift\s+right\b", r"Verschiebung nach left", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
-    #Others
+    # Others
     IgnoreByTcommentRegexWrapper(r"(us-customary-distance|metric-system-tutorial)",
         NegativeTranslationConstraintRule("'mile(s)' translated to 'Meile(n)' instead of 'Kilometer'", r"miles?", r"(?<!\")meilen?", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE)),
     NegativeTranslationConstraintRule("'real number' transslated to 'reale ...' instead of 'reelle'", r"real\s+numbers?", r"reale", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
