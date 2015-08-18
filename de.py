@@ -213,6 +213,7 @@ rules = [
     ExactCopyRule("All GUI elements must match in order", r"\[\[☃\s+[a-z-]+\s*\d*\]\]", severity=Severity.warning),
     # Unsorted stuff
     TranslationConstraintRule("'expression' not translated to 'Term'", r"(?<!polynomial )expression", r"term", severity=Severity.notice, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'polynomial expression' not translated to 'Polynom'", r"polynomial expression", r"Polynom", severity=Severity.notice, flags=re.UNICODE | re.IGNORECASE),
 ]
 
 if __name__ == "__main__":
