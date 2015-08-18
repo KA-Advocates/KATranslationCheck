@@ -136,6 +136,8 @@ rules = [
     TranslationConstraintRule("'isoscel' not translated to 'gleichschenklig'", r"isoscel(es)?", r"gleichschenklig", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'two-step equations' not translated to 'komplexere Gleichungen'", r"two-step\s+equations?", r"komplexe(re)?\s+gleichung(en)?", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'origin' not translated to 'Ursprung'", r"\borigin\b", r"Ursprung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+
+    TranslationConstraintRule("'translation' not translated to 'Verschiebung'", r"translations?", r"Verschiebung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     #Shift direction
     TranslationConstraintRule("'shift down' not translated to 'Verschiebung nach unten'", r"\bshift\s+down\b", r"Verschiebung nach unten", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'shift up' not translated to 'Verschiebung nach oben'", r"\bshift\s+up\b", r"Verschiebung nach oben", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
