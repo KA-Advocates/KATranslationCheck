@@ -205,6 +205,7 @@ rules = [
     SimpleRegexRule("Typo: vierek instead of viereck", r"\b[Vv]ierek\b", severity=Severity.info),
     SimpleRegexRule("Typo: fünfek instead of fünfeck", r"\b[Ff]ünfek\b", severity=Severity.info),
     SimpleRegexRule("Typo: sechsek instead of sechseck", r"\b[Ss]echsek\b", severity=Severity.info),
+    SimpleRegexRule("Typo: Multiplikaiton instead of Multiplikation", r"\b[Mm]ultiplikaiton\b", severity=Severity.info),
     # Untranslated stuff directly after \n (not machine translated)
     SimpleRegexRule("Untranslated 'First' after \\n", r"\\nFirst", severity=Severity.standard),
     SimpleRegexRule("Untranslated 'Second' after \\n", r"\\nSecond", severity=Severity.standard),
