@@ -197,7 +197,7 @@ rules = [
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}", severity=Severity.dangerous),
     # Typos
     SimpleRegexRule("Typo: bliden instead of bilden", r"[Bb]lide[nt]", severity=Severity.info),
-    SimpleRegexRule("Typo: sit instead of ist", r"\b[Ss]it\b", severity=Severity.info),
+    SimpleRegexRule("Typo: sit instead of ist", r"\b[Ss]it\b(?!-[Uu]p)", severity=Severity.info),
     SimpleRegexRule("Typo: spielgeln instead of spiegeln", r"[Ss]pielgeln", severity=Severity.info),
     SimpleRegexRule("Typo: zeien instead of zeigen", r"[Zz]eien", severity=Severity.info),
     SimpleRegexRule("Typo: un instead of und", r"\b[Uu]n\b", severity=Severity.info),
