@@ -151,6 +151,7 @@ rules = [
     # Others
     IgnoreByTcommentRegexWrapper(r"(us-customary-distance|metric-system-tutorial)",
         NegativeTranslationConstraintRule("'mile(s)' translated to 'Meile(n)' instead of 'Kilometer'", r"miles?", r"(?<!\")meilen?", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE)),
+    NegativeTranslationConstraintRule("'term' translated to 'Begriff' instead of 'Term'", r"\bterms?\b", r"\bBegriffe?\b", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'real number' transslated to 'reale ...' instead of 'reelle'", r"real\s+numbers?", r"reale", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schraffiert' instead of 'eingefärbt'", r"shaded", r"schraffiert", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     NegativeTranslationConstraintRule("'shaded' translated to 'schattiert' instead of 'eingefärbt'", r"shaded", r"schattiert", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
