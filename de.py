@@ -44,9 +44,9 @@ rules = [
     # Translator missed english-only world
     SimpleRegexRule("Occurrence of untranslated 'year'", r"(?<!%\()[Yy]ear(?!\)s)", severity=Severity.standard), # These are lookbehind/lookhead assertions ;-)
     SimpleRegexRule("Occurrence of untranslated 'time'", r"\s+[tT]imes?(?![A-Za-z])(?!-[Oo]ut)(?!_\d)", severity=Severity.standard),
-    SimpleRegexRule("Occurrence of untranslated 'is'", r"\b[Ii]s\b", severity=Severity.standard),
-    SimpleRegexRule("Occurrence of untranslated 'and'", r"\b[A]nd\b", severity=Severity.standard),
-    SimpleRegexRule("Occurrence of untranslated 'because'", r"\b[Bb]ecause\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'is'", r"(\b|\\n)[Ii]s\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'and'", r"(\b|\\n)[A]nd\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'because'", r"(\b|\\n)[Bb]ecause\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'due'", r"\b[Dd]ue\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'great(er)'", r"\b[Gg]reat(er)?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'less'", r"\b[L]ess\b", severity=Severity.standard),
@@ -66,6 +66,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'eliminate'", r"\b[Ee]liminat(e|ion)\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'similar'", r"\b[Ss]imilar(ity)?\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'pair'", r"\b[Pp]airs?\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'she'", r"(\b|\\n)[Ss]he\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'has/had'", r"\b[Hh]a[sd]\b", severity=Severity.standard),
     IgnoreByFilenameListWrapper(["de/4_low_priority/about.team.pot"],
             SimpleRegexRule("Occurrence of untranslated 'school'", r"(?<!Old-)(?<!Ivy-League[- ])(?<!High[- ])(?<!Marlborough[- ])(?<!World[- ])\b[S]chool\b", severity=Severity.standard)),
