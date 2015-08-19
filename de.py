@@ -124,6 +124,8 @@ rules = [
     SimpleRegexRule("daß needs to be written as dass", r"\b[Dd]aß\b", severity=Severity.info),
     SimpleRegexRule("Ausreisser needs to be written as Ausreißer", r"\b[Aa]usreisser\b", severity=Severity.info),
     # Recommended translations
+    TranslationConstraintRule("'perpendicular bisector' not translated to 'Mittelsenkrechte'", r"perpendicular\s+bisector", r"mittelsenkrechte", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'angle bisector' not translated to 'Winkelhalbierende'", r"angle\s+bisector", r"Winkelhalbierende", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'scalene' not translated to 'ungleichseitig'", r"scalene", r"ungleichseitig", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'standard quadratic form' not translated to 'allgemeine form'", r"standard\s+quadratic\s+form", r"allgemeiner?\s+form", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'rectangular coordinates' not translated to 'kartesische Koordinaten'", r"rectangular\s+coordinates?", r"kartesische\s+Koordinaten?", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
