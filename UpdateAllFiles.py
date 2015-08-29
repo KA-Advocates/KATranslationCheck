@@ -9,6 +9,7 @@ import requests
 import json
 import re
 import os
+import time
 import errno
 import os.path
 import datetime
@@ -118,6 +119,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract')
     parser.add_argument('-j', '--num-processes', default=1, type=int, help='Number of processes to use for parallel download')
+    parser.add_argument('-d', '--delay', default=0, type=float, help='Delay (in seconds) to sleep between fetches for -j 1')
     args = parser.parse_args()
 
     # Get map that contains (besides other stuff)
@@ -144,6 +146,7 @@ if __name__ == "__main__":
     else:
         for t in fileinfos:
             performPOTDownload(t)
+            time.sleep(args.delay)
     #Set download timestamp
     timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
     with open("lastdownload.txt", "w") as outfile:
