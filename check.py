@@ -98,7 +98,7 @@ class HTMLHitRenderer(object):
         # Initialize translation ID/URL map
         translationFilemapCache = getTranslationFilemapCache()
         self.translationURLs = {
-            lang + "/" + v["path"]: "https://crowdin.com/translate/khanacademy" + v["id"] + "/enus-" + lang
+            lang + "/" + v["path"]: "https://crowdin.com/translate/khanacademy/" + str(v["id"]) + "/enus-" + lang
             for v in translationFilemapCache.values()
         }
     def filepath_to_url(self, filename):
