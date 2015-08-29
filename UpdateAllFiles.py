@@ -120,11 +120,12 @@ if __name__ == "__main__":
     parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract')
     parser.add_argument('-j', '--num-processes', default=1, type=int, help='Number of processes to use for parallel download')
     parser.add_argument('-d', '--delay', default=0, type=float, help='Delay (in seconds) to sleep between fetches for -j 1')
+    parser.add_argument('-f', '--force-filemap-update', action="store_true", help='Force updating the filemap')
     args = parser.parse_args()
 
     # Get map that contains (besides other stuff)
     #  the crowdin ID for a given file
-    translationFilemap = getTranslationFilemapCache()
+    translationFilemap = getTranslationFilemapCache(args.force_filemap_update)
 
     # Collect valid downloadable files for parallel processing
     fileinfos = []
