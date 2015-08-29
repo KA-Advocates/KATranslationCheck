@@ -13,6 +13,7 @@ import time
 import errno
 import os.path
 import datetime
+from retry import retry
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
 from ansicolor import red, black, blue, green
@@ -36,6 +37,7 @@ def getCrowdinSession():
     response = s.post("http://crowdin.khanacademy.org/login", data=loginData, stream=False)
     return s
 
+@retry(tries=8)
 def downloadTranslationFilemap(lang="de"):
     """
     Create a filename -> info map for a given Crowdin.
@@ -45,8 +47,8 @@ def downloadTranslationFilemap(lang="de"):
     """
     # Extract filemap
     response = requests.get("http://crowdin.khanacademy.org/project/khanacademy/%s" % lang)
-    soup = BeautifulSoup(response.text)
-    scripttext = soup.find_all("script")[3].text
+    soup = BeautifulSoup(response.text, "lxml")
+    scripttext = soup.find_all("script")[4].text
     jsonStr = scripttext.partition("PROJECT_FILES = ")[2]
     jsonStr = jsonStr.rpartition(", DOWNLOAD_PERMISSIONS")[0].replace("\\/", "/")
     projectFiles = json.loads(jsonStr)
@@ -54,7 +56,7 @@ def downloadTranslationFilemap(lang="de"):
     directoryMap = {
         v["id"]: v["name"] + "/"
         for k, v in projectFiles.items()
-        if v["node_type"] == "0"} #0 -> directory
+        if v["node_type"] == "0"} # 0 -> directory
     # Filter only POT. Create filename -> object map with "id" property set
     idRegex = re.compile("/khanacademy/(\d+)/enus-de")
     return {
@@ -62,6 +64,7 @@ def downloadTranslationFilemap(lang="de"):
         for k, v in projectFiles.items()
         if v["name"].endswith(".pot")}
 
+@retry(tries=8, delay=5.0)
 def performPOTDownload(argtuple):
     """
     Explicitly uncurried function that downloads a single Crowdin file

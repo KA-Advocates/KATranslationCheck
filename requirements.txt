@@ -6,3 +6,5 @@ BeautifulSoup4
 regex
 htmlmin
 compressinja
+lxml
+retry
