@@ -211,7 +211,7 @@ class HTMLHitRenderer(object):
         if os.path.isfile(lintFilename):
             lintEntries = readLintCSV(lintFilename)
             with open(os.path.join(self.outdir, "lint.html"), "w") as outfile:
-                minifyHTML(self.lintTemplate.render(lintEntries=lintEntries))
+                outfile.write(minifyHTML(self.lintTemplate.render(lintEntries=lintEntries)))
         else:
             print("Skipping lint (%s)" % lintFilename)
         # Copy static files
