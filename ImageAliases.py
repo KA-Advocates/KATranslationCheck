@@ -5,14 +5,15 @@ from collections import defaultdict
 from io import StringIO
 
 def readImageAliases(ssid):
-    text = StringIO(downloadCSV(ssid))
+    text = StringIO(downloadGDocsCSV(ssid))
     reader = csv.reader(text, delimiter=',')
     next(reader) # Skip header
     aliases = defaultdict(str)
     aliases.update({"![](" + row[0] + ")": "![](" + row[1] + ")" for row in reader})
     return aliases
 
-def downloadCSV(ssid):
+def downloadGDocsCSV(ssid):
+    "Download CSV for a google docs spreadsheet"
     url = "https://docs.google.com/spreadsheets/d/{0}/export?format=csv&id={0}".format(ssid)
     return requests.get(url).text
 
