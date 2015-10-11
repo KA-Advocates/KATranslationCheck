@@ -227,7 +227,7 @@ rules = [
     IgnoreByTcommentRegexWrapper(r"SEO\s+keyword",
         SimpleRegexRule("Kreis not capitalized", r"\bkreise?\b", severity=Severity.info)),
     IgnoreByTcommentRegexWrapper(r"SEO\s+keyword",
-        SimpleRegexRule("Umfang not capitalized", r"\bUmfang\b", severity=Severity.info)),
+        SimpleRegexRule("Umfang not capitalized", r"\bumfang\b", severity=Severity.info)),
     IgnoreByTcommentRegexWrapper(r"SEO\s+keyword",
         SimpleRegexRule("Fläche not capitalized", r"\bflächen?\b", severity=Severity.info)),
     IgnoreByTcommentRegexWrapper(r"SEO\s+keyword",
