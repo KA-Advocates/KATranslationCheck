@@ -212,12 +212,12 @@ rules = [
         SimpleRegexRule("Missing translation of ten(s)", r"(?<!\d)\^?\{?(\\large)?\\text\{\s*tens?\}\}", severity=Severity.info)),
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}", severity=Severity.dangerous),
     # Capitalization
-    SimpleRegexRule("Dreieck not capitalized", r"dreiecke?\b", severity=Severity.info),
-    SimpleRegexRule("Viereck not capitalized", r"vierecke?\b", severity=Severity.info),
-    SimpleRegexRule("Fünfeck not capitalized", r"fünfecke?\b", severity=Severity.info),
-    SimpleRegexRule("Sechseck not capitalized", r"sechsecke?\b", severity=Severity.info),
-    SimpleRegexRule("Fläche not capitalized", r"flächen?\b", severity=Severity.info),
-    SimpleRegexRule("Celsius not capitalized", r"celsius\b", severity=Severity.info),
+    SimpleRegexRule("Dreieck not capitalized", r"\bdreiecke?\b", severity=Severity.info),
+    SimpleRegexRule("Viereck not capitalized", r"\bvierecke?\b", severity=Severity.info),
+    SimpleRegexRule("Fünfeck not capitalized", r"\bfünfecke?\b", severity=Severity.info),
+    SimpleRegexRule("Sechseck not capitalized", r"\bsechsecke?\b", severity=Severity.info),
+    SimpleRegexRule("Fläche not capitalized", r"\bflächen?\b", severity=Severity.info),
+    SimpleRegexRule("Celsius not capitalized", r"\bcelsius\b", severity=Severity.info),
     # Typos
     SimpleRegexRule("Typo: bliden instead of bilden", r"[Bb]lide[nt]", severity=Severity.info),
     SimpleRegexRule("Typo: ähnlich Terme or Ausdrücke instead of ähnliche Terme", r"[Ää]hnlich\s+([Tt]erme?|[Aa]usdr(uck|ücke))", severity=Severity.info),
