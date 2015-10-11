@@ -209,6 +209,7 @@ class HTMLHitRenderer(object):
         # Parse & render lint
         lintFilename = "{0}-lint.csv".format(self.lang)
         if os.path.isfile(lintFilename):
+            print(black("Rendering lint...", bold=True))
             lintEntries = readLintCSV(lintFilename)
             with open(os.path.join(self.outdir, "lint.html"), "w") as outfile:
                 outfile.write(minifyHTML(self.lintTemplate.render(lintEntries=lintEntries)))
