@@ -43,26 +43,10 @@
       <!-- /.container -->
     </nav>
     <div id="maincontainer" class="container">
-      {% for exercise in exercises if exercise["videos"] %}
+      {% for lintEntry in lintEntries %}
         <div class="row">
-          <h2><a href="{{exercise['url']}}">{{exercise["title"]}}</a></h2>
-          <table class="table table-striped">
-          <thead>
-            <tr><th>Video</th><th>Duration</th><th>Subtitles</th></tr>
-          </thead>
-          <tbody></tbody>
-          {% for video in exercise["videos"] %}
-            <tr>
-              <td><a href="https://www.youtube.com/timedtext_video?v={{video['youtube_id']}}">{{video["title"]}}</a></td>
-              <td>{{video["duration"]}} s</td>
-              {% if video["has_subtitles"] %}
-                <td><span class="glyphicon glyphicon-ok" style="color: #00FF00"></span></td>
-              {% else %}
-                <td><span class="glyphicon glyphicon-remove" style="color: #FF0000"></span></td>
-              {% endif %}
-            </tr>
-          {% endfor %}
-          </table>
+          <h3><a href="{{lintEntry.url}}"> Lint error</a></h3>
+          <pre class="lint-entry">{{lintEntry.text}}</pre>
         </div>
       {% endfor %}
     </div>

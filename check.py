@@ -28,6 +28,7 @@ from jinja2 import Environment, FileSystemLoader
 from UpdateAllFiles import getTranslationFilemapCache
 from de import rules
 from Rules import Severity
+from ReadLint import readLintCSV
 from compressinja.html import HtmlCompressor
 
 def readPOFiles(directory):
@@ -83,11 +84,13 @@ class HTMLHitRenderer(object):
     """
     def __init__(self, outdir, rules, lang="de"):
         self.outdir = outdir
+        self.lang = lang
         self.rules = sorted(rules, reverse=True)
         #Initialize template engine
         self.env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True, lstrip_blocks=True, extensions=[HtmlCompressor])
         self.ruleTemplate = self.env.get_template("template.html")
         self.indexTemplate = self.env.get_template("index.html")
+        self.lintTemplate = self.env.get_template("index.html")
         # Get timestamp
         self.timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
         if os.path.isfile("lastdownload.txt"):
@@ -203,6 +206,14 @@ class HTMLHitRenderer(object):
             for rule in self.rules
         }
         self._renderDirectory(overviewHits, self.totalStatsByRule, self.outdir, filename="all files", filelist=self.files)
+        # Parse & render lint
+        lintFilename = "{0}-lint.csv".format(self.lang)
+        if os.path.isfile(lintFilename):
+            lintEntries = readLintCSV(lintFilename)
+            with open(os.path.join(self.outdir, "lint.html"), "w") as outfile:
+                minifyHTML(self.lintTemplate.render(lintEntries=lintEntries))
+        else:
+            print("Skipping lint (%s)" % lintFilename)
         # Copy static files
         shutil.copyfile("templates/katc.js", os.path.join(self.outdir, "katc.js"))
         shutil.copyfile("templates/katc.css", os.path.join(self.outdir, "katc.css"))
