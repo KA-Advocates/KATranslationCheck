@@ -90,7 +90,7 @@ class HTMLHitRenderer(object):
         self.env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True, lstrip_blocks=True, extensions=[HtmlCompressor])
         self.ruleTemplate = self.env.get_template("template.html")
         self.indexTemplate = self.env.get_template("index.html")
-        self.lintTemplate = self.env.get_template("index.html")
+        self.lintTemplate = self.env.get_template("lint.html")
         # Get timestamp
         self.timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
         if os.path.isfile("lastdownload.txt"):
