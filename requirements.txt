@@ -8,3 +8,4 @@ htmlmin
 compressinja
 lxml
 retry
+selenium
