@@ -12,8 +12,7 @@ def readLintCSV(filename):
     "Read a KA lint file"
     with open(filename) as lintin:
         reader = csv.reader(lintin, delimiter=',')
-        next(reader)  # Skip header
-        yield([LintEntry(row[0], row[1], row[2]) for row in reader])
+        return [LintEntry(row[0], row[1], row[2]) for row in reader]
 
 if __name__ == "__main__":
-    print(list(readLintCSV("de-lint.csv")))
+    print(readLintCSV("de-lint.csv"))

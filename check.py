@@ -184,6 +184,16 @@ class HTMLHitRenderer(object):
         with open(os.path.join(directory, "index.html"), "w") as outfile:
             outfile.write(minifyHTML(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
                           statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename, translationURLs=self.translationURLs)))
+    def renderLintHTML(self):
+        "Parse & render lint"
+        lintFilename = "{0}-lint.csv".format(self.lang)
+        if os.path.isfile(lintFilename):
+            print(black("Rendering lint...", bold=True))
+            lintEntries = readLintCSV(lintFilename)
+            with open(os.path.join(self.outdir, "lint.html"), "w") as outfile:
+                outfile.write(minifyHTML(self.lintTemplate.render(lintEntries=lintEntries)))
+        else:
+            print("Skipping lint (%s does not exist)" % lintFilename)
     def hitsToHTML(self):
         """
         Apply a rule and write a directory of output HTML files
@@ -206,15 +216,6 @@ class HTMLHitRenderer(object):
             for rule in self.rules
         }
         self._renderDirectory(overviewHits, self.totalStatsByRule, self.outdir, filename="all files", filelist=self.files)
-        # Parse & render lint
-        lintFilename = "{0}-lint.csv".format(self.lang)
-        if os.path.isfile(lintFilename):
-            print(black("Rendering lint...", bold=True))
-            lintEntries = readLintCSV(lintFilename)
-            with open(os.path.join(self.outdir, "lint.html"), "w") as outfile:
-                outfile.write(minifyHTML(self.lintTemplate.render(lintEntries=lintEntries)))
-        else:
-            print("Skipping lint (%s)" % lintFilename)
         # Copy static files
         shutil.copyfile("templates/katc.js", os.path.join(self.outdir, "katc.js"))
         shutil.copyfile("templates/katc.css", os.path.join(self.outdir, "katc.css"))
@@ -250,6 +251,7 @@ if __name__ == "__main__":
 
     # Generate HTML
     print(black("Rendering HTML...", bold=True))
+    renderer.renderLintHTML()
     renderer.hitsToHTML()
 
     # Generate filestats.json
