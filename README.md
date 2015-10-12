@@ -78,6 +78,8 @@ This means that, in order to update the lint file, you need to install Firefox. 
 xvfb-run ./LintReport.py
 ```
 
+Note that running the lint report script only updates the lint CSV file and does not (re-)generate the lint HTML.
+
 This process is entirely optional. The main HTML generator will automatically recognize if the lint file exist and only try to generate the lint page if it is present.
 
 ### Reporting
