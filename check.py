@@ -223,8 +223,8 @@ class HTMLHitRenderer(object):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d','--download', action='store_true', help='Download or update the directory')
-    parser.add_argument('-l','--language', default="de", help='The language directory to use/extract')
+    parser.add_argument('-d', '--download', action='store_true', help='Download or update the directory')
+    parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract')
     parser.add_argument('outdir', nargs='?', default="output", help='The output directory to use')
     args = parser.parse_args()
 
