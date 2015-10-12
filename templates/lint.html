@@ -45,7 +45,7 @@
     <div id="maincontainer" class="container">
 
         <div class="row">
-          <h1>Showing {{len(lintEntries)}} lint errors</h1>
+          <h1>Showing {{lintEntries|length}} lint errors</h1>
         </div>
       {% for lintEntry in lintEntries %}
         <div class="row">
