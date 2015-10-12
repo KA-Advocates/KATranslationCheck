@@ -43,9 +43,13 @@
       <!-- /.container -->
     </nav>
     <div id="maincontainer" class="container">
+
+        <div class="row">
+          <h1>Showing {{len(lintEntries)}} lint errors</h1>
+        </div>
       {% for lintEntry in lintEntries %}
         <div class="row">
-          <h3><a href="{{lintEntry.url}}">Lint error at {{lintEntry.date}}</a></h3>
+          <h3><a target="_blank" href="{{lintEntry.url}}">Lint error at {{lintEntry.date}}</a></h3>
           <pre class="lint-entry">{{lintEntry.text}}</pre>
         </div>
       {% endfor %}
