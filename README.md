@@ -67,6 +67,19 @@ The rendering is performed using [Jinja2](http://jinja.pocoo.org/docs/dev/) usin
 
 Additionally, the `filestats.json` statistics API file is generated. This file is used by [KALanguageReport](https://github.com/alani1/KALanguageReport).
 
+### Lint processing
+
+KATC also contains an automatic lint report generation. This approach resolves the issue that the Khan Academy Lint CSV format contains newline and is therefore hard to import in off-the-shelf tools like Excel.
+
+The current lint report can be fetched automatically from [i18n-reports at Google Groups](https://groups.google.com/a/khanacademy.org/forum/#!forum/i18n-reports). Due to the complexity of the GWT-based Google Groups interface, the automation is done using Selenium. Due to unknown limitations, the process of fetching the group index can be performed using PhantomJS while the second step of fetching an individual post only works in actual browsers like Chrome or Firefox
+
+This means that, in order to update the lint file, you need to install Firefox. On servers, use `xvfb-run` to run the script. On Desktops, you can try running it without any prefix:
+```
+xvfb-run ./LintReport.py
+```
+
+This process is entirely optional. The main HTML generator will automatically recognize if the lint file exist and only try to generate the lint page if it is present.
+
 ### Reporting
 
 The report button uses the `utils/report.php` script which sends me an e-mail if a user reports an entry as wrong. Remember to use your own email address if you setup a customized instance of KATC.

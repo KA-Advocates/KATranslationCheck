@@ -63,3 +63,4 @@ lastdownload.txt
 crowdin-credentials.json
 translation-filemap.cache.json
 videos.json
+*-lint.csv

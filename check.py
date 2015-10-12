@@ -28,7 +28,7 @@ from jinja2 import Environment, FileSystemLoader
 from UpdateAllFiles import getTranslationFilemapCache
 from de import rules
 from Rules import Severity
-from ReadLint import readLintCSV
+from LintReport import readLintCSV
 from compressinja.html import HtmlCompressor
 
 def readPOFiles(directory):
