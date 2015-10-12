@@ -149,7 +149,7 @@ rules = [
     TranslationConstraintRule("'translation' not translated to 'Verschiebung'", r"translations?", r"Verschiebung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'reflection' not translated to 'Spiegelung'", r"reflections?", r"Spiegelung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'rotation' not translated to 'Drehung' or 'Rotation'", r"rotation?", r"(rotation|drehung)", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'dilation' not translated to 'Streckung'", r"dilation", r"streckung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'dilation' not translated to 'Streckung'", r"dilation", r"(streckung|gestreckt)", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'line of reflection' not translated to 'Spiegelungsachse'", r"line of reflection?", r"Spiegelungsachse", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     # Shift direction
     TranslationConstraintRule("'shift down' not translated to 'Verschiebung nach unten'", r"\bshift\s+down\b", r"Verschiebung nach unten", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
