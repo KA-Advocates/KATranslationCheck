@@ -253,6 +253,7 @@ rules = [
         SimpleRegexRule("Zahl not capitalized", r"\bzahl\b", severity=Severity.info)),
     # Typos
     SimpleRegexRule("Typo: bliden instead of bilden", r"[Bb]lide[nt]", severity=Severity.info),
+    SimpleRegexRule("Typo: bidlen instead of bilden", r"[Bb]idle[nt]", severity=Severity.info),
     SimpleRegexRule("Typo: ähnlich Terme or Ausdrücke instead of ähnliche Terme", r"[Ää]hnlich\s+([Tt]erme?|[Aa]usdr(uck|ücke))", severity=Severity.info),
     SimpleRegexRule("Typo: sit instead of ist", r"\b[Ss]it\b(?!-[Uu]p)", severity=Severity.info),
     SimpleRegexRule("Typo: spielgeln instead of spiegeln", r"[Ss]pielgeln", severity=Severity.info),
