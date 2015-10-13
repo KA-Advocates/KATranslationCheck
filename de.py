@@ -209,7 +209,7 @@ rules = [
     SimpleRegexRule("Missing translation of **How", r"\*\*[Hh]ow", severity=Severity.dangerous),
     SimpleRegexRule("Missing translation of **What", r"\*\*[Ww]hat", severity=Severity.dangerous),
     SimpleRegexRule("Missing translation of ones", r"\\text\{\s*ones\}\}", severity=Severity.dangerous),
-    IgnoreByMsgidRegexWrapper(r"\d+\^\{\\large\\text\{ten?",
+    IgnoreByMsgstrRegexWrapper(r"\d+\^\{\\large\\text\{ten?\}",
         SimpleRegexRule("Missing translation of ten(s)", r"(?<!\d)\^?\{?(\\large)?\\text\{\s*tens?\}\}", severity=Severity.info)),
     SimpleRegexRule("Missing translation of hundred(s)", r"\\text\{\s*hundreds?\}\}", severity=Severity.dangerous),
     # Capitalization

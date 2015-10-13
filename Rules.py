@@ -321,6 +321,30 @@ class IgnoreByMsgidRegexWrapper(Rule):
             return None
         return self.child(msgstr, msgid, tcomment, filename)
 
+
+class IgnoreByMsgstrRegexWrapper(Rule):
+    """
+    Ignore a rule if a regex search in the msgstr returns a certain value.
+
+    This can be useful to ignore special cases of translation which
+    are distinguishable by the untranslated (english) text, e.g.
+    "Green's theorem" as a special case of untranslated "green".
+
+    Note that if a single regex hit is found, the entire string is ignore
+    """
+    def __init__(self, msgstr_regex, child):
+        super().__init__(child.name)
+        self.child = child
+        self.msgstr_regex = re.compile(msgstr_regex)
+        self.msgid_regex_str = msgstr_regex
+        self.severity = child.severity
+    def description(self):
+        return "%s (ignored for msgids matching '%s')" % (self.child.description(), self.msgid_regex_str)
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
+        if self.msgstr_regex.search(msgstr):
+            return None
+        return self.child(msgstr, msgid, tcomment, filename)
+
 class IgnoreByTcommentRegexWrapper(Rule):
     """
     Ignore a rule if a regex search in the tcomment returns a certain value.
