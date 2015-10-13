@@ -14,7 +14,7 @@ rules = [
     SimpleRegexRule("Comma in coordinate (| required)", r"\$\(-?\d+([\.,]\d+)?\s*,\s*-?\d+([\.,]\d+)?\)\$", severity=Severity.warning),
     SimpleRegexRule("Semicolon in coordinate (| required)", r"\$\(-?\d+([\.,]\d+)?\s*\;\s*-?\d+([\.,]\d+)?\)\$", severity=Severity.warning),
     SimpleRegexRule("{\ } instead of {\,} inside number", r"\d+\{\\\s+\}\d+", severity=Severity.notice),
-    SimpleRegexRule("Simple interval separated by comma instead of semicolon", r"(?<!)\[\d+\s*,\s*\d+\]", severity=Severity.standard),
+    SimpleRegexRule("Simple interval separated by comma instead of semicolon", r"(?<!!)\[\d+\s*,\s*\d+\]", severity=Severity.standard),
     SimpleRegexRule("Must not use {,} inside \\textit in a formula", r"\\textit\{\s*\d+\{,\}\d+\s*\}", severity=Severity.warning),
     SimpleRegexRule("'.* *' needs to be '.**', could cause bad formatting", r"\.\s*\* +\*(?!\*)", severity=Severity.warning),
     IgnoreByMsgidRegexWrapper(r"CC\s+BY-NC-SA\s+\d\.\d",
