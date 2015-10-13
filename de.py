@@ -129,7 +129,7 @@ rules = [
     TranslationConstraintRule("'angle bisector' not translated to 'Winkelhalbierende'", r"angle\s+bisector", r"Winkelhalbierende", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'scalene' not translated to 'ungleichseitig'", r"scalene", r"ungleichseitig", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'standard quadratic form' not translated to 'allgemeine form'", r"standard\s+quadratic\s+form", r"allgemeiner?\s+form", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'rectangular coordinates' not translated to 'kartesische Koordinaten'", r"rectangular\s+coordinates?", r"kartesische\s+Koordinaten?", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'rectangular coordinates' not translated to 'kartesische Koordinaten'", r"rectangular\s+coordinates?", r"kartesischen?\s+Koordinaten?", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'interquartile range' not translated to 'Interquartilsabstand'", r"interquartile\s+range", r"Interquartilsabstand", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'two-way table' not translated to 'Kontingenztafel'", r"two-way\s+table", r"Kontingenztafel", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'relative frequency' not translated to 'relative Häufigkeit'", r"relative\s+(frequency|frequencies)", r"relative\s+Häufigkeit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
