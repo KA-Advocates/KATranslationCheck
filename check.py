@@ -19,7 +19,6 @@ import os
 import os.path
 import urllib
 import shutil
-import htmlmin
 import datetime
 import collections
 from multiprocessing import Pool
@@ -75,12 +74,6 @@ def genCrowdinSearchString(entry):
     #Remove consecutive spaces
     s = _multiSpace.sub(" ", s)
     return urllib.parse.quote(s.replace('☃', ' ').replace("|", " "))
-
-# Minification takes half the space but too much CPU time
-#def minifyHTML(html):
-#    return htmlmin.minify(html, remove_empty_space=True)
-def minifyHTML(html):
-    return html
 
 class HTMLHitRenderer(object):
     """
@@ -190,14 +183,14 @@ class HTMLHitRenderer(object):
             #Remove file (redirects to 404 file) if there are no hits
             if hits: # Render hits
                 writeToFile(outfilePath,
-                    minifyHTML(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs, urllib=urllib, rule=rule, genCrowdinSearchString=genCrowdinSearchString)))
+                    self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs, urllib=urllib, rule=rule, genCrowdinSearchString=genCrowdinSearchString))
             else: # No hits
                 if os.path.isfile(outfilePath):
                     os.remove(outfilePath)
         # Render file index page (no filelist)
         writeToFile(os.path.join(directory, "index.html"),
-            minifyHTML(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
-                          statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename, translationURLs=self.translationURLs)))
+            self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
+                          statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename, translationURLs=self.translationURLs))
     def renderLintHTML(self):
         "Parse & render lint"
         lintFilename = os.path.join("cache", "{0}-lint.csv".format(self.lang))
@@ -205,7 +198,7 @@ class HTMLHitRenderer(object):
             print(black("Rendering lint...", bold=True))
             lintEntries = readLintCSV(lintFilename)
             writeToFile(os.path.join(self.outdir, "lint.html"),
-                minifyHTML(self.lintTemplate.render(lintEntries=lintEntries)))
+                self.lintTemplate.render(lintEntries=lintEntries))
         else:
             print("Skipping lint (%s does not exist)" % lintFilename)
     def hitsToHTML(self):
