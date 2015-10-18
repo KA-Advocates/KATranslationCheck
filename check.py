@@ -26,8 +26,7 @@ from multiprocessing import Pool
 from ansicolor import red, black, blue
 from jinja2 import Environment, FileSystemLoader
 from UpdateAllFiles import getTranslationFilemapCache
-from de import rules
-from Rules import Severity
+from Rules import Severity, importRulesForLanguage
 from LintReport import readLintCSV
 from compressinja.html import HtmlCompressor
 
@@ -66,7 +65,7 @@ def readPOFiles(directory):
     else: #Only a small number of files, process directly
         return {path: polib.pofile(path) for path in poFilenames}
 
-_multiSpace = re.compile("\s+")
+_multiSpace = re.compile(r"\s+")
 
 def genCrowdinSearchString(entry):
     s = entry.msgstr[:100].replace('*', ' ')
@@ -87,9 +86,11 @@ class HTMLHitRenderer(object):
     """
     A state container for the code which applies rules and generates HTML.
     """
-    def __init__(self, outdir, rules, lang="de"):
+    def __init__(self, outdir, lang="de"):
         self.outdir = outdir
         self.lang = lang
+        #Import rules by language
+        rules = importRulesForLanguage(lang)
         self.rules = sorted(rules, reverse=True)
         #Initialize template engine
         self.env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True, lstrip_blocks=True, extensions=[HtmlCompressor])
@@ -255,7 +256,7 @@ if __name__ == "__main__":
 
     # Compute hits
     print(black("Computing rules...", bold=True))
-    renderer = HTMLHitRenderer(args.outdir, rules)
+    renderer = HTMLHitRenderer(args.outdir)
     renderer.computeRuleHitsForFileSet(poFiles)
     # Ensure the HUGE po stuff goes out of scope ASAP
     poFiles = None

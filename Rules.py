@@ -5,6 +5,7 @@ import sys
 import fnmatch
 from collections import defaultdict
 from enum import IntEnum
+import importlib
 
 class Severity(IntEnum):
     # Notice should be used for rules where a significant number of unfixable false-positives are expected
@@ -33,6 +34,11 @@ def cleanupTranslatedString(s):
     if not __cleanupDetectRegex.search(s):
         return s
     return __cleanupRegex.sub(r"\1", s)
+
+def importRulesForLanguage(lang, basedir="."):
+    """Import ruleset from the language-specific python file"""
+    langModule = importlib.import_module("rules.{0}".format(lang))
+    return langModule.rules
 
 _extractImgRegex = re.compile(r"(https?://ka-perseus-graphie\.s3\.amazonaws\.com/[0-9a-f]{40,40}\.(png|svg))")
 
