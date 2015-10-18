@@ -250,7 +250,7 @@ if __name__ == "__main__":
     potDir = os.path.join("cache", args.language)
     print(black("Reading files from {0} folder...".format(potDir), bold=True))
     poFiles = readPOFiles(potDir)
-    print(black("Read {0]} files".format(len(poFiles)), bold=True))
+    print(black("Read {0} files".format(len(poFiles)), bold=True))
 
     # Compute hits
     print(black("Computing rules...", bold=True))
