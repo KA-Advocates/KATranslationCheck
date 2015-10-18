@@ -75,7 +75,6 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'to'", r"(?<!\\)\b[Tt]o\b", severity=Severity.info),
     SimpleRegexRule("Occurrence of untranslated 'not'", r"(?<!\\)(?<!in)\s*\bnot\b", severity=Severity.standard),
     IgnoreByMsgidRegexWrapper(r"What Does the Fox Hear",
-    IgnoreByMsgidRegexWrapper(r"What Does the Fox Hear",
         SimpleRegexRule("Occurrence of untranslated 'does", r"(?<!\\)(?<!-)\b[Dd]oesn?\b", severity=Severity.standard)),
     IgnoreByMsgidRegexWrapper(r"What Does the Fox Hear",
         SimpleRegexRule("Occurrence of untranslated 'what", r"\b[WW]hat\b", severity=Severity.standard)),
