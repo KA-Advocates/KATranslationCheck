@@ -58,7 +58,7 @@ def getLatestLintDownloadLink(lang="de"):
 def downloadLatestLint(lang="de"):
     url = getLatestLintDownloadLink()
     response = requests.get(url)
-    filename = "%s-lint.csv" % lang
+    filename = os.path.join("cache", "{0}-lint.csv".format(lang))
     with open(filename, "w") as outfile:
         outfile.write(response.text)
     print(black("Updated %s" % filename, bold=True))
