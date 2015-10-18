@@ -233,7 +233,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--download', action='store_true', help='Download or update the directory')
     parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract')
-    parser.add_argument('outdir', nargs='?', default="output", help='The output directory to use')
+    parser.add_argument('outdir', nargs='?', default=None, help='The output directory to use (default: output-<lang>)')
     args = parser.parse_args()
 
     # Download / update if requested
@@ -241,6 +241,8 @@ if __name__ == "__main__":
         download()
 
     # Create directory
+    if not args.outdir:
+        args.outdir = "output-{0}".format(args.language)
     if not os.path.isdir(args.outdir):
         os.mkdir(args.outdir)
 
