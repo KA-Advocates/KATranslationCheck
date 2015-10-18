@@ -108,6 +108,7 @@ rules = [
     IgnoreByMsgidRegexWrapper(r"Attack of the Soft Purple Bunnies",
         SimpleRegexRule("Occurrence of untranslated 'purple' (not as color specifier)", r"(?<!\\)\b[Pp]urple\b(?! Pi)", severity=Severity.standard)),
     SimpleRegexRule("Occurrence of untranslated 'blue' (not as color specifier)", r"(?<!Captain )(?<!\\color\{)(?<!\\)\b[Bb]lue\b", severity=Severity.standard),
+    SimpleRegexRule("Untranslated 'of' inside text inside formula" r"\\text\{\s*of\s*\}", severity=Severity.warning),
     IgnoreByMsgidRegexWrapper(r"Lygia\s+Pape", # red bottles = artwork
         SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)(?<!\\color\{)\b[Rr]ed\b(?! Delicious)(?! Robins)(?! Robbins)", severity=Severity.standard)),
     IgnoreByMsgidRegexWrapper(r"(Summer|Tree|Hour|Art|Lots|System|Museum|Institute|University)\s+of\s+(Drawing|Code|Script(ing)?|Life|Webpage|Databases|Problem|Fun|Higher\s+Education|Art|Technology)",
