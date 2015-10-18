@@ -174,7 +174,7 @@ rules = [
     NegativeTranslationConstraintRule("'Challenge' translated to 'Herausforderung' instead of 'challenge'", r"challenge", r"herausforderung", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     IgnoreByMsgidRegexWrapper(r"[Pp]ost\s*(office|card|alCode|man|-Money)",
         NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"\bpost", r"\bpost\b(?!-)", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE)),
-    TranslationConstraintRule("'real root(s)' not translated to 'reelle Nullstellen'", r"real\s+roots?", r"reelle Nullstellen?", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'real root(s)' not translated to 'reelle Nullstellen'", r"real\s+roots?", r"reellen?\s+Nullstellen?", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'complex root(s)' not translated to 'komplexe Nullstellen'", r"complex\s+roots?", r"komplexe Nullstellen?", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'DENOMINATOR' not translated to 'DENOMINATOR'", r"DENOMINATOR", r"DENOMINATOR", severity=Severity.warning, flags=re.UNICODE),
     TranslationConstraintRule("'NUMERATOR' not translated to 'NUMERATOR'", r"NUMERATOR", r"NUMERATOR", severity=Severity.warning, flags=re.UNICODE),
