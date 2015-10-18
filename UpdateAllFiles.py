@@ -48,7 +48,7 @@ def downloadTranslationFilemap(lang="de"):
     # Extract filemap
     response = requests.get("http://crowdin.khanacademy.org/project/khanacademy/%s" % lang)
     soup = BeautifulSoup(response.text, "lxml")
-    scripttext = soup.find_all("script")[4].text
+    scripttext = soup.find_all("script")[3].text
     jsonStr = scripttext.partition("PROJECT_FILES = ")[2]
     jsonStr = jsonStr.rpartition(", DOWNLOAD_PERMISSIONS")[0].replace("\\/", "/")
     projectFiles = json.loads(jsonStr)
