@@ -31,6 +31,11 @@ from Rules import Severity
 from LintReport import readLintCSV
 from compressinja.html import HtmlCompressor
 
+def writeToFile(filename, s):
+    "Utility function to write a string to a file identified by its filename"
+    with open(filename, "w") as outfile:
+        outfile.write(s)
+
 def readPOFiles(directory):
     """
     Read all PO files from a given directory and return
@@ -177,12 +182,17 @@ class HTMLHitRenderer(object):
         # Generate output HTML for each rule
         for rule, hits in ruleHits.items():
             # Render hits for individual rule
-            outfilePath = os.path.join(directory, "%s.html" % rule.get_machine_name())
-            with open(outfilePath, "w") as outfile:
-                outfile.write(minifyHTML(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs, urllib=urllib, rule=rule, genCrowdinSearchString=genCrowdinSearchString)))
+            outfilePath = os.path.join(directory, rule.get_machine_name() + ".html")
+            #Remove file (redirects to 404 file) if there are no hits
+            if hits: # Render hits
+                writeToFile(outfilePath,
+                    minifyHTML(self.ruleTemplate.render(hits=hits, timestamp=self.timestamp, downloadTimestamp=self.downloadTimestamp, translationURLs=self.translationURLs, urllib=urllib, rule=rule, genCrowdinSearchString=genCrowdinSearchString)))
+            else: # No hits
+                if os.path.isfile(outfilePath):
+                    os.remove(outfilePath)
         # Render file index page (no filelist)
-        with open(os.path.join(directory, "index.html"), "w") as outfile:
-            outfile.write(minifyHTML(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
+        writeToFile(os.path.join(directory, "index.html"),
+            minifyHTML(self.indexTemplate.render(rules=self.rules, timestamp=self.timestamp, files=filelist, statsByFile=self.statsByFile,
                           statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename, translationURLs=self.translationURLs)))
     def renderLintHTML(self):
         "Parse & render lint"
@@ -190,8 +200,8 @@ class HTMLHitRenderer(object):
         if os.path.isfile(lintFilename):
             print(black("Rendering lint...", bold=True))
             lintEntries = readLintCSV(lintFilename)
-            with open(os.path.join(self.outdir, "lint.html"), "w") as outfile:
-                outfile.write(minifyHTML(self.lintTemplate.render(lintEntries=lintEntries)))
+            writeToFile(os.path.join(self.outdir, "lint.html"),
+                minifyHTML(self.lintTemplate.render(lintEntries=lintEntries)))
         else:
             print("Skipping lint (%s does not exist)" % lintFilename)
     def hitsToHTML(self):
@@ -219,6 +229,7 @@ class HTMLHitRenderer(object):
         # Copy static files
         shutil.copyfile("templates/katc.js", os.path.join(self.outdir, "katc.js"))
         shutil.copyfile("templates/katc.css", os.path.join(self.outdir, "katc.css"))
+        shutil.copyfile("templates/404.html", os.path.join(self.outdir, "404.html"))
 
 if __name__ == "__main__":
     import argparse
@@ -264,5 +275,4 @@ if __name__ == "__main__":
         with open("videos.json") as infile:
             exercises = json.load(infile)
         subtitleTemplate = renderer.env.get_template("subtitles.html")
-        with open(os.path.join(args.outdir, "subtitles.html"), "w") as outf:
-            outf.write(subtitleTemplate.render(exercises=exercises))
+        writeToFile(os.path.join(args.outdir, "subtitles.html"), subtitleTemplate.render(exercises=exercises))
