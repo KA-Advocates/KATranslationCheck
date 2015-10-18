@@ -252,9 +252,10 @@ if __name__ == "__main__":
         os.mkdir(args.outdir)
 
     # Import
-    print(black("Reading files from %s folder..." % args.language, bold=True))
-    poFiles = readPOFiles(os.path.join(args.language))
-    print(black("Read %d files" % len(poFiles), bold=True))
+    potDir = os.path.join("cache", args.language)
+    print(black("Reading files from {0} folder...".format(potDir), bold=True))
+    poFiles = readPOFiles(potDir)
+    print(black("Read {0]} files".format(len(poFiles)), bold=True))
 
     # Compute hits
     print(black("Computing rules...", bold=True))
