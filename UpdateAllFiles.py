@@ -18,7 +18,8 @@ from multiprocessing import Pool
 from bs4 import BeautifulSoup
 from ansicolor import red, black, blue, green
 
-translationFilemapCacheFilename = "translation-filemap.cache.json"
+def translationFilemapCacheFilename(lang="de"):
+    return os.path.join("cache", "translation-filemap-{0}.json".format(lang))
 
 def loadUsernamePassword():
     """ """
@@ -104,23 +105,25 @@ def findExistingPOFiles(lang="de", directory="de"):
 def updateTranslationFilemapCache(lang="de"):
     """Re-download the translation filemap cache"""
     print(black("Updating translation filemap", bold=True))
-    with open(translationFilemapCacheFilename, "w") as outfile:
+    filename = translationFilemapCacheFilename(lang)
+    with open(filename, "w") as outfile:
         translation_filemap = downloadTranslationFilemap(lang)
         json.dump(translation_filemap, outfile)
         return translation_filemap
 
-def getTranslationFilemapCache(forceUpdate=False):
+def getTranslationFilemapCache(lang="de",  forceUpdate=False):
     # Enforce update if file does not exist
-    if not os.path.isfile(translationFilemapCacheFilename) or forceUpdate:
-        updateTranslationFilemapCache()
+    filename = translationFilemapCacheFilename(lang)
+    if not os.path.isfile(filename) or forceUpdate:
+        updateTranslationFilemapCache(lang)
     # Read filename cache
-    with open(translationFilemapCacheFilename) as infile:
+    with open(filename) as infile:
         return json.load(infile)
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract')
+    parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract (e.g. de, es)')
     parser.add_argument('-j', '--num-processes', default=1, type=int, help='Number of processes to use for parallel download')
     parser.add_argument('-d', '--delay', default=0, type=float, help='Delay (in seconds) to sleep between fetches for -j 1')
     parser.add_argument('-f', '--force-filemap-update', action="store_true", help='Force updating the filemap')
@@ -128,7 +131,7 @@ if __name__ == "__main__":
 
     # Get map that contains (besides other stuff)
     #  the crowdin ID for a given file
-    translationFilemap = getTranslationFilemapCache(args.force_filemap_update)
+    translationFilemap = getTranslationFilemapCache(args.language, args.force_filemap_update)
 
     # Collect valid downloadable files for parallel processing
     fileinfos = []

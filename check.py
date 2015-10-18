@@ -99,15 +99,18 @@ class HTMLHitRenderer(object):
         self.lintTemplate = self.env.get_template("lint.html")
         # Get timestamp
         self.timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
-        if os.path.isfile("lastdownload.txt"):
-            with open("lastdownload.txt") as infile:
+        #Process lastdownload date (copied to the templated)
+        lastdownloadPath = os.path.join("cache", "lastdownload-{0}.txt".format(lang))
+        if os.path.isfile(lastdownloadPath):
+            with open(lastdownloadPath) as infile:
                 self.downloadTimestamp = infile.read().strip()
         else:
             self.downloadTimestamp = None
         # Initialize translation ID/URL map
         translationFilemapCache = getTranslationFilemapCache()
         self.translationURLs = {
-            lang + "/" + v["path"]: "https://crowdin.com/translate/khanacademy/" + str(v["id"]) + "/enus-" + lang
+            "{0}/{1}".format(lang, v["path"]):
+                "https://crowdin.com/translate/khanacademy/{0}/enus-{1}".format(v["id"], lang)
             for v in translationFilemapCache.values()
         }
     def filepath_to_url(self, filename):
@@ -159,10 +162,10 @@ class HTMLHitRenderer(object):
         }
     def countRuleHitsAboveSeverity(self, ruleHits, severity):
         """In a rule -> hitlist mapping, count the total number of hits above a given severity"""
-        return sum([len(hits) for rule, hits in ruleHits.items() if rule.severity >= severity])
+        return sum((len(hits) for rule, hits in ruleHits.items() if rule.severity >= severity))
     def countRuleHitsAtSeverity(self, ruleHits, severity):
         """In a rule -> hitlist mapping, count the total number of hits above a given severity"""
-        return sum([len(hits) for rule, hits in ruleHits.items() if rule.severity == severity])
+        return sum((len(hits) for rule, hits in ruleHits.items() if rule.severity == severity))
     def writeStatsJSON(self):
         """
         Write a statistics-by-filename JSON to outdir/filestats.sjon
@@ -197,7 +200,7 @@ class HTMLHitRenderer(object):
                           statsByRule=ruleStats, downloadTimestamp=self.downloadTimestamp, filename=filename, translationURLs=self.translationURLs)))
     def renderLintHTML(self):
         "Parse & render lint"
-        lintFilename = "{0}-lint.csv".format(self.lang)
+        lintFilename = os.path.join("cache", "{0}-lint.csv".format(self.lang))
         if os.path.isfile(lintFilename):
             print(black("Rendering lint...", bold=True))
             lintEntries = readLintCSV(lintFilename)
@@ -248,10 +251,9 @@ if __name__ == "__main__":
     if not os.path.isdir(args.outdir):
         os.mkdir(args.outdir)
 
-
     # Import
     print(black("Reading files from %s folder..." % args.language, bold=True))
-    poFiles = readPOFiles(args.language)
+    poFiles = readPOFiles(os.path.join(args.language))
     print(black("Read %d files" % len(poFiles), bold=True))
 
     # Compute hits
@@ -271,9 +273,10 @@ if __name__ == "__main__":
     renderer.writeStatsJSON()
 
     # If data is present, generate subtitle information
-    if os.path.isfile("videos.json"):
+    videosJSONPath = os.path.join("cache", "videos.json")
+    if os.path.isfile(videosJSONPath):
         print (black("Rendering subtitles overview...", bold=True))
-        with open("videos.json") as infile:
+        with open(videosJSONPath) as infile:
             exercises = json.load(infile)
         subtitleTemplate = renderer.env.get_template("subtitles.html")
         writeToFile(os.path.join(args.outdir, "subtitles.html"), subtitleTemplate.render(exercises=exercises))
