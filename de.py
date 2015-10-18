@@ -139,7 +139,8 @@ rules = [
     TranslationConstraintRule("'Inequality' not translated to 'Ungleichung'", r"Inequality", r"Ungleich(ung|heit|zeichen|heitszeichen)", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Accessibility' not translated to 'Barrierefreiheit'", r"Accessibility", r"Barrierefreiheit", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'inverse function' not translated to 'Umkehrfunktion'", r"inverse\s+function", r"Umkehrfunktion", severity=Severity.standard, flags=re.UNICODE | re.IGNORECASE),
-    TranslationConstraintRule("'Triangle' not translated to 'Dreieck'", r"(?<!\\)triangles?", r"Dreieck", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
+    IgnoreByMsgidRegexWrapper(r"TRIANGLES", # Special code for something!?!
+        TranslationConstraintRule("'Triangle' not translated to 'Dreieck'", r"(?<!\\)triangles?", r"Dreieck", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Quadrilateral' not translated to 'Viereck'", r"Quadrilaterals?", r"Viereck", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Pentagon' not translated to 'Fünfeck'", r"\bpentagons?\b", r"Fünfeck", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'Hexagon' not translated to 'Sechseck'", r"\bhexagons?\b", r"Sechseck", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE),
