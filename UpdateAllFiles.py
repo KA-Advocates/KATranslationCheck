@@ -104,7 +104,7 @@ def findExistingPOFiles(lang="de", directory="de"):
 
 def updateTranslationFilemapCache(lang="de"):
     """Re-download the translation filemap cache"""
-    print(black("Updating translation filemap", bold=True))
+    print(black("Updating translation filemap for {0}".format(lang), bold=True))
     filename = translationFilemapCacheFilename(lang)
     with open(filename, "w") as outfile:
         translation_filemap = downloadTranslationFilemap(lang)
