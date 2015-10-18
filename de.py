@@ -112,7 +112,7 @@ rules = [
     IgnoreByMsgidRegexWrapper(r"Lygia\s+Pape", # red bottles = artwork
         SimpleRegexRule("Occurrence of untranslated 'red' (not as color specifier)", r"(?<!\\)(?<!\\color\{)\b[Rr]ed\b(?! Delicious)(?! Robins)(?! Robbins)", severity=Severity.standard)),
     IgnoreByMsgidRegexWrapper(r"(Summer|Tree|Hour|Art|Lots|System|Museum|Institute|University)\s+of\s+(Drawing|Code|Script(ing)?|Life|Webpage|Databases|Problem|Fun|Higher\s+Education|Art|Technology)",
-        IgnoreByMsgidRegexWrapper(r"University\s+of\s+\w+", # Any "University of Maryland" etc
+        IgnoreByMsgidRegexWrapper(r"(University\s+of\s+\w+|Nature of Code|cost of goods sold)", # Any "University of Maryland" etc
             SimpleRegexRule("Occurrence of untranslated 'of'", r"\b[Oo]f\b(?!-)", severity=Severity.info))), #Also allow of inside links etc.
     IgnoreByMsgidRegexWrapper(r"([Gg]reen'?s.+[Tt]heorem|Green Elementary)",
         SimpleRegexRule("Occurrence of untranslated 'green' (not as color specifier)", r"(?<!\\)(?<!Hank )\b[Gg]reen\b", severity=Severity.standard)),
