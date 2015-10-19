@@ -39,7 +39,7 @@ def cleanupTranslatedString(s):
 def importRulesForLanguage(lang, basedir="."):
     """Import ruleset from the language-specific python file"""
     moduleName = "rules.{0}".format(lang)
-    print(black("Reading rules from {0}".format(moduleName)))
+    print(black("Reading rules from {0}".format(moduleName), bold=True))
     langModule = importlib.import_module(moduleName)
     return langModule.rules
 

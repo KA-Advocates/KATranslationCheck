@@ -2,8 +2,9 @@
 # coding: utf-8
 from Rules import *
 from ImageAliases import readImageAliases
+from collections import defaultdict
 
-imageAliases = {}#readImageAliases("177zIAO37SY6xUBUyUE30kn5G_wR7oT-txY8XIN7cecU")
+imageAliases = defaultdict(str) #readImageAliases("177zIAO37SY6xUBUyUE30kn5G_wR7oT-txY8XIN7cecU")
 
 ########################
 ### Initialize rules ###
