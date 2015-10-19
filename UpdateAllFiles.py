@@ -136,7 +136,7 @@ if __name__ == "__main__":
     # Collect valid downloadable files for parallel processing
     fileinfos = []
     for filename, fileinfo in translationFilemap.items():
-        filepath = os.path.join(args.language, fileinfo["path"])
+        filepath = os.path.join("cache", args.language, fileinfo["path"])
         # Create dir if not exists
         try: os.makedirs(os.path.dirname(filepath))
         except OSError as exc:
