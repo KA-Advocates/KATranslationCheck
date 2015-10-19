@@ -102,10 +102,11 @@ class HTMLHitRenderer(object):
         # Initialize translation ID/URL map
         translationFilemapCache = getTranslationFilemapCache()
         self.translationURLs = {
-            "{0}/{1}".format(lang, v["path"]):
+            "cache/{0}/{1}".format(lang, v["path"]):
                 "https://crowdin.com/translate/khanacademy/{0}/enus-{1}".format(v["id"], lang)
             for v in translationFilemapCache.values()
         }
+        print(self.translationURLs)
     def filepath_to_url(self, filename):
         return filename.replace("/", "_")
     def computeRuleHits(self, po, filename="[unknown filename]"):
