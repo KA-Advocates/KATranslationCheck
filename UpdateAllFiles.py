@@ -13,6 +13,7 @@ import time
 import errno
 import os.path
 import datetime
+import functools
 from retry import retry
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
@@ -66,14 +67,14 @@ def downloadTranslationFilemap(lang="de"):
         if v["name"].endswith(".pot")}
 
 @retry(tries=8, delay=5.0)
-def performPOTDownload(argtuple):
+def performPOTDownload(lang, argtuple):
     """
     Explicitly uncurried function that downloads a single Crowdin file
     to a filesystem file. fileid, filepath
     """
     # Extract argument tuple
     fileid, filepath = argtuple
-    urlPrefix = "http://crowdin.khanacademy.org/project/khanacademy/de/%s/" % str(fileid)
+    urlPrefix = "http://crowdin.khanacademy.org/project/khanacademy/{0}/{1}/".format(lang, fileid)
     # Initialize session
     s = getCrowdinSession()
     # Trigger export
@@ -146,13 +147,15 @@ if __name__ == "__main__":
                 raise
         fileid = fileinfo["id"]
         fileinfos.append((fileid, filepath))
+    # Curry the function with the language
+    performDownload = functools.partial(performPOTDownload, args.language)
     # Perform parallel download
     if args.num_processes > 1:
         pool = Pool(args.num_processes)
-        pool.map(performPOTDownload, fileinfos)
+        pool.map(performDownload, fileinfos)
     else:
         for t in fileinfos:
-            performPOTDownload(t)
+            performDownload(t)
             time.sleep(args.delay)
     #Set download timestamp
     timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
