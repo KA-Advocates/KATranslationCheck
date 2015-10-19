@@ -254,7 +254,7 @@ if __name__ == "__main__":
 
     # Compute hits
     print(black("Computing rules...", bold=True))
-    renderer = HTMLHitRenderer(args.outdir)
+    renderer = HTMLHitRenderer(args.outdir, args.language)
     renderer.computeRuleHitsForFileSet(poFiles)
     # Ensure the HUGE po stuff goes out of scope ASAP
     poFiles = None

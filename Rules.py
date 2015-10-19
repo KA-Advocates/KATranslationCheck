@@ -6,6 +6,7 @@ import fnmatch
 from collections import defaultdict
 from enum import IntEnum
 import importlib
+from ansicolor import black
 
 class Severity(IntEnum):
     # Notice should be used for rules where a significant number of unfixable false-positives are expected
@@ -37,7 +38,9 @@ def cleanupTranslatedString(s):
 
 def importRulesForLanguage(lang, basedir="."):
     """Import ruleset from the language-specific python file"""
-    langModule = importlib.import_module("rules.{0}".format(lang))
+    moduleName = "rules.{0}".format(lang)
+    print(black("Reading rules from {0}".format(moduleName)))
+    langModule = importlib.import_module(moduleName)
     return langModule.rules
 
 _extractImgRegex = re.compile(r"(https?://ka-perseus-graphie\.s3\.amazonaws\.com/[0-9a-f]{40,40}\.(png|svg))")
