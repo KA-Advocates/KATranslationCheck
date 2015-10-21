@@ -4,6 +4,7 @@ Official Khan Academy Lint reader
 """
 from collections import namedtuple
 import csv
+import os
 import requests
 import time
 from lxml.html import fromstring
