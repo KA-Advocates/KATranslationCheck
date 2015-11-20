@@ -189,11 +189,12 @@ class DynamicTranslationIdentityRule(Rule):
     """
     def __init__(self, name, regex, negative=False, group=None, severity=Severity.standard, flags=re.UNICODE):
         super().__init__(name, severity)
+        self.regex_str = regex
         self.regex = re.compile(regex, flags)
         self.negative = negative
         self.group = group
     def description(self):
-        return "Matches a match for '%s' if %spresent in the translated string" % (self.regex_orig_str, "NOT " if self.negative else "")
+        return "Matches a match for '%s' if %spresent in the translated string" % (self.regex_str, "NOT " if self.negative else "")
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         matches = self.regex.findall(msgid)
         if not matches: return
