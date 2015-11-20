@@ -28,7 +28,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    # Call args.func, but do not catch AttributeError inside args.func()
     try:
-        args.func(args)
+        args.func
+        err = False
     except AttributeError:
         parser.print_help()
+        err = True
+    if not err:
+        args.func(args)
