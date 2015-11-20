@@ -13,10 +13,10 @@ if __name__ == "__main__":
     # Generic argument
     parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract (e.g. de, es)')
 
-    updateTranslations = subparsers.add_parser('update-translations')
-    updateTranslations.add_argument('-j', '--num-processes', default=16, type=int, help='Number of processes to use for parallel download')
-    updateTranslations.add_argument('-f', '--force-filemap-update', action="store_true", help='Force updating the filemap')
-    updateTranslations.set_defaults(func=updateTranslations)
+    updateTranslationsCmd = subparsers.add_parser('update-translations')
+    updateTranslationsCmd.add_argument('-j', '--num-processes', default=16, type=int, help='Number of processes to use for parallel download')
+    updateTranslationsCmd.add_argument('-f', '--force-filemap-update', action="store_true", help='Force updating the filemap')
+    updateTranslationsCmd.set_defaults(func=updateTranslations)
 
     updateLint = subparsers.add_parser('update-lint')
     updateLint.set_defaults(func=updateLintHandler)
