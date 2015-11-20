@@ -41,6 +41,7 @@ def importRulesForLanguage(lang, basedir="."):
     moduleName = "rules.{0}".format(lang)
     print(black("Reading rules from {0}".format(moduleName), bold=True))
     langModule = importlib.import_module(moduleName)
+    print(black("Found {0} rules for language {1}".format(len(langModule.rules), lang), bold=True))
     return langModule.rules
 
 _extractImgRegex = re.compile(r"(https?://ka-perseus-graphie\.s3\.amazonaws\.com/[0-9a-f]{40,40}\.(png|svg))")
