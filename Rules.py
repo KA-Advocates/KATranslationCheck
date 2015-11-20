@@ -195,6 +195,7 @@ class DynamicTranslationIdentityRule(Rule):
         return "Matches a match for '%s' if %spresent in the translated string" % (self.regex_orig_str, "NOT " if self.negative else "")
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         matches = self.regex.findall(msgid)
+        if not matches: return
         # Apply group filter if enabled
         if self.group is not None:
             matches = [m[self.group] for m in matches]
