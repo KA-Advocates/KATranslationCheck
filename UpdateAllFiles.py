@@ -40,7 +40,7 @@ def getCrowdinSession(credentials):
     password = credentials["password"]
     loginData = {"password": password, "submitted": 1, "redirect": "/profile", "email_as_login": "", "login": username}
     response = s.post("http://crowdin.khanacademy.org/login", data=loginData, stream=False)
-    return
+    return s
 
 @retry(tries=8)
 def downloadTranslationFilemap(lang="de"):
