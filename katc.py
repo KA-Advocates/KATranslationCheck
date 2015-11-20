@@ -24,7 +24,7 @@ if __name__ == "__main__":
     render = subparsers.add_parser('render')
     render.add_argument('-d', '--download', action='store_true', help='Download or update the directory')
     render.add_argument('outdir', nargs='?', default=None, help='The output directory to use (default: output-<lang>)')
-    update.set_defaults(func=performRender)
+    render.set_defaults(func=performRender)
 
     args = parser.parse_args()
 
