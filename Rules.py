@@ -180,6 +180,35 @@ class NegativeTranslationConstraintRule(Rule):
             return "[failed constraint]"
         return None
 
+class DynamicTranslationIdentityRule(Rule):
+    """
+    Enforces that a match to the given regex does is contained in the translated string as-is.
+    This rule can also be used as a negative rule to enforce the match is not present
+    in the translated string.
+    """
+    def __init__(self, name, regex, regexTranslated, negative=False, group=None, severity=Severity.standard, flags=re.UNICODE):
+        super().__init__(name, severity)
+        self.regex = re.compile(regex, flags)
+        self.negative = negative
+        self.group = group
+    def description(self):
+        return "Matches a match for '%s' if %spresent in the translated string" % (self.regex_orig_str, "NOT " if self.negative else "")
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
+        matches = self.regex.findall(msgid)
+        # Apply group filter if enabled
+        if self.group is not None:
+            matches = [m[self.group] for m in matches]
+        # Check individual matches
+        if self.negative:
+            for match in matches:
+                if match in msgstr:
+                    return match
+        else:  # Positive rule
+            for match in matches:
+                if match not in msgstr:
+                    return match
+
+
 class BooleanNotRule(Rule):
     """Apply a boolean NOT to a child rule"""
     def __init__(self, child):
