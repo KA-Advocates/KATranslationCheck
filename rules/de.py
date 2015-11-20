@@ -32,6 +32,7 @@ rules = [
     SimpleRegexRule("Value with embedded dollar symbol", r"\$\s*\\\\?\$\s*\d+([.,]\d+)?\s*\$", severity=Severity.info),
     #Errors in thousands separation
     SimpleRegexRule("Value with multiple or mixed commata or dots", r"(\d+(\.|\{,\})){2,}\d+", severity=Severity.dangerous), #Should be space. Comma without {} ignored.
+    DynamicTranslationIdentityRule("", r"(\d+(\.|\{,\})){2,}\d+", severity=Severity.dangerous), #Should be space. Comma without {} ignored.
     #Dollar not embedded as a symbol 234$ dollar
     SimpleRegexRule("Value suffixed by dollar", r"\d+\$\s*dollars?", severity=Severity.info),
     SimpleRegexRule("Additional spaces after * for italic word", r"(?<!\*)(?<!^)(?<!\w)\*\s+\w+\s+\*(?!\*)", severity=Severity.info), # Need to avoid hit for *kleiner* oder *größer* etc.
