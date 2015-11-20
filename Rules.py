@@ -186,7 +186,7 @@ class DynamicTranslationIdentityRule(Rule):
     This rule can also be used as a negative rule to enforce the match is not present
     in the translated string.
     """
-    def __init__(self, name, regex, regexTranslated, negative=False, group=None, severity=Severity.standard, flags=re.UNICODE):
+    def __init__(self, name, regex, negative=False, group=None, severity=Severity.standard, flags=re.UNICODE):
         super().__init__(name, severity)
         self.regex = re.compile(regex, flags)
         self.negative = negative
