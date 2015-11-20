@@ -19,7 +19,7 @@ if __name__ == "__main__":
     update.set_defaults(func=updateTranslations)
 
     updateLint = subparsers.add_parser('update-lint')
-    update.set_defaults(func=updateLintHandler)
+    updateLint.set_defaults(func=updateLintHandler)
 
     render = subparsers.add_parser('render')
     render.add_argument('-d', '--download', action='store_true', help='Download or update the directory')
