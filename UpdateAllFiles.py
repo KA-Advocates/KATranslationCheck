@@ -24,20 +24,23 @@ def translationFilemapCacheFilename(lang="de"):
 
 def loadUsernamePassword():
     """ """
-    with open("crowdin-credentials.json") as infile:
-        return json.load(infile)
+    try:
+        with open("crowdin-credentials.json") as infile:
+            return json.load(infile)
+    except FileNotFoundError:
+        print(red("Could not find crowdin-credentials.json. Please create that file from crowdin-credentials-template.json!", bold=True))
+
 
 # Globally load credentials
-crowdingCredentials = loadUsernamePassword()
 
 # Perform login
-def getCrowdinSession():
+def getCrowdinSession(credentials):
     s = requests.Session()
-    username = crowdingCredentials["username"]
-    password = crowdingCredentials["password"]
+    username = credentials["username"]
+    password = credentials["password"]
     loginData = {"password": password, "submitted": 1, "redirect": "/profile", "email_as_login": "", "login": username}
     response = s.post("http://crowdin.khanacademy.org/login", data=loginData, stream=False)
-    return s
+    return
 
 @retry(tries=8)
 def downloadTranslationFilemap(lang="de"):
@@ -76,7 +79,8 @@ def performPOTDownload(lang, argtuple):
     fileid, filepath = argtuple
     urlPrefix = "http://crowdin.khanacademy.org/project/khanacademy/{0}/{1}/".format(lang, fileid)
     # Initialize session
-    s = getCrowdinSession()
+    credentials = loadUsernamePassword()
+    s = getCrowdinSession(credentials)
     # Trigger export
     exportResponse = s.get(urlPrefix + "export", headers={"Accept": "application/json"})
     #print(exportResponse.text)
@@ -121,15 +125,7 @@ def getTranslationFilemapCache(lang="de",  forceUpdate=False):
     with open(filename) as infile:
         return json.load(infile)
 
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract (e.g. de, es)')
-    parser.add_argument('-j', '--num-processes', default=1, type=int, help='Number of processes to use for parallel download')
-    parser.add_argument('-d', '--delay', default=0, type=float, help='Delay (in seconds) to sleep between fetches for -j 1')
-    parser.add_argument('-f', '--force-filemap-update', action="store_true", help='Force updating the filemap')
-    args = parser.parse_args()
-
+def updateTranslations(args):
     # Get map that contains (besides other stuff)
     #  the crowdin ID for a given file
     translationFilemap = getTranslationFilemapCache(args.language, args.force_filemap_update)
@@ -156,7 +152,6 @@ if __name__ == "__main__":
     else:
         for t in fileinfos:
             performDownload(t)
-            time.sleep(args.delay)
     #Set download timestamp
     timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
     with open("lastdownload.txt", "w") as outfile:

@@ -56,7 +56,7 @@ def getLatestLintDownloadLink(lang="de"):
             latest = element.get("href")
     return latest
 
-def downloadLatestLint(lang="de"):
+def updateLintFromGoogleGroups(lang="de"):
     url = getLatestLintDownloadLink()
     response = requests.get(url)
     filename = os.path.join("cache", "{0}-lint.csv".format(lang))
@@ -69,5 +69,5 @@ def getCSV(): pass
 if __name__ == "__main__":
     #url = getLatestLintPostURLForLanguage()
     #print(url)
-    downloadLatestLint()
+    updateLintFromGoogleGroups()
     #print(readLintCSV("de-lint.csv"))

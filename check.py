@@ -228,14 +228,7 @@ class HTMLHitRenderer(object):
         shutil.copyfile("templates/katc.css", os.path.join(self.outdir, "katc.css"))
         shutil.copyfile("templates/404.html", os.path.join(self.outdir, "404.html"))
 
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--download', action='store_true', help='Download or update the directory')
-    parser.add_argument('-l', '--language', default="de", help='The language directory to use/extract')
-    parser.add_argument('outdir', nargs='?', default=None, help='The output directory to use (default: output-<lang>)')
-    args = parser.parse_args()
-
+def performRender(args):
     # Download / update if requested
     if args.download:
         download()
