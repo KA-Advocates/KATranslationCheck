@@ -237,11 +237,12 @@ class ExactCopyRule(Rule):
     This can be used, for example, to ensure GUI elements, numbers or URLs are the same in
     both the translated text and the original.
     """
-    def __init__(self, name, regex, severity=Severity.standard, aliases=defaultdict(str), ignore_whitespace=True):
+    def __init__(self, name, regex, severity=Severity.standard, aliases=defaultdict(str), ignore_whitespace=True, group=None):
         super().__init__(name, severity)
         self.regex = re.compile(regex)
         self.regex_str = regex
         self.aliases = aliases
+        self.group = group
         self.ignore_whitespace = ignore_whitespace
     def description(self):
         return "Matches if all instances of '%s' are the same (with %d aliases)" % (self.regex_str, len(self.aliases))
@@ -251,6 +252,10 @@ class ExactCopyRule(Rule):
         # Apply aliases
         origMatches = [self.aliases[x] or x for x in origMatches]
         translatedMatches = [self.aliases[x] or x for x in translatedMatches]
+        # Apply group if 
+        if self.group is not None: # None - Use entire string. No groups must be present in regex
+            origMatches = [m[self.group] for m in origMatches]
+            translatedMatches = [m[self.group] for m in translatedMatches]
         # Apply whitespace filtering
         if self.ignore_whitespace:
             origMatches = [_whitespaceRegex.sub("", x) or x for x in origMatches]
@@ -259,7 +264,7 @@ class ExactCopyRule(Rule):
         try:
             idx = next(idx for idx, (x, y) in
                        enumerate(zip(origMatches, translatedMatches)) if x != y)
-            return "[First expression mismatch at index %d]" % (idx + 1)
+            return "[First expression mismatch at occurrence %d]" % (idx + 1)
         except StopIteration:  # No mismatch
             return None
 
