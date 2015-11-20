@@ -164,7 +164,7 @@ class HTMLHitRenderer(object):
         Write a statistics-by-filename JSON to outdir/filestats.sjon
         """
         # Write file
-        with open(os.path.join(args.outdir, "filestats.json"), "w") as outfile:
+        with open(os.path.join(self.outdir, "filestats.json"), "w") as outfile:
             stats = {
                 filename: {"hits": self.countRuleHitsAboveSeverity(ruleHits, Severity.standard),
                            "warnings": self.countRuleHitsAboveSeverity(ruleHits, Severity.warning),
