@@ -177,6 +177,7 @@ rules = [
         NegativeTranslationConstraintRule("'Post' translated to 'Post' instead of 'Beitrag'", r"\bpost", r"\bpost\b(?!-)", severity=Severity.info, flags=re.UNICODE | re.IGNORECASE)),
     TranslationConstraintRule("'real root(s)' not translated to 'reelle Nullstellen'", r"real\s+roots?", r"reellen?\s+Nullstellen?", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'complex root(s)' not translated to 'komplexe Nullstellen'", r"complex\s+roots?", r"komplexe Nullstellen?", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
+    TranslationConstraintRule("'domain' not translated to 'Definitionsbereich'", r"[Dd]omain", r"Definitionsbereich", severity=Severity.warning, flags=re.UNICODE | re.IGNORECASE),
     TranslationConstraintRule("'DENOMINATOR' not translated to 'DENOMINATOR'", r"DENOMINATOR", r"DENOMINATOR", severity=Severity.warning, flags=re.UNICODE),
     TranslationConstraintRule("'NUMERATOR' not translated to 'NUMERATOR'", r"NUMERATOR", r"NUMERATOR", severity=Severity.warning, flags=re.UNICODE),
     # HTML tags must not be removed. Rules disabled because they don't work.
