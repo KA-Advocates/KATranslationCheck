@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Official Khan Academy Lint reader
 """
@@ -79,6 +80,8 @@ def readAndMapLintEntries(filename):
     for entry in readLintCSV("cache/de-lint.csv"):
         msgid, msgstr, comment, filename = downloadCrowdinById(session, entry.crid)
         #comment = re.sub(__urlRegex, r"<a href=\"\1\">\1</a>", comment)
+        msgid = msgid.replace(" ", "⸱").replace("\t", "→")
+        msgstr = msgstr.replace(" ", "⸱").replace("\t", "→")
         yield LintEntry(entry.date, entry.url,
                         entry.crid, entry.text, msgid, msgstr, comment, filename)
         cnt += 1
