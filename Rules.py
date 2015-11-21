@@ -88,6 +88,9 @@ class Rule(object):
         Yields tuples entry, hit, filename
         """
         for entry in po:
+            # Ignore empty translations (-> untranslated)
+            if not entry.msgstr:
+                continue
             # Ignore strings which are the same orig/msgid
             # This accounts for the fact that we don't know how
             if ignore_untranslated and entry.msgstr == entry.msgid:
