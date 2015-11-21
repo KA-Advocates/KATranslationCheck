@@ -12,6 +12,7 @@ import re
 from lxml.html import fromstring
 from selenium import webdriver
 from ansicolor import black
+from html.parser import HTMLParser
 from UpdateAllFiles import downloadCrowdinById, getCrowdinSession
 
 LintEntry = namedtuple("LintEntry", ["date", "url", "crid", "text",
@@ -69,19 +70,19 @@ def updateLintFromGoogleGroups(lang="de"):
         outfile.write(response.text)
     print(black("Updated %s" % filename, bold=True))
 
-__urlRegex = '(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)'
-
 def readAndMapLintEntries(filename):
     """
     Enrich a list of lint entries with msgid and msgstr information
     """
     session = getCrowdinSession(domain="https://crowdin.com")
     cnt = 0
+    h = HTMLParser()
     for entry in readLintCSV("cache/de-lint.csv"):
         msgid, msgstr, comment, filename = downloadCrowdinById(session, entry.crid)
         #comment = re.sub(__urlRegex, r"<a href=\"\1\">\1</a>", comment)
         msgid = msgid.replace(" ", "⸱").replace("\t", "→")
         msgstr = msgstr.replace(" ", "⸱").replace("\t", "→")
+        comment = h.unescape(comment)
         yield LintEntry(entry.date, entry.url,
                         entry.crid, entry.text, msgid, msgstr, comment, filename)
         cnt += 1
