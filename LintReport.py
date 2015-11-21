@@ -78,7 +78,7 @@ def readAndMapLintEntries(filename):
     cnt = 0
     for entry in readLintCSV("cache/de-lint.csv"):
         msgid, msgstr, comment, filename = downloadCrowdinById(session, entry.crid)
-        comment = re.sub(__urlRegex, r"<a href=\"\1\">\1</a>")
+        comment = re.sub(__urlRegex, r"<a href=\"\1\">\1</a>", comment)
         yield LintEntry(entry.date, entry.url,
                         entry.crid, entry.text, msgid, msgstr, comment, filename)
         cnt += 1
