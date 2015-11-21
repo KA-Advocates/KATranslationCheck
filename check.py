@@ -243,8 +243,9 @@ def performRender(args):
     renderer = HTMLHitRenderer(args.outdir, args.language)
 
     # Generate HTML
-    print(black("Rendering lint...", bold=True))
-    renderer.renderLintHTML()
+    if not args.no_lint:
+        print(black("Rendering lint...", bold=True))
+        renderer.renderLintHTML()
 
     if not args.only_lint:
         # Import

@@ -24,6 +24,7 @@ if __name__ == "__main__":
     render = subparsers.add_parser('render')
     render.add_argument('-d', '--download', action='store_true', help='Download or update the directory')
     render.add_argument('--only-lint', action='store_true', help='Only render the lint hierarchy')
+    render.add_argument('--no-lint', action='store_true', help='Do not render the lint hierarchy')
     render.add_argument('outdir', nargs='?', default=None, help='The output directory to use (default: output-<lang>)')
     render.set_defaults(func=performRender)
 

@@ -176,4 +176,3 @@ if __name__ == "__main__":
     s = getCrowdinSession(domain="https://crowdin.com")
     print(downloadCrowdin(s, "2844363"))
     # Load phrase
-    
