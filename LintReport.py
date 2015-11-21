@@ -72,10 +72,14 @@ def readAndMapLintEntries(filename):
     Enrich a list of lint entries with msgid and msgstr information
     """
     session = getCrowdinSession(domain="https://crowdin.com")
+    cnt = 0
     for entry in readLintCSV("cache/de-lint.csv"):
         msgid, msgstr, comment, filename = downloadCrowdinById(session, entry.crid)
         yield LintEntry(entry.date, entry.url,
                         entry.crid, entry.text, msgid, msgstr, comment, filename)
+        cnt += 1
+        if cnt % 100 == 0:
+            print("Mapped {0} lint entries".format(cnt))
 
 
 if __name__ == "__main__":
