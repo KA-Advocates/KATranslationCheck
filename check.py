@@ -226,6 +226,7 @@ class HTMLHitRenderer(object):
         # Copy static files
         shutil.copyfile("templates/katc.js", os.path.join(self.outdir, "katc.js"))
         shutil.copyfile("templates/katc.css", os.path.join(self.outdir, "katc.css"))
+        shutil.copyfile("templates/robots.txt", os.path.join(self.outdir, "robots.txt"))
         shutil.copyfile("templates/404.html", os.path.join(self.outdir, "404.html"))
 
 def performRender(args):
