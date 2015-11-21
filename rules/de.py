@@ -91,6 +91,7 @@ rules = [
     SimpleRegexRule("Occurrence of untranslated 'denominator'", r"\b[Dd]enominator\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'January'", r"\b[Jj]anuary\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'may'", r"\b[Mm]ay\b", severity=Severity.standard),
+    SimpleRegexRule("Occurrence of untranslated 'zero'", r"\b[Zz]ero\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'diameter'", r"\b[Dd]iameter\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'perimeter'", r"(?<!SHAPE\.)\b[Pp]erimeter\b", severity=Severity.standard),
     SimpleRegexRule("Occurrence of untranslated 'measurement'", r"\b[Mm]easurement\b", severity=Severity.standard),
