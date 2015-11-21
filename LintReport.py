@@ -18,6 +18,9 @@ from UpdateAllFiles import downloadCrowdinById, getCrowdinSession
 LintEntry = namedtuple("LintEntry", ["date", "url", "crid", "text",
                                      "msgid", "msgstr", "comment", "filename"])
 
+class NoResultException(Exception):
+    pass
+
 def readLintCSV(filename):
     "Read a KA lint file"
     with open(filename) as lintin:
@@ -60,6 +63,8 @@ def getLatestLintDownloadLink(lang="de"):
         txt = element.text
         if txt == "Herunterladen":
             latest = element.get("href")
+    if latest is None:
+        raise NoResultException()
     return latest
 
 def updateLintFromGoogleGroups(lang="de"):

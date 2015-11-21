@@ -26,7 +26,7 @@ from ansicolor import red, black, blue
 from jinja2 import Environment, FileSystemLoader
 from UpdateAllFiles import getTranslationFilemapCache
 from Rules import Severity, importRulesForLanguage
-from LintReport import readAndMapLintEntries
+from LintReport import readAndMapLintEntries, NoResultException
 from compressinja.html import HtmlCompressor
 
 def writeToFile(filename, s):
@@ -245,7 +245,17 @@ def performRender(args):
     # Generate HTML
     if not args.no_lint:
         print(black("Rendering lint...", bold=True))
-        renderer.renderLintHTML()
+        success = False
+        for i in range(25):
+            try:
+                renderer.renderLintHTML()
+                success = True
+                break
+            except NoResultException:
+                print(red("Lint fetch error, retrying..."))
+        if not success:
+            print(red("Lint fetch error (retries exhausted)", bold=True))
+
 
     if not args.only_lint:
         # Import
