@@ -91,7 +91,7 @@ def readAndMapLintEntries(filename):
 
 
 if __name__ == "__main__":
-    #url = getLatestLintPostURLForLanguage()
-    #print(url)
-    print(list(getMappedLintEntries("cache/de-lint.json")))
+    url = getLatestLintPostURLForLanguage()
+    print(url)
+    #print(list(getMappedLintEntries("cache/de-lint.json")))
     #print(readLintCSV("de-lint.csv"))
