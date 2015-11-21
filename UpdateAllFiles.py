@@ -164,11 +164,12 @@ def downloadCrowdinById(session, crid):
     try:
         jsondata = response.json()["data"]
         msgid = jsondata["translation"]["text"]
-        comment = jsondata["translation"]["context"]
         msgstr = jsondata["top_suggestion"]
+        comment = jsondata["translation"]["context"]
+        filename = jsondata["translation"]["file_path"][1:]
     except:
-        return "[Retrieval error]", "[Retrieval error]", "[Retrieval error]"
-    return msgid, msgstr, comment
+        return "[Retrieval error]", "[Retrieval error]", "[Retrieval error]", None
+    return msgid, msgstr, comment, filename
 
 if __name__ == "__main__":
     # Create new session

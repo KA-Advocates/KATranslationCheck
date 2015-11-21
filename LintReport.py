@@ -12,14 +12,15 @@ from selenium import webdriver
 from ansicolor import black
 from UpdateAllFiles import downloadCrowdinById, getCrowdinSession
 
-LintEntry = namedtuple("LintEntry", ["date", "url", "crid", "text", "msgid", "msgstr", "comment"])
+LintEntry = namedtuple("LintEntry", ["date", "url", "crid", "text",
+                                     "msgid", "msgstr", "comment", "filename"])
 
 def readLintCSV(filename):
     "Read a KA lint file"
     with open(filename) as lintin:
         reader = csv.reader(lintin, delimiter=',')
         return [LintEntry(row[0], row[1], row[1].rpartition("#")[2],
-                row[2], None, None, None) for row in reader]
+                row[2], None, None, None, None) for row in reader]
 
 def fetchSeleniumFF(url):
     browser = webdriver.Firefox()
@@ -72,9 +73,9 @@ def readAndMapLintEntries(filename):
     """
     session = getCrowdinSession(domain="https://crowdin.com")
     for entry in readLintCSV("cache/de-lint.csv"):
-        msgid, msgstr, comment = downloadCrowdinById(session, entry.crid)
+        msgid, msgstr, comment, filename = downloadCrowdinById(session, entry.crid)
         yield LintEntry(entry.date, entry.url,
-                        entry.crid, entry.text, msgid, msgstr, comment)
+                        entry.crid, entry.text, msgid, msgstr, comment, filename)
 
 
 if __name__ == "__main__":

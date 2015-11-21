@@ -196,7 +196,7 @@ class HTMLHitRenderer(object):
         lintFilename = os.path.join("cache", "{0}-lint.csv".format(self.lang))
         if os.path.isfile(lintFilename):
             print(black("Rendering lint...", bold=True))
-            lintEntries = readAndMapLintEntries(lintFilename)
+            lintEntries = list(readAndMapLintEntries(lintFilename))
             writeToFile(os.path.join(self.outdir, "lint.html"),
                 self.lintTemplate.render(lintEntries=lintEntries))
         else:
@@ -239,23 +239,25 @@ def performRender(args):
     if not os.path.isdir(args.outdir):
         os.mkdir(args.outdir)
 
-    # Import
-    potDir = os.path.join("cache", args.language)
-    print(black("Reading files from {0} folder...".format(potDir), bold=True))
-    poFiles = readPOFiles(potDir)
-    print(black("Read {0} files".format(len(poFiles)), bold=True))
-
-    # Compute hits
-    print(black("Computing rules...", bold=True))
     renderer = HTMLHitRenderer(args.outdir, args.language)
-    renderer.computeRuleHitsForFileSet(poFiles)
-    # Ensure the HUGE po stuff goes out of scope ASAP
-    poFiles = None
+
+    if not args.only_lint:
+        # Import
+        potDir = os.path.join("cache", args.language)
+        print(black("Reading files from {0} folder...".format(potDir), bold=True))
+        poFiles = readPOFiles(potDir)
+        print(black("Read {0} files".format(len(poFiles)), bold=True))
+        # Compute hits
+        print(black("Computing rules...", bold=True))
+        renderer.computeRuleHitsForFileSet(poFiles)
+        # Ensure the HUGE po stuff goes out of scope ASAP
+        poFiles = None
 
     # Generate HTML
     print(black("Rendering HTML...", bold=True))
     renderer.renderLintHTML()
-    renderer.hitsToHTML()
+    if not args.only_lint:
+        renderer.hitsToHTML()
 
     # Generate filestats.json
     print (black("Generating JSON API files...", bold=True))
