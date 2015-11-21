@@ -159,10 +159,16 @@ def updateTranslations(args):
     with open("lastdownload.txt", "w") as outfile:
         outfile.write(timestamp)
 
-def downloadCrowdin(session, crid):
-    h = HTMLParser()
-    response = s.get("https://crowdin.com/translation/phrase?id={0}&project_id=10880&target_language_id=11".format(crid))
-    return h.unescape(response.json()["data"]["translation"]["text"])
+def downloadCrowdinById(session, crid):
+    response = session.get("https://crowdin.com/translation/phrase?id={0}&project_id=10880&target_language_id=11".format(crid))
+    try:
+        jsondata = response.json()["data"]
+        msgid = jsondata["translation"]["text"]
+        comment = jsondata["translation"]["context"]
+        msgstr = jsondata["top_suggestion"]
+    except:
+        return "[Retrieval error]", "[Retrieval error]", "[Retrieval error]"
+    return msgid, msgstr, comment
 
 if __name__ == "__main__":
     # Create new session

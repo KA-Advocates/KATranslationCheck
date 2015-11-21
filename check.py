@@ -26,7 +26,7 @@ from ansicolor import red, black, blue
 from jinja2 import Environment, FileSystemLoader
 from UpdateAllFiles import getTranslationFilemapCache
 from Rules import Severity, importRulesForLanguage
-from LintReport import readLintCSV
+from LintReport import readAndMapLintEntries
 from compressinja.html import HtmlCompressor
 
 def writeToFile(filename, s):
@@ -196,7 +196,7 @@ class HTMLHitRenderer(object):
         lintFilename = os.path.join("cache", "{0}-lint.csv".format(self.lang))
         if os.path.isfile(lintFilename):
             print(black("Rendering lint...", bold=True))
-            lintEntries = readLintCSV(lintFilename)
+            lintEntries = readAndMapLintEntries(lintFilename)
             writeToFile(os.path.join(self.outdir, "lint.html"),
                 self.lintTemplate.render(lintEntries=lintEntries))
         else:

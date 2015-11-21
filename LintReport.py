@@ -10,14 +10,16 @@ import time
 from lxml.html import fromstring
 from selenium import webdriver
 from ansicolor import black
+from UpdateAllFiles import downloadCrowdinById, getCrowdinSession
 
-LintEntry = namedtuple("LintEntry", ["date", "url", "text"])
+LintEntry = namedtuple("LintEntry", ["date", "url", "crid", "text", "msgid", "msgstr", "comment"])
 
 def readLintCSV(filename):
     "Read a KA lint file"
     with open(filename) as lintin:
         reader = csv.reader(lintin, delimiter=',')
-        return [LintEntry(row[0], row[1], row[2]) for row in reader]
+        return [LintEntry(row[0], row[1], row[1].rpartition("#")[2],
+                row[2], None, None, None) for row in reader]
 
 def fetchSeleniumFF(url):
     browser = webdriver.Firefox()
@@ -64,10 +66,19 @@ def updateLintFromGoogleGroups(lang="de"):
         outfile.write(response.text)
     print(black("Updated %s" % filename, bold=True))
 
-def getCSV(): pass
+def readAndMapLintEntries(filename):
+    """
+    Enrich a list of lint entries with msgid and msgstr information
+    """
+    session = getCrowdinSession(domain="https://crowdin.com")
+    for entry in readLintCSV("cache/de-lint.csv"):
+        msgid, msgstr, comment = downloadCrowdinById(session, entry.crid)
+        yield LintEntry(entry.date, entry.url,
+                        entry.crid, entry.text, msgid, msgstr, comment)
+
 
 if __name__ == "__main__":
     #url = getLatestLintPostURLForLanguage()
     #print(url)
-    updateLintFromGoogleGroups()
+    print(list(getMappedLintEntries("cache/de-lint.json")))
     #print(readLintCSV("de-lint.csv"))
