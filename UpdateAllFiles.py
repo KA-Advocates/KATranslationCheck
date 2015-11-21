@@ -17,6 +17,7 @@ import functools
 from retry import retry
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
+from html.parser import HTMLParser
 from ansicolor import red, black, blue, green
 
 def translationFilemapCacheFilename(lang="de"):
@@ -26,7 +27,8 @@ def loadUsernamePassword():
     """ """
     try:
         with open("crowdin-credentials.json") as infile:
-            return json.load(infile)
+            data = json.load(infile)
+            return data["username"], data["password"]
     except FileNotFoundError:
         print(red("Could not find crowdin-credentials.json. Please create that file from crowdin-credentials-template.json!", bold=True))
 
@@ -34,12 +36,13 @@ def loadUsernamePassword():
 # Globally load credentials
 
 # Perform login
-def getCrowdinSession(credentials):
+def getCrowdinSession(credentials=None, domain="http://crowdin.khanacademy.org"):
     s = requests.Session()
-    username = credentials["username"]
-    password = credentials["password"]
+    if credentials is None:
+        credentials = loadUsernamePassword()
+    username, password = credentials
     loginData = {"password": password, "submitted": 1, "redirect": "/profile", "email_as_login": "", "login": username}
-    response = s.post("http://crowdin.khanacademy.org/login", data=loginData, stream=False)
+    response = s.post("{0}/login".format(domain), data=loginData, stream=False)
     return s
 
 @retry(tries=8)
@@ -79,8 +82,7 @@ def performPOTDownload(lang, argtuple):
     fileid, filepath = argtuple
     urlPrefix = "http://crowdin.khanacademy.org/project/khanacademy/{0}/{1}/".format(lang, fileid)
     # Initialize session
-    credentials = loadUsernamePassword()
-    s = getCrowdinSession(credentials)
+    s = getCrowdinSession()
     # Trigger export
     exportResponse = s.get(urlPrefix + "export", headers={"Accept": "application/json"})
     #print(exportResponse.text)
@@ -156,3 +158,15 @@ def updateTranslations(args):
     timestamp = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
     with open("lastdownload.txt", "w") as outfile:
         outfile.write(timestamp)
+
+def downloadCrowdin(session, crid):
+    h = HTMLParser()
+    response = s.get("https://crowdin.com/translation/phrase?id={0}&project_id=10880&target_language_id=11".format(crid))
+    return h.unescape(response.json()["data"]["translation"]["text"])
+
+if __name__ == "__main__":
+    # Create new session
+    s = getCrowdinSession(domain="https://crowdin.com")
+    print(downloadCrowdin(s, "2844363"))
+    # Load phrase
+    
