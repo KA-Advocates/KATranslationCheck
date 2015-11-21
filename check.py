@@ -241,6 +241,10 @@ def performRender(args):
 
     renderer = HTMLHitRenderer(args.outdir, args.language)
 
+    # Generate HTML
+    print(black("Rendering lint...", bold=True))
+    renderer.renderLintHTML()
+
     if not args.only_lint:
         # Import
         potDir = os.path.join("cache", args.language)
@@ -253,15 +257,13 @@ def performRender(args):
         # Ensure the HUGE po stuff goes out of scope ASAP
         poFiles = None
 
-    # Generate HTML
-    print(black("Rendering HTML...", bold=True))
-    renderer.renderLintHTML()
-    if not args.only_lint:
+        # Generate HTML
+        print(black("Rendering HTML...", bold=True))
         renderer.hitsToHTML()
 
-    # Generate filestats.json
-    print (black("Generating JSON API files...", bold=True))
-    renderer.writeStatsJSON()
+        # Generate filestats.json
+        print (black("Generating JSON API files...", bold=True))
+        renderer.writeStatsJSON()
 
     # If data is present, generate subtitle information
     videosJSONPath = os.path.join("cache", "videos.json")
