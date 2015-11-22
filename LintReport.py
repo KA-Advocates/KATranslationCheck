@@ -87,7 +87,7 @@ def readAndMapLintEntries(filename):
         #comment = re.sub(__urlRegex, r"<a href=\"\1\">\1</a>", comment)
         msgid = msgid.replace(" ", "⸱").replace("\t", "→")
         msgstr = msgstr.replace(" ", "⸱").replace("\t", "→")
-        comment = h.unescape(comment)
+        comment = h.unescape(comment).replace("<a href=", "<a target=\"_blank\" href=")
         yield LintEntry(entry.date, entry.url,
                         entry.crid, entry.text, msgid, msgstr, comment, filename)
         cnt += 1
