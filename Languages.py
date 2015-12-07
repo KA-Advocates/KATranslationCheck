@@ -2,7 +2,7 @@
 import requests
 import re
 
-def findLanguages():
+def findAllLanguages():
     "Find a list of Crowdin language codes to which KA is translated to"
     response = requests.get("https://crowdin.com/project/khanacademy")
     txt = response.text
@@ -10,4 +10,4 @@ def findLanguages():
         yield match
 
 if __name__ == "__main__":
-    print(list(findLanguages()))
+    print(list(findAllLanguages()))

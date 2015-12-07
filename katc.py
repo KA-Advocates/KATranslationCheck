@@ -16,6 +16,7 @@ if __name__ == "__main__":
     updateTranslationsCmd = subparsers.add_parser('update-translations')
     updateTranslationsCmd.add_argument('-j', '--num-processes', default=16, type=int, help='Number of processes to use for parallel download')
     updateTranslationsCmd.add_argument('-f', '--force-filemap-update', action="store_true", help='Force updating the filemap')
+    updateTranslationsCmd.add_argument('-a', '--all-languages', action="store_true", help='Download all languages')
     updateTranslationsCmd.set_defaults(func=updateTranslations)
 
     updateLint = subparsers.add_parser('update-lint')

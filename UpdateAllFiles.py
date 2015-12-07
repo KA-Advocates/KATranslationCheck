@@ -18,6 +18,7 @@ from retry import retry
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
 from html.parser import HTMLParser
+from Languages import findAllLanguages
 from ansicolor import red, black, blue, green
 
 def translationFilemapCacheFilename(lang="de"):
@@ -127,7 +128,17 @@ def getTranslationFilemapCache(lang="de",  forceUpdate=False):
     with open(filename) as infile:
         return json.load(infile)
 
+
 def updateTranslations(args):
+    if args.all_languages:
+        for language in findAllLanguages():
+            print(green("Downloading language {0}".format(language), bold=True))
+            args.language = language
+            updateTranslation(args)
+    else: # Single language
+        updateTranslation(args)
+
+def updateTranslation(args):
     # Get map that contains (besides other stuff)
     #  the crowdin ID for a given file
     translationFilemap = getTranslationFilemapCache(args.language, args.force_filemap_update)
