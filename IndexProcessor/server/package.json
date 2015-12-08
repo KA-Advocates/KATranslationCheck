@@ -1,0 +1,14 @@
+{
+  "name": "polyglott-server",
+  "version": "1.0.0",
+  "description": "Khan Academy Polyglott Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": ">= 4.10"
+  },
+  "author": "Uli Köhler",
+  "license": "Apache-2.0"
+}
