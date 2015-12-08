@@ -2,12 +2,13 @@
 module POParser where
 
 import Prelude hiding (takeWhile)
-import Data.Attoparsec.ByteString
-import Data.Attoparsec.ByteString.Char8 hiding (takeWhile, skipWhile)
+import Data.Attoparsec.Text.Lazy hiding (skipWhile)
 import qualified Data.Text.Encoding as TE
-import Data.Text(Text)
+import qualified Data.Text.Lazy as LT
+import Data.Text (Text)
 import Data.Word
-import Data.ByteString (unsnoc, ByteString)
+import Data.Monoid
+import Data.ByteString (ByteString)
 import Control.Applicative
 import Control.Monad
 import Data.Maybe
@@ -37,17 +38,17 @@ poToSimple _ = Nothing
 maybeOption :: Parser a -> Parser (Maybe a)
 maybeOption p = option Nothing (Just <$> p)
 
-takeTillEOL :: Parser ByteString
+takeTillEOL :: Parser Text
 takeTillEOL = takeWhile (not . isEndOfLine)
 
-parseKeyedLine :: ByteString -> Parser Text
+parseKeyedLine :: Text -> Parser Text
 parseKeyedLine key = do
   void (string key) <?> "Line key"
   skipSpace
   char '"' <?> "Opening Qutotation mark"
   val <- takeTillEOL
   endOfLine <?> "EOL"
-  return $ TE.decodeUtf8 $ fromMaybe "" $ (fst <$> unsnoc val)
+  return $ T.dropEnd 1 val
 
 -- Parse lines of the form msgstr[n] "..."
 parseMsgstrPlural :: Parser (Int, Text)
@@ -58,8 +59,7 @@ parseMsgstrPlural = do
   char '"' <?> "Opening Qutotation mark"
   val <- takeTillEOL
   endOfLine <?> "EOL"
-  let txt = TE.decodeUtf8 $ fromMaybe "" $ (fst <$> unsnoc val)
-  return (n, txt)
+  return (n, T.dropEnd 1 val)
 
 -- Parses a POT line 
 lineWithExtraLines :: Parser Text -> Parser Text
@@ -78,7 +78,7 @@ msgstrPluralLines =
     in many singlePlural
 
 escapedTextLine :: Parser Text
-escapedTextLine = char '"' *> (TE.decodeUtf8 <$> takeTillEOL) <* endOfLine
+escapedTextLine = char '"' *> takeTillEOL <* endOfLine
 
 nameP :: String -> Parser a -> Parser a
 nameP str p = p <?> str
@@ -88,7 +88,7 @@ commentLine = nameP "comment line" $ do
     char '#' <?> "Line start hash"
     -- Skip space but not newline
     void $ many (char ' ')
-    txt <- TE.decodeUtf8 <$> takeTillEOL
+    txt <- takeTillEOL
     endOfLine <?> "EOF"
     return txt
 
@@ -108,5 +108,9 @@ poRecord = do
 poFile :: Parser [PORecord]
 poFile = many1 poRecord <?> "PO results"
 
-parsePOFile :: ByteString -> Either String [PORecord]
-parsePOFile = parseOnly poFile
+parsePOFile :: LT.Text -> Either Text [PORecord]
+parsePOFile txt =
+  case parse poFile txt of
+    Fail _ [] err   -> Left $ T.pack err
+    Fail _ ctxs err -> Left (T.intercalate " > " (map T.pack ctxs) <> ": " <> T.pack err)
+    Done _ a        -> Right a

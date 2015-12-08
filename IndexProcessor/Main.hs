@@ -4,10 +4,15 @@ import Control.Applicative
 import Control.Monad
 import qualified Data.ByteString.Char8 as B
 import Data.ByteString.Char8 (ByteString)
+import qualified Data.ByteString.Lazy as LB
 import qualified Data.Text as T
+import qualified Data.Text.IO as TIO
 import Data.Text (Text)
+import qualified Data.Text.Lazy.IO as LTIO
+import qualified Data.Text.Lazy as LT
 import Data.Maybe
 import Data.Aeson
+import Control.DeepSeq (force)
 import System.FilePath.Posix
 import Data.Either.Combinators
 import Control.Concurrent.Async
@@ -22,10 +27,10 @@ type TranslationMap = M.Map Text LanguageMap
 type TranslationMapIndex = M.Map Text Text
 
 processPOFile :: FilePath -> IO [(Text, Text)]
-processPOFile fp = processPOData <$> B.readFile fp
+processPOFile fp = processPOData <$> LTIO.readFile fp
 
 -- Process POT file content, search for titles and return [(msgid, msgstr)]
-processPOData :: ByteString -> [(Text, Text)]
+processPOData :: LT.Text -> [(Text, Text)]
 processPOData bs =
     let allowedTypes = ["Title of topic"] -- "Description of topic"
         test a = any (\t -> T.isInfixOf t a) allowedTypes
@@ -42,14 +47,15 @@ processPODirectory dir = do
     files <- listFilesRecursive dir
     concat <$> mapConcurrently processPOFile files
 
+forConcurrently :: [a] -> (a -> IO b) -> IO [b]
 forConcurrently = flip mapConcurrently
 
 -- Process a directory of PO files
 processPODirectories :: FilePath -> [Text] -> IO [TranslationMap]
-processPODirectories dir langs = forConcurrently langs $ \lang -> do
+processPODirectories dir langs = forM langs $ \lang -> do
         let curdir = dir </> T.unpack lang
         results <- processPODirectory curdir
-        return $ poDirResultToTranslationMap lang results
+        return $ force $ poDirResultToTranslationMap lang results
 
 poDirResultToTranslationMap :: Text -> [(Text, Text)] -> TranslationMap
 poDirResultToTranslationMap lang results =
@@ -70,5 +76,6 @@ main = do
     results <- processPODirectories "../cache" ["de", "fr", "nl", "pt-BR", "ru"]
     let tm = foldr1 unionTranslationMap results
     let index = buildInvertedIndex tm
-    print $ encode index
+    LB.writeFile "TranslationMap.json" $ encode tm
+    LB.writeFile "TranslationIndex.json" $ encode index
     
