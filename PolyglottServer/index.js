@@ -1,8 +1,8 @@
 var express = require('express')
 var app = express()
 
-var TranslationIndex = require('TranslationIndex.json');
-var TranslationMap = require('TranslationMap.json');
+var TranslationIndex = require('./TranslationIndex.json');
+var TranslationMap = require('./TranslationMap.json');
 
 app.get('/translate.json', function (req, res) {
     var key = req.query.s;
@@ -10,6 +10,7 @@ app.get('/translate.json', function (req, res) {
     var result = TranslationMap[engkey];
     //Inject english version
     result.en = engkey;
+    //Return reult as JSON
     res.json(result);
 })
 
