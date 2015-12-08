@@ -52,7 +52,7 @@ forConcurrently = flip mapConcurrently
 
 -- Process a directory of PO files
 processPODirectories :: FilePath -> [Text] -> IO [TranslationMap]
-processPODirectories dir langs = forM langs $ \lang -> do
+processPODirectories dir langs = forConcurrently langs $ \lang -> do
         let curdir = dir </> T.unpack lang
         results <- processPODirectory curdir
         return $ force $ poDirResultToTranslationMap lang results
@@ -73,7 +73,7 @@ buildInvertedIndex tm =
 
 main :: IO ()
 main = do
-    results <- processPODirectories "../cache" ["de", "fr", "nl", "pt-BR", "ru"]
+    results <- processPODirectories "../cache" ["de", "fr", "nl", "pt-BR", "ru", "hr", "ro", "pl", "sv-SE", "nn-NO", "es"]
     let tm = foldr1 unionTranslationMap results
     let index = buildInvertedIndex tm
     LB.writeFile "TranslationMap.json" $ encode tm
