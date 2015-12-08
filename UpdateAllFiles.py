@@ -8,6 +8,7 @@ Non-present files will NOT be updated.
 import requests
 import json
 import re
+import gc
 import os
 import time
 import errno
@@ -135,6 +136,8 @@ def updateTranslations(args):
             print(green("Downloading language {0}".format(language), bold=True))
             args.language = language
             updateTranslation(args)
+            # Cleanup objects (especially the pool) left from last language
+            gc.collect()
     else: # Single language
         updateTranslation(args)
 
