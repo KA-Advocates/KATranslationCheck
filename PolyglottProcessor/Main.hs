@@ -68,7 +68,7 @@ unionTranslationMap = M.unionWith M.union
 buildInvertedIndex :: TranslationMap -> TranslationMapIndex
 buildInvertedIndex tm =
     let f :: (Text, M.Map Text Text) -> [(Text, Text)]
-        f (k, vals) = map (\(_, v) -> (v, k)) $ M.assocs vals -- Ignore language
+        f (k, vals) = (k, k) : map (\(_, v) -> (v, k)) $ M.assocs vals -- Ignore language
     in M.fromList $ concatMap f $ M.assocs tm 
 
 main :: IO ()
