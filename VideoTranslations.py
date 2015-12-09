@@ -59,7 +59,11 @@ if __name__ == "__main__":
 
     videoMap = defaultdict(dict)
     for language in languages:
-        langMap = fetchVideoMap(pool, language)
+        try:
+            langMap = fetchVideoMap(pool, language)
+        except:
+            print(red("Failed downloading language {0}".format(language), bold=True))
+            continue
         # Insert results into main language map
         for vid, url in langMap.items():
             videoMap[vid][language] = url
@@ -69,7 +73,7 @@ if __name__ == "__main__":
         url = fetchOriginalVideoURL(url)
         videoMap[vid]["en"] = url
 
-    with open("videomap.json", "w") as outfile:
+    with open("VideoMap.json", "w") as outfile:
         json.dump(videoMap, outfile)
     print(black("Writing JSON videomap", bold=True))
     
