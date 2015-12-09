@@ -32,7 +32,7 @@ processPOFile fp = processPOData <$> LTIO.readFile fp
 -- Process POT file content, search for titles and return [(msgid, msgstr)]
 processPOData :: LT.Text -> [(Text, Text)]
 processPOData bs =
-    let allowedTypes = ["Title of topic"] -- "Description of topic"
+    let allowedTypes = ["Title of topic", "Title of video"] -- "Description of topic"
         test a = any (\t -> T.isInfixOf t a) allowedTypes
         poResult = fromRight [] $ parsePOFile bs
         poEntries = mapMaybe poToSimple $ poResult
@@ -68,7 +68,7 @@ unionTranslationMap = M.unionWith M.union
 buildInvertedIndex :: TranslationMap -> TranslationMapIndex
 buildInvertedIndex tm =
     let f :: (Text, M.Map Text Text) -> [(Text, Text)]
-        f (k, vals) = (k, k) : map (\(_, v) -> (v, k)) $ M.assocs vals -- Ignore language
+        f (k, vals) = (k, k) : (map (\(_, v) -> (v, k)) $ M.assocs vals) -- Ignore language
     in M.fromList $ concatMap f $ M.assocs tm 
 
 main :: IO ()
