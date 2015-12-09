@@ -22,17 +22,13 @@ app.get('/translate.json', function (req, res) {
 app.get('/videos.json', function (req, res) {
     var key = req.query.id;
     try {
-        var engkey = VideoMap[key];
-        var result = TranslationMap[engkey];
-        //Inject english version
-        result.en = engkey;
+        var videos = VideoMap[key];
         res.json(result);
     } catch(err) {
         //Not found -> Empty result
         res.json({})
     }
 })
-
 
 var port = 7160
 console.log("Starting server on port " + port)

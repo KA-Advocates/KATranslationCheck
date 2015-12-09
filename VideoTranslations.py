@@ -68,7 +68,7 @@ if __name__ == "__main__":
         for vid, url in langMap.items():
             videoMap[vid][language] = url
 
-    # Fetch all english videos
+    # Fetch all english video URLs
     for vid in allVideoIDs:
         url = fetchOriginalVideoURL(url)
         videoMap[vid]["en"] = url
