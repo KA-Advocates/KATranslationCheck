@@ -28,6 +28,7 @@ if __name__ == "__main__":
         .format(len(exercises)), bold=True))
     pool = Pool(32)
     exVideos = pool.map(getExerciseVideos, [e["name"] for e in exercises])
+    with open("fo.json","w") as outf:json.dump(exVideos, outf)
     # Perform mapping
     print(black("Mapping videos...", bold=True))
     result = []
