@@ -70,8 +70,11 @@ if __name__ == "__main__":
 
     # Fetch all english video URLs
     for vid in allVideoIDs:
-        url = fetchOriginalVideoURL(url)
-        videoMap[vid]["en"] = url
+        try:
+            url = fetchOriginalVideoURL(url)
+            videoMap[vid]["en"] = url
+        except:
+            print(red("Failed downloading original video URL {0}".format(vi), bold=True))
 
     with open("VideoMap.json", "w") as outfile:
         json.dump(videoMap, outfile)
