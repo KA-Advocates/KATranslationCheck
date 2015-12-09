@@ -3,7 +3,7 @@ var app = express()
 
 var TranslationIndex = require('./TranslationIndex.json');
 var TranslationMap = require('./TranslationMap.json');
-var VideoMap     = require('./VideoMap.json');
+var VideoMap = require('./VideoMap.json');
 
 app.get('/translate.json', function (req, res) {
     var key = req.query.s;
@@ -23,9 +23,10 @@ app.get('/videos.json', function (req, res) {
     var key = req.query.id;
     try {
         var videos = VideoMap[key];
-        res.json(result);
+        res.json(videos);
     } catch(err) {
         //Not found -> Empty result
+        console.log(err)
         res.json({})
     }
 })
