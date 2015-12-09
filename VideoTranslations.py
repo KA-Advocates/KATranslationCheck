@@ -74,7 +74,7 @@ if __name__ == "__main__":
             url = fetchOriginalVideoURL(url)
             videoMap[vid]["en"] = url
         except:
-            print(red("Failed downloading original video URL {0}".format(vi), bold=True))
+            print(red("Failed downloading original video URL {0}".format(vid), bold=True))
 
     with open("VideoMap.json", "w") as outfile:
         json.dump(videoMap, outfile)
