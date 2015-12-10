@@ -4,12 +4,18 @@ Dubbed video mapping code
 """
 import requests
 import re
+import sys
 import json
 from ansicolor import black, red
 import functools
 from collections import defaultdict
 from Languages import findAllLanguages
 from multiprocessing import Pool
+import csv
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 def fetchVideos(lang):
     res = requests.get("https://www.khanacademy.org/api/internal/translate_now?lang={0}".format(lang))
@@ -50,7 +56,26 @@ def fetchVideoMap(pool, lang):
              for videoId, url in zip(dubbedVideoIDs, videoURLs)
              if url is not None}
 
+#Domain,Subject,Topic,Tutorial,Transcript,en,ar,title,slug,duration,en_date_added,ar_date_added,TEST,LIVE
+def fetchVideoTranslationsCSV(lang):
+    response = requests.get("https://www.khanacademy.org/translations/videos/{0}_all_videos.csv".format(lang))
+    sio = StringIO(response.text)
+    reader = csv.reader(sio)
+    for row in reader:
+        try:
+            slug = row[8]
+            vid = row[6]
+            # Ignore non translated videos
+            if not vid: continue
+            vid = "https://www.youtube.com/watch?v={0}".format()
+            print(vid + "," + slug)
+            ###yield(vid, slug)
+        except IndexError:
+            continue
+
 if __name__ == "__main__":
+    fetchVideoTranslationsCSV("de")
+    sys.exit(1)
     pool = Pool(32)
     languages = findAllLanguages()
 
