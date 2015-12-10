@@ -18,15 +18,18 @@ except ImportError:
     from io import StringIO
 
 def fetchVideos(lang):
+    "Fetch a list of videos for a given language"
     res = requests.get("https://www.khanacademy.org/api/internal/translate_now?lang={0}".format(lang))
     json = res.json()
     return json["nodes"]["videos"]
 
 def findDubbedVideos(lang):
+    "Find only videos which are dubbed"
     videos = fetchVideos(lang)
     return [k for k, v in videos.items() if v["dubbed"]]
 
 def fetchOriginalVideoURL(vid):
+    "Depreated: Fix original video ID for a slug"
     response = requests.get("https://www.khanacademy.org/api/v1/videos/{0}".format(vid)).json()
     # Strip off extra YT attributes
     return response["url"].partition("&")[0].replace("http:", "https:")
@@ -34,6 +37,7 @@ def fetchOriginalVideoURL(vid):
 timedtextRE = re.compile(r"^https?://www\.youtube\.com/timedtext_video\?v=(.*)$")
 
 def getTranslatedVideoId(vid, lang):
+    "Deprecated: Find redirect for a specific video ID"
     url = "https://www.khanacademy.org/translate/videos/{0}/subtitle?lang={1}&dub=1".format(vid, lang)
     response = requests.get(url, allow_redirects=False)
     location = response.headers["location"]
@@ -43,6 +47,7 @@ def getTranslatedVideoId(vid, lang):
     else: return None
 
 def fetchVideoMap(pool, lang):
+    "Deprecated: Fetch individual video dubs"
     print(black("Fetching dubbed video list for lang {0}".format(lang), bold=True))
     dubbedVideoIDs = findDubbedVideos(lang)
 
@@ -61,45 +66,36 @@ def fetchVideoTranslationsCSV(lang):
     response = requests.get("https://www.khanacademy.org/translations/videos/{0}_all_videos.csv".format(lang))
     sio = StringIO(response.text)
     reader = csv.reader(sio)
+    result = []
     for row in reader:
         try:
-            slug = row[8]
-            vid = row[6]
+            slug, orig_vid, vid = row[8], row[5], row[6]
             # Ignore non translated videos
             if not vid: continue
-            vid = "https://www.youtube.com/watch?v={0}".format()
-            print(vid + "," + slug)
-            ###yield(vid, slug)
+            url_tpl = "https://www.youtube.com/watch?v={0}"
+            url = url_tpl.format(vid)
+            orig_url = url_tpl.format(orig_vid)
+            result.append((slug, url, orig_url))
         except IndexError:
             continue
+    return result
 
 if __name__ == "__main__":
-    fetchVideoTranslationsCSV("de")
-    sys.exit(1)
-    pool = Pool(32)
-    languages = findAllLanguages()
+    pool = Pool(48)
+    languages = list(sorted(list(findAllLanguages())))
 
     # Fetch all video IDs (i.e. all english videos)
     allVideoIDs = list(fetchVideos("de").keys())
 
-    videoMap = defaultdict(dict)
-    for language in languages:
-        try:
-            langMap = fetchVideoMap(pool, language)
-        except:
-            print(red("Failed downloading language {0}".format(language), bold=True))
-            continue
-        # Insert results into main language map
-        for vid, url in langMap.items():
-            videoMap[vid][language] = url
+    print(black("Fetching language videomaps", bold=True))
+    langresults = pool.map(fetchVideoTranslationsCSV, languages)
 
-    # Fetch all english video URLs
-    for vid in allVideoIDs:
-        try:
-            url = fetchOriginalVideoURL(url)
-            videoMap[vid]["en"] = url
-        except:
-            print(red("Failed downloading original video URL {0}".format(vid), bold=True))
+    videoMap = defaultdict(dict)
+    for language, langresult in zip(languages, langresults):
+        # Insert results into main language map
+        for slug, url, orig_url in langresult:
+            videoMap[slug][language] = url
+            videoMap[slug]["en"] = orig_url
 
     with open("VideoMap.json", "w") as outfile:
         json.dump(videoMap, outfile)
