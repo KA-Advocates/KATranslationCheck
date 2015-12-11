@@ -27,12 +27,11 @@ type TranslationMap = M.Map Text LanguageMap
 type TranslationMapIndex = M.Map Text Text
 
 -- Process POT file content, search for titles and return [(msgid, msgstr)]
-processPOData :: LT.Text -> [(Text, Text)]
-processPOData bs =
+processPOData :: [PORecord] -> [(Text, Text)]
+processPOData podata =
     let allowedTypes = ["Title of topic", "Title of video", "Description of topic", "Description of video"]
         test a = any (\t -> T.isInfixOf t a) allowedTypes
-        poResult = fromRight [] $ parsePOFile bs
-        poEntries = mapMaybe poToSimple $ poResult
+        poEntries = mapMaybe poToSimple podata
         filteredPO = filter (test . simplePOComment) $ poEntries
         filteredPO2 = filter (not . T.null . simplePOMsgstr) $ filteredPO
         toTuple r = (simplePOMsgid r, simplePOMsgstr r)
@@ -42,7 +41,7 @@ processPOData bs =
 processPODirectory :: FilePath -> IO [(Text, Text)]
 processPODirectory dir = do
     files <- listFilesRecursive dir
-    concat <$> mapConcurrently processPOFile files
+    concat <$> mapConcurrently (\f -> processPOData <$> parsePOFile f) files
 
 forConcurrently :: [a] -> (a -> IO b) -> IO [b]
 forConcurrently = flip mapConcurrently
