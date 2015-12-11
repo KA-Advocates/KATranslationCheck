@@ -26,9 +26,6 @@ type TranslationMap = M.Map Text LanguageMap
 -- Index for a translations map, maps translation to the english version (which you can lookup in the main map)
 type TranslationMapIndex = M.Map Text Text
 
-processPOFile :: FilePath -> IO [(Text, Text)]
-processPOFile fp = processPOData <$> LTIO.readFile fp
-
 -- Process POT file content, search for titles and return [(msgid, msgstr)]
 processPOData :: LT.Text -> [(Text, Text)]
 processPOData bs =

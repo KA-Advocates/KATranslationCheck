@@ -10,10 +10,12 @@ import Data.Word
 import Data.Monoid
 import Data.ByteString (ByteString)
 import Control.Applicative
+import Data.Either
 import Control.Monad
 import Data.Maybe
 import Data.Either
 import qualified Data.Text as T
+import qualified Data.Text.Lazy.IO as LTIO
 
 data PORecord = PORecord {
         poComment :: Text,
@@ -108,9 +110,15 @@ poRecord = do
 poFile :: Parser [PORecord]
 poFile = many1 poRecord <?> "PO results"
 
-parsePOFile :: LT.Text -> Either Text [PORecord]
-parsePOFile txt =
+parsePOText :: LT.Text -> Either Text [PORecord]
+parsePOText txt =
   case parse poFile txt of
     Fail _ [] err   -> Left $ T.pack err
     Fail _ ctxs err -> Left (T.intercalate " > " (map T.pack ctxs) <> ": " <> T.pack err)
     Done _ a        -> Right a
+
+-- ^ Parse a PO file or fail
+parsePOFile :: FilePath -> IO [PORecord]
+parsePOFile fp =
+  let filtEither = either (\msg -> error $ "Can't parse PO file in " ++ fp ++ ": " ++ T.unpack msg) id
+  in filtEither . parsePOText <$> LTIO.readFile fp

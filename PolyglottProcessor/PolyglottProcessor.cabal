@@ -21,6 +21,6 @@ executable PolyglottProcessor
   -- other-modules:       
   other-extensions:    OverloadedStrings
   build-depends:       base >=4.6 && <4.7, attoparsec >=0.12 && <0.13, text >=1.2 && <1.3, bytestring >=0.10.4 && <0.11, async >=2.0 && <2.1, extra >= 1.4, either >= 4.0, containers >= 0.5, filepath >= 1.0, aeson >= 0.7.0, deepseq,
-                       data-default, http-conduit, regex-tdfa
+                       data-default, http-conduit, regex-tdfa, regex-tdfa-text
   -- hs-source-dirs:      
   default-language:    Haskell2010
