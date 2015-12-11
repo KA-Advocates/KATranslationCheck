@@ -32,7 +32,7 @@ processPOFile fp = processPOData <$> LTIO.readFile fp
 -- Process POT file content, search for titles and return [(msgid, msgstr)]
 processPOData :: LT.Text -> [(Text, Text)]
 processPOData bs =
-    let allowedTypes = ["Title of topic", "Title of video", "Description of topic"]
+    let allowedTypes = ["Title of topic", "Title of video", "Description of topic", "Description of video"]
         test a = any (\t -> T.isInfixOf t a) allowedTypes
         poResult = fromRight [] $ parsePOFile bs
         poEntries = mapMaybe poToSimple $ poResult
