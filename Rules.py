@@ -378,7 +378,6 @@ class TextListRule(Rule):
     """
     def __init__(self, name, filename, severity=Severity.standard, flags=re.UNICODE):
         super().__init__(name, severity)
-        self.re = re.compile(regex, flags)
         self.filename = filename
         self.regexes = []
         # Check if file exists
