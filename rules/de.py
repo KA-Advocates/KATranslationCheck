@@ -13,7 +13,7 @@ imageAliases = readImageAliases("177zIAO37SY6xUBUyUE30kn5G_wR7oT-txY8XIN7cecU")
 # Currently hardcoded for DE language
 rules = [
     #Wikipedia-listed typos
-    TextListRule("Wikipedia-listed typo", "cache/de-typos.txt", severity=severity.stanard),
+    TextListRule("Wikipedia-listed typo", "cache/de-typos.txt", severity=Severity.standard),
     #Coordinate separated by comma instead of |
     SimpleRegexRule("Comma in coordinate (| required)", r"\$\(-?\d+([\.,]\d+)?\s*,\s*-?\d+([\.,]\d+)?\)\$", severity=Severity.warning),
     SimpleRegexRule("Semicolon in coordinate (| required)", r"\$\(-?\d+([\.,]\d+)?\s*\;\s*-?\d+([\.,]\d+)?\)\$", severity=Severity.warning),
