@@ -386,6 +386,8 @@ class TextListRule(Rule):
             with open(filename) as infile:
                 for line in infile:
                     rgx = line.strip().replace(" ", r"\s+")
+                    #Don't match in the middle of a word
+                    rgx = "\\b{0}\\b".format(rgx)
                     self.regexes.append(re.compile(rgx, flags=flags))
         else:  # File does not exist
             print(red("Unable to find text list file %s" % filename, bold=True))
