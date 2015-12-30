@@ -17,4 +17,6 @@ def fetchAllWikipediaMisspellings():
 
 if __name__ == "__main__":
     with open("cache/de-typos.txt", "w") as outfile:
-        outfile.write("\n".join(list(fetchAllWikipediaMisspellings())))
+        typos = list(fetchAllWikipediaMisspellings())
+        print("Found {0} typos".format(len(typos)))
+        outfile.write("\n".join(typos))
