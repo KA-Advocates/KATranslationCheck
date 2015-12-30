@@ -195,7 +195,6 @@ class HTMLHitRenderer(object):
         "Parse & render lint"
         lintFilename = os.path.join("cache", "{0}-lint.csv".format(self.lang))
         if os.path.isfile(lintFilename):
-            print(black("Rendering lint...", bold=True))
             lintEntries = list(readAndMapLintEntries(lintFilename))
             writeToFile(os.path.join(self.outdir, "lint.html"),
                 self.lintTemplate.render(lintEntries=lintEntries))
