@@ -6,7 +6,7 @@ import fnmatch
 from collections import defaultdict
 from enum import IntEnum
 import importlib
-from ansicolor import black
+from ansicolor import black, red
 
 class Severity(IntEnum):
     # Notice should be used for rules where a significant number of unfixable false-positives are expected
@@ -98,8 +98,7 @@ class Rule(object):
             # Translated string cleanup
             msgstr = cleanupTranslatedString(entry.msgstr)
             # Apply the rule
-            hit = self(msgstr, entry.msgid, entry.tcomment, filename=filename)
-            if hit:
+            for hit in self(msgstr, entry.msgid, entry.tcomment, filename=filename):
                 #Find images in both original and new string
                 origImages = [h[0] for h in _extractImgRegex.findall(entry.msgid)]
                 translatedImages = [h[0] for h in _extractImgRegex.findall(entry.msgstr)]
@@ -119,8 +118,7 @@ class SimpleRegexRule(Rule):
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         hit = self.re.search(msgstr)
         if hit:
-            return hit.group(0)
-        return None
+            yield hit.group(0)
 
 class SimpleSubstringRule(Rule):
     """
@@ -139,8 +137,7 @@ class SimpleSubstringRule(Rule):
         if self.ci:
             msgstr = msgstr.lower()
         if msgstr.find(self.substr) != -1:
-            return self.substr
-        return None
+            yield self.substr
 
 class TranslationConstraintRule(Rule):
     """
@@ -160,8 +157,7 @@ class TranslationConstraintRule(Rule):
         return "Matches '%s' if translated as '%s'" % (self.regex_orig_str, self.regex_translated_str)
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.reOrig.search(msgid) and not self.reTranslated.search(msgstr):
-            return "[failed constraint]"
-        return None
+            yield "[failed constraint]"
 
 class NegativeTranslationConstraintRule(Rule):
     """
@@ -181,8 +177,7 @@ class NegativeTranslationConstraintRule(Rule):
         return "Matches '%s' if NOT translated as '%s'" % (self.regex_orig_str, self.regex_translated_str)
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.reOrig.search(msgid) and self.reTranslated.search(msgstr):
-            return "[failed constraint]"
-        return None
+            yield "[failed constraint]"
 
 class DynamicTranslationIdentityRule(Rule):
     """
@@ -208,61 +203,17 @@ class DynamicTranslationIdentityRule(Rule):
         if self.negative:
             for match in matches:
                 if match in msgstr:
-                    return match
+                    yield match
         else:  # Positive rule
             for match in matches:
                 if match not in msgstr:
-                    return match
-
-
-class BooleanNotRule(Rule):
-    """Apply a boolean NOT to a child rule"""
-    def __init__(self, child):
-        super().__init__(child.name)
-        self.child = child
-        self.severity = child.severity
-    def __call__(self, msgstr, msgid, tcomment="", filename=None):
-        if self.child(msgstr, msgid, tcomment, filename):
-            return None
-        else:
-            return "[failed boolean NOT]"
-
-class BooleanAndRule(Rule):
-    """Apply a boolean AND to a child rule. Returns the hit of the first child."""
-    def __init__(self, name, childA, childB):
-        super().__init__(name)
-        self.childA = childA
-        self.childB = childB
-        self.severity = childA.severity
-    def description(self):
-        return "(%s) and (%s)" % (self.childA.description(), self.childB.description())
-    def __call__(self, msgstr, msgid, tcomment="", filename=None):
-        hitA = self.childA(msgstr, msgid, tcomment, filename)
-        if not hitA: return None # Shortcut-return
-        hitB = self.childB(msgstr, msgid, tcomment, filename)
-        if hitB: return hitA
-        return None
-
-class BooleanOrRule(Rule):
-    """Apply a boolean AND to a child rule. Returns the hit of the first child."""
-    def __init__(self, name, childA, childB):
-        super().__init__(name)
-        self.childA = childA
-        self.childB = childB
-        self.severity = childA.severity
-    def description(self):
-        return "(%s) or (%s)" % (self.childA.description(), self.childB.description())
-    def __call__(self, msgstr, msgid, tcomment="", filename=None):
-        hitA = self.childA(msgstr, msgid)
-        if hitA: return hitA # Shortcut-return
-        return self.childB(msgstr, msgid, tcomment, filename)
-
+                    yield match
 
 def SimpleGlobRule(name, glob):
     """Rule wrapper that translates a glob-ish rule to a regex rule"""
     return SimpleRegexRule(name, fnmatch.translate(glob))
 
-_whitespaceRegex = re.compile("\s+")
+_whitespaceRegex = re.compile(r"\s+")
 
 class ExactCopyRule(Rule):
     """
@@ -287,8 +238,8 @@ class ExactCopyRule(Rule):
         # Apply aliases
         origMatches = [self.aliases[x] or x for x in origMatches]
         translatedMatches = [self.aliases[x] or x for x in translatedMatches]
-        # Apply group if 
-        if self.group is not None: # None - Use entire string. No groups must be present in regex
+        # Apply group if
+        if self.group is not None:  # None - Use entire string. No groups must be present in regex
             origMatches = [m[self.group] for m in origMatches]
             translatedMatches = [m[self.group] for m in translatedMatches]
         # Apply whitespace filtering
@@ -299,9 +250,9 @@ class ExactCopyRule(Rule):
         try:
             idx = next(idx for idx, (x, y) in
                        enumerate(zip(origMatches, translatedMatches)) if x != y)
-            return "[First expression mismatch at occurrence %d]" % (idx + 1)
+            yield "[First expression mismatch at occurrence %d]" % (idx + 1)
         except StopIteration:  # No mismatch
-            return None
+            pass
 
 class IgnoreByFilenameRegexWrapper(Rule):
     """
@@ -329,7 +280,7 @@ class IgnoreByFilenameRegexWrapper(Rule):
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if bool(self.filename_regex.match(filename)) != self.invert:
             return None
-        return self.child(msgstr, msgid, tcomment, filename)
+        yield from self.child(msgstr, msgid, tcomment, filename)
 
 class IgnoreByFilenameListWrapper(Rule):
     """
@@ -345,7 +296,7 @@ class IgnoreByFilenameListWrapper(Rule):
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if filename in self.filenames:
             return None
-        return self.child(msgstr, msgid, tcomment, filename)
+        yield from self.child(msgstr, msgid, tcomment, filename)
 
 class IgnoreByMsgidRegexWrapper(Rule):
     """
@@ -368,7 +319,7 @@ class IgnoreByMsgidRegexWrapper(Rule):
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.msgid_regex.search(msgid):
             return None
-        return self.child(msgstr, msgid, tcomment, filename)
+        yield from self.child(msgstr, msgid, tcomment, filename)
 
 
 class IgnoreByMsgstrRegexWrapper(Rule):
@@ -392,7 +343,7 @@ class IgnoreByMsgstrRegexWrapper(Rule):
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.msgstr_regex.search(msgstr):
             return None
-        return self.child(msgstr, msgid, tcomment, filename)
+        yield from self.child(msgstr, msgid, tcomment, filename)
 
 class IgnoreByTcommentRegexWrapper(Rule):
     """
@@ -415,11 +366,41 @@ class IgnoreByTcommentRegexWrapper(Rule):
     def __call__(self, msgstr, msgid, tcomment="", filename=None):
         if self.tcommentRegex.search(tcomment):
             return None
-        return self.child(msgstr, msgid, tcomment, filename)
+        yield from self.child(msgstr, msgid, tcomment, filename)
+
+
+class TextListRule(Rule):
+    """
+    A rule that excepts a text list of words (e.g. typos), each of which will generate a
+    rule hit. The file is expected to contain one string per line.
+
+    If the file does not exist, this method prints a red bold error message and does not
+    generate any rule hits
+    """
+    def __init__(self, name, filename, severity=Severity.standard, flags=re.UNICODE):
+        super().__init__(name, severity)
+        self.re = re.compile(regex, flags)
+        self.filename = filename
+        self.regexes = []
+        # Check if file exists
+        if os.path.isfile(filename):
+            with open(filename) as infile:
+                for line in infile:
+                    rgx = line.strip().replace(" ", r"\s+")
+                    self.regexes.append(re.compile(rgx, flags=flags))
+        else:  # File does not exist
+            print(red("Unable to find text list file %s" % filename, bold=True))
+    def description(self):
+        return "Matches one of the strings in file %s" % self.filename
+    def __call__(self, msgstr, msgid, tcomment="", filename=None):
+        for regex in self.regexes:
+            hit = regex.search(msgstr)
+            if hit:
+                yield hit.group(0)
 
 def findRule(rules, name):
     "Find a rule by name"
-    for rule in rules:
-        if rule.name == name:
-            return rule
-    return None
+    try:
+        next(rule for rule in rules if rule.name == name)
+    except StopIteration:
+        return None
