@@ -368,7 +368,6 @@ class IgnoreByTcommentRegexWrapper(Rule):
             return None
         yield from self.child(msgstr, msgid, tcomment, filename)
 
-
 class TextListRule(Rule):
     """
     A rule that excepts a text list of words (e.g. typos), each of which will generate a
