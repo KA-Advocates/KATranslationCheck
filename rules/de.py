@@ -294,10 +294,3 @@ rules = [
 
 if __name__ == "__main__":
     print("Counting %d rules" % len(rules))
-    #Rule tests. python3 Rules.py to run
-    assert(findRule(rules, "Comma in coordinate (| required)")("$(12,3)$", ""))
-    assert(findRule(rules, "Decimal point instead of comma")("$12.3$", ""))
-    assert(findRule(rules, "Value with embedded dollar symbol")("$\\\\$12$", ""))
-    assert(findRule(rules, "Value with embedded dollar symbol")("$\\\\$12.5$", ""))
-    assert(findRule(rules, "Value with embedded dollar symbol")("$\\\\$12,5$", ""))
-    assert(findRule(rules, "Value suffixed by dollar")("$1,234$ dollar", ""))
